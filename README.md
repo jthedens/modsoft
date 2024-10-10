@@ -1,13 +1,17 @@
 # modsoft
 modul moderne softwareentwicklung
 
+---
+
 ### Git mit PyCharm benutzen - Local Repository und Remote Repository
  
 Versionsverwaltungs-Tools wie Git lassen sich optimal in integrierte Entwicklungsumgebungen (IDEs) wie PyCharm einbinden. Dies erleichtert den Umgang mit Git für Entwickler deutlich. Git ermöglicht es, Änderungen an einem Projekt nachvollziehbar zu machen und PyCharm bietet eine Integration, um Git-Befehle direkt in der IDE auszuführen.
 Um diese Konstellation zu nutzen, müssen sowohl Git als auch PyCharm auf dem Computer installiert sein. PyCharm bietet bereits eine direkte Integration von Git ohne zusätzliche Plugins.
 
+<img align="right" width="200px" hspace="15" vspace="15" src="Git_Menue.png" alt="image" />
+
 #### Git in PyCharm nutzen
-PyCharm bietet zwei Hauptmöglichkeiten, Git-Befehle auszuführen:
+PyCharm bietet zwei Hauptmöglichkeiten, um Git-Befehle auszuführen:
 1. Über das Terminal: Git-Befehle können wie gewohnt direkt im Terminal eingegeben werden.
 2. Über die GUI (Menüpunkte): PyCharm stellt über das Menü eine benutzerfreundliche Oberfläche bereit, um die wichtigsten Git-Befehle auszuführen.
 
@@ -23,3 +27,5 @@ Sobald die Versionskontrolle verknüpft ist (der Remote-Zugriff wird automatisch
 Mit PyCharm können Tools wie das Anzeigen von Diff-Dateien (um Unterschiede zwischen verschiedenen Versionen eines Projekts darzustellen) genutzt werden, sowie die Möglichkeit, Branches zu erstellen und zu verwalten.
 
 Weitere Informationen zu diesem Thema: https://www.jetbrains.com/help/pycharm/set-up-a-git-repository.html
+
+---
