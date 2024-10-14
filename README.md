@@ -7,7 +7,7 @@ Ein Branch (Zweig) in Git ist eine unabhängige Entwicklungsumgebung, die es erm
 - Der main-Branch ist standardmäßig der Hauptzweig, in den normalerweise der fertige Code gemerged wird.
 - Entwickler erstellen für jede Aufgabe einen neuen Branch, um dort isoliert zu arbeiten. Zum Beispiel:
 
-``` git checkout -b feature/neues-feature ``
+` git checkout -b feature/neues-feature
 
 # Warum Branches nutzen?
 - Isolierte Entwicklung: Änderungen in einem Branch wirken sich nicht auf den Hauptcode aus, bis sie gemerged werden.
