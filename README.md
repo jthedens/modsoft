@@ -27,19 +27,19 @@ Ein Merge-Konflikt tritt auf, wenn zwei Branches Änderungen an denselben Zeilen
   1. Git teilt mit, in welchen Dateien ein Konflikt besteht, wenn der merge- oder pull-Befehl ausgeführt wird.
   2. Öffne die betroffenen Dateien. Git markiert die konfliktverursachenden Zeilen mit:
   ```bash
-  <<<<<<< HEAD
-// Dein aktueller Branch
-=======
-// Änderungen aus dem Branch, den du mergen möchtest
->>>>>>> branchname
-```
+    <<<<<<< HEAD
+    // Dein aktueller Branch
+    =======
+    // Änderungen aus dem Branch, den du mergen möchtest
+    >>>>>>> branchname
+  ```
 
 3. Entscheide, welche Version der Änderungen übernommen werden soll (oder kombiniere beide).
 4. Entferne die Konfliktmarkierungen und committe die Änderungen:
-```bash
-git add DateiName
-git commit -m "Löse Merge-Konflikte"
-```
+  ```bash
+  git add DateiName
+  git commit -m "Löse Merge-Konflikte"
+  ```
 
 # Branching in Zusammenarbeit mit anderen Tools
 Wenn du mit einem Tool wie GitHub oder GitLab arbeitest, kannst du Pull Requests (PR) oder Merge Requests (MR) erstellen, um Branches zu reviewen und zu mergen.
