@@ -10,14 +10,14 @@ Ein Branch (Zweig) in Git ist eine unabhängige Entwicklungsumgebung, die es erm
 `git checkout -b feature/neues-feature`
 
 # Warum Branches nutzen?
-- Isolierte Entwicklung: Änderungen in einem Branch wirken sich nicht auf den Hauptcode aus, bis sie gemerged werden.
-- Paralleles Arbeiten: Mehrere Teammitglieder können gleichzeitig an unterschiedlichen Teilen eines Projekts arbeiten.
-- Rückverfolgbarkeit: Änderungen sind einfacher nachvollziehbar, da jeder Branch eine spezifische Aufgabe repräsentiert.
+- **Isolierte Entwicklung**: Änderungen in einem Branch wirken sich nicht auf den Hauptcode aus, bis sie gemerged werden.
+- **Paralleles Arbeiten**: Mehrere Teammitglieder können gleichzeitig an unterschiedlichen Teilen eines Projekts arbeiten.
+- **Rückverfolgbarkeit**: Änderungen sind einfacher nachvollziehbar, da jeder Branch eine spezifische Aufgabe repräsentiert.
 
 # Branching-Strategien
-- Feature Branches: Für jedes neue Feature oder jede neue Aufgabe wird ein eigener Branch erstellt und nach Fertigstellung in den Hauptbranch gemerged.
-- Release Branches: Diese Branches dienen zur Vorbereitung einer neuen Version und sind von main abgezweigt, um letzte Anpassungen vorzunehmen.
-- Hotfix Branches: Dienen zur schnellen Behebung von Fehlern im Produktionscode.
+- **Feature Branches**: Für jedes neue Feature oder jede neue Aufgabe wird ein eigener Branch erstellt und nach Fertigstellung in den Hauptbranch gemerged.
+- **Release Branches**: Diese Branches dienen zur Vorbereitung einer neuen Version und sind von `main abgezweigt, um letzte Anpassungen vorzunehmen.
+- **Hotfix Branches**: Dienen zur schnellen Behebung von Fehlern im Produktionscode.
 
 # Merge-Konflikte
 Ein Merge-Konflikt tritt auf, wenn zwei Branches Änderungen an denselben Zeilen in einer Datei vorgenommen haben und Git nicht automatisch entscheiden kann, welche Änderung übernommen werden soll.
@@ -42,6 +42,5 @@ Ein Merge-Konflikt tritt auf, wenn zwei Branches Änderungen an denselben Zeilen
   ```
 
 # Branching in Zusammenarbeit mit anderen Tools
-Wenn du mit einem Tool wie GitHub oder GitLab arbeitest, kannst du Pull Requests (PR) oder Merge Requests (MR) erstellen, um Branches zu reviewen und zu mergen.
+Mit dem Tool  GitHub oder GitLab können Pull Requests (PR) oder Merge Requests (MR) erstellt werden, um Branches zu reviewen und zu mergen.
 
-Möchtest du eine Beispielgrafik zu Branches oder Merge-Konflikten einfügen, um das Handout visuell aufzuwerten? Das könnte die Inhalte verständlicher machen.
