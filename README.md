@@ -165,3 +165,12 @@ GitLab:	Eine integrierte Plattform für DevOps, die Git-Repositories, CI/CD und 
 Bitbucket:	Eine Plattform für die Versionskontrolle, die eng mit Atlassian-Tools wie Jira und Trello verbunden ist. Features:	Pull-Requests, Pipelines für CI/CD, Integration mit anderen Atlassian-Produkten.
 SourceForge:	Eine Plattform für Open-Source-Projekte, die Hosting und Versionskontrolle bietet. Features:	Projektverwaltung, Bug-Tracking, Download-Statistiken.
 GitKraken:	Ein visueller Git-Client, der die Arbeit mit Git-Repositories erleichtert. Features: Drag-and-Drop-Interface, integriertes Issue-Tracking, Team-Kollaboration.
+
+# Dokumentation der Zusammenarbeit
+- Was ist Git und warum sollte es verwendet werden? *- bearbeitet von Vera Kammerer*
+- Grundlegende Git-Befehle *- bearbeitet von Vera Kammerer*
+- Branches und ihre Nutzung, Umgang mit Merge-Konflikten *- bearbeitet von Josefine Theden-Schow*
+- Git mit IntelliJ/PyCharm benutzen: Local Repository und Remote Repository *- bearbeitet von Niklas Wehl*
+- Nützliche Git-Tools und Plabormen (z. B. GitHub) *- bearbeitet von Jan Eberlein*
+
+
