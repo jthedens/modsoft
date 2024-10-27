@@ -1,5 +1,9 @@
 # Modul Moderne Softwareentwicklung
 
+## Übung 1 (Git)
+
+---
+
 ## Was ist Git und warum sollte es verwendet werden?
 
 1. Während andere Versionskontrollsystemen nur die Unterschiede in den Änderungen speichern, erstellt  Git häufig "Snapshots" der Dateien. Das bringt viele Vorteile, besonders jedoch hinsichtlich des Branchings.
@@ -90,6 +94,8 @@ $ git mv <alter_dateiname> <neuer_dateiname>
 
 Dieser Befehl vereinfacht den Prozess, indem er die Datei verschiebt oder umbenennt und die Änderungen sofort für den nächsten Commit vorbereitet.
 
+--- 
+
 ## Was sind Branches?
 Ein Branch (Zweig) in Git ist eine unabhängige Entwicklungsumgebung, die es ermöglicht, gleichzeitig an verschiedenen Features, Bugfixes oder Experimenten zu arbeiten, ohne die Hauptarbeit auf dem main-Branch zu beeinträchtigen.
 
@@ -133,6 +139,9 @@ Ein Merge-Konflikt tritt auf, wenn zwei Branches Änderungen an denselben Zeilen
 ### Branching in Zusammenarbeit mit anderen Tools
 Mit dem Tool  GitHub oder GitLab können Pull Requests (PR) oder Merge Requests (MR) erstellt werden, um Branches zu reviewen und zu mergen.
 
+
+---
+
 ## Git mit PyCharm benutzen - Local Repository und Remote Repository
  
 Versionsverwaltungs-Tools wie Git lassen sich optimal in integrierte Entwicklungsumgebungen (IDEs) wie PyCharm einbinden. Dies erleichtert den Umgang mit Git für Entwickler deutlich. Git ermöglicht es, Änderungen an einem Projekt nachvollziehbar zu machen und PyCharm bietet eine Integration, um Git-Befehle direkt in der IDE auszuführen.
@@ -158,19 +167,133 @@ Mit PyCharm können Tools wie das Anzeigen von Diff-Dateien (um Unterschiede zwi
 
 Weitere Informationen zu diesem Thema: https://www.jetbrains.com/help/pycharm/set-up-a-git-repository.html
 
+---
+
 ## Nützliche Tools und Plattformen
 
-GitHub:	Eine der bekanntesten Plattformen für die Versionskontrolle, die es Entwicklern ermöglicht, Projekte zu hosten, zusammenzuarbeiten und Issues zu verwalten.	Features: Pull-Requests, Code-Reviews, Actions für CI/CD, GitHub Pages.
+GitHub: Eine der bekanntesten Plattformen für die Versionskontrolle, die es Entwicklern ermöglicht, Projekte zu hosten, zusammenzuarbeiten und Issues zu verwalten.	Features: Pull-Requests, Code-Reviews, Actions für CI/CD, GitHub Pages.
+
 GitLab:	Eine integrierte Plattform für DevOps, die Git-Repositories, CI/CD und Projektmanagement bietet. Features:	Automatisierte Deployments, Issue-Tracking, Wiki-Funktion.
+
 Bitbucket:	Eine Plattform für die Versionskontrolle, die eng mit Atlassian-Tools wie Jira und Trello verbunden ist. Features:	Pull-Requests, Pipelines für CI/CD, Integration mit anderen Atlassian-Produkten.
+
 SourceForge:	Eine Plattform für Open-Source-Projekte, die Hosting und Versionskontrolle bietet. Features:	Projektverwaltung, Bug-Tracking, Download-Statistiken.
+
 GitKraken:	Ein visueller Git-Client, der die Arbeit mit Git-Repositories erleichtert. Features: Drag-and-Drop-Interface, integriertes Issue-Tracking, Team-Kollaboration.
 
-# Dokumentation der Zusammenarbeit
+---
+
+## Dokumentation der Zusammenarbeit (Übung 1)
 - Was ist Git und warum sollte es verwendet werden? *- bearbeitet von Vera Kammerer*
 - Grundlegende Git-Befehle *- bearbeitet von Vera Kammerer*
 - Branches und ihre Nutzung, Umgang mit Merge-Konflikten *- bearbeitet von Josefine Theden-Schow*
 - Git mit IntelliJ/PyCharm benutzen: Local Repository und Remote Repository *- bearbeitet von Niklas Wehl*
 - Nützliche Git-Tools und Plabormen (z. B. GitHub) *- bearbeitet von Jan Eberlein*
+
+---
+
+## Übung 3 (UML & DDD)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
