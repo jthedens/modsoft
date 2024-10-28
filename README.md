@@ -1,4 +1,4 @@
-# Modul Moderne Softwareentwicklung
+# Modul Moderne Softwareentwicklung (Gruppe 8 - eVote)
 
 ## Übung 1 (Git)
 
@@ -197,6 +197,62 @@ GitKraken:	Ein visueller Git-Client, der die Arbeit mit Git-Repositories erleich
 ---
 
 ## Übung 3 (UML & DDD)
+
+Ergebnisse aus unserem Miro-Board: https://miro.com/app/board/uXjVLO2HW6A=/?share_link_id=761067200081
+
+___
+
+### Event Storming
+
+#### Nutzerregistrierung und Authentifizierung
+
+BürgerInnen:
+- Fordert Registrierung an
+- Bestätigt Link in E-Mail.
+
+
+System:
+- Wahlberechtigungprüfen
+- Bestätigungs-E-Mail gesendet
+- Bürgerregristrierung erfolgreich abgeschlossen
+
+
+#### Abstimmungsübersicht
+
+BürgerInnen:
+- Fordert Abstimmungsübersicht an
+
+
+System:
+- Liste der verfügbaren Abstimmungen wird angezeigt
+
+#### Abstimmungsmechanismus
+
+BürgerInnen:
+- Wählt Abstimmung aus
+- Gibt Stimme ab
+
+
+System:
+- Abstimmung eröffnet
+
+#### Abstimmungssicherheit
+
+System:
+- System prüft, ob Stimme zum ersten Mal abgegeben
+- Stimme wird gezählt > Zugang zur Abstimmung gesperrt
+- ODER: Stimme wird verworfen
+
+#### Ergebnisübersicht
+
+BürgerInnen:
+- Fordert Ergebnisübersicht an
+
+System:
+- Abstimmungsergebnisse werden angezeigt
+
+
+
 
 ---
 
