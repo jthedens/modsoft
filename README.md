@@ -289,11 +289,74 @@ Aggregate: Ergebnis
 
 ---
 
+### Domain Services und Repositories
+
+#### Domain Services
+
+**a. AbstimmungsService** 
+- **Beschreibung:** Verwaltet die Logik rund um den Abstimmungsprozess und die Verwaltung der Abstimmungen.
+- **Methoden:**
+  - erstelleAbstimmung(titel: string, beschreibung: string, frist: date, optionen: string[]): Abstimmung
+    - Erstellt eine neue Abstimmung mit den angegebenen Details.
+  - aktualisiereAbstimmung(abstimmungsID: string, neueDaten: Abstimmungsdaten): Abstimmung
+    - Aktualisiert die Daten einer bestehenden Abstimmung.
+  - sperreAbstimmung(abstimmungsID: string): boolean
+    - Sperrt eine Abstimmung, sodass keine weiteren Stimmen mehr abgegeben werden können.
 
 
+**b. StimmService**
+- **Beschreibung:** Verwaltet die Logik rund um die Abgabe und Verwaltung von Stimmen.
+- **Methoden:**
+  - stimmeAbgeben(buergerID: string, abstimmungsID: string, wahloption: string): Stimme
+    - Fügt eine Stimme zu einer Abstimmung hinzu.
+  - überprüfeStimmberechtigung(buergerID: string, abstimmungsID: string): boolean
+    - Prüft, ob der Bürger für die Abstimmung stimmberechtigt ist.
+
+**c. ErgebnisService**
+- **Beschreibung:** Verwaltet die Berechnung und Verwaltung von Ergebnissen, die separat von der Abstimmung existieren.
+- **Methoden:**
+  - berechneErgebnis(abstimmungsID: string): Ergebnis
+    - Berechnet das Ergebnis einer Abstimmung, indem alle abgegebenen Stimmen berücksichtigt werden.
+  - speichereErgebnis(ergebnis: Ergebnis): void
+    - Speichert das berechnete Ergebnis für eine Abstimmung.
+  - zeigeErgebnis(abstimmungsID: string): Ergebnis
+    - Gibt das berechnete Ergebnis zurück, falls die Abstimmung abgeschlossen und gesperrt ist.
 
 
+#### Repositories
 
+
+**a. AbstimmungRepository**
+- **Beschreibung:** Verwaltet die Persistenz der Abstimmungs-Entitäten.
+- **Methoden:**
+  - speichereAbstimmung(abstimmung: Abstimmung): void
+    - Speichert eine neue Abstimmung.
+  - findeAbstimmung(abstimmungsID: string): Abstimmung
+    - Sucht eine Abstimmung basierend auf ihrer ID.
+  - aktualisiereAbstimmung(abstimmung: Abstimmung): void
+    - Aktualisiert eine bestehende Abstimmung in der Datenbank.
+  - loescheAbstimmung(abstimmungsID: string): void
+    - Löscht eine Abstimmung basierend auf ihrer ID.
+
+**b. StimmeRepository**
+- **Beschreibung:** Verwaltet die Persistenz der Stimme-Entitäten.
+- **Methoden:**
+  - speichereStimme(stimme: Stimme): void
+    - Speichert eine abgegebene Stimme.
+  - findeStimmenNachAbstimmung(abstimmungsID: string): List<Stimme>
+    - Gibt alle Stimmen für eine bestimmte Abstimmung zurück.
+
+**c. ErgebnisRepository**
+- **Beschreibung:** Verwaltet die Persistenz der Ergebnis-Entitäten, die separat von der Abstimmung gespeichert werden.
+- **Methoden:**
+  - speichereErgebnis(ergebnis: Ergebnis): void
+    - Speichert ein berechnetes Ergebnis.
+  - findeErgebnisNachAbstimmung(abstimmungsID: string): Ergebnis
+    - Sucht das Ergebnis einer bestimmten Abstimmung.
+  - aktualisiereErgebnis(ergebnis: Ergebnis): void
+    - Aktualisiert das Ergebnis einer Abstimmung, falls Anpassungen notwendig sind.
+  - loescheErgebnis(ergebnisID: string): void
+    - Löscht ein Ergebnis basierend auf seiner ID.
 
 
 
