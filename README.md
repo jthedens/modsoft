@@ -190,6 +190,10 @@ GitKraken:	Ein visueller Git-Client, der die Arbeit mit Git-Repositories erleich
 - Git mit IntelliJ/PyCharm benutzen: Local Repository und Remote Repository *- bearbeitet von Niklas Wehl*
 - Nützliche Git-Tools und Plabormen (z. B. GitHub) *- bearbeitet von Jan Eberlein*
 
+
+
+---
+
 ---
 
 ## Übung 3 (UML & DDD)
@@ -358,90 +362,155 @@ Aggregate: Ergebnis
   - loescheErgebnis(ergebnisID: string): void
     - Löscht ein Ergebnis basierend auf seiner ID.
 
+---
 
+### Strategie zur Implementierung des DDD-Modells in Code
 
+Die vorliegende Strategie beschreibt einen strukturierten Ansatz zur Implementierung von Domain-Driven Design (DDD) Modellen in Code, wobei die Aspekte Testbarkeit und Modularität berücksichtigt werden.
 
+**1. Domänenverständnis**
 
+Zunächst muss eine „gemeinsame Sprache“ (**Ubiquitous Language**)
+bzw. ein gemeinsames Verständnis entwickelt werden, die bei der Implementierung im Team verwendet wird, um Missverständnisse zu vermeiden. Zudem wurden die verschiedenen „**Bounded Contexts**“ innerhalb der Domäne/des Modells identifiziert, sowie die Grenzen und Schnittstellen zwischen Ihnen definiert.
 
+**2. Architektur**
 
+a) Schichtenarchitektur
+- **Domain Layer**: Enthält Entitäten, Value Objects, Aggregate und Domain Services.
+- **Application Layer** beinhaltet Use Cases, die die Geschäftslogik orchestrieren.
+- **Infrastructure Layer**: Umfasst technische Implementierungen wie Datenzugriffe und externe Schnittstellen.
+- **Presentation Layer**: Stellt die Benutzeroberfläche bereit.
+b) Modularisierung
+- Organisation des Codes in Modulen, die klar definierte Verantwortlichkeiten haben.
+- Namenskonventionen und Ordnerstrukturen zur besseren Übersichtlichkeit.
 
+**3. Implementierung des Domänenmodells**
 
+**Entitäten** haben eine eindeutige Identität, und **Value Objects** sind unveränderlich und beschreiben Attribute. **Aggregate** mit einer **Wurzelentität** müssen definiert werden, und es wird sichergestellt, dass alle Änderungen über die Wurzel erfolgen.
 
+**4. Testbarkeit**
 
+Über die Unit Tests wird die **Domänenlogik** sichergestellt, und über die Integrationstests überprüft, ob die Interaktion zwischen Modulen und Schichten korrekt funktionieren.
 
+**5. Modularität und Flexibilität**
 
+Durch die Implementierung von **Dependency Injection**, können die Abhängigkeiten verwaltet und die Testbarkeit erhöht werden.
+Durch die Verwendung von **Event Sourcing und CQRS** kann zusätzliche Modularität erreicht werden-
 
+**6. Beispiel eines Domain Models**
 
+Nebenan ist ein Beispiel des Domain Models zum E-Vote System
 
+**7. Ausblick**
 
+Im nächsten Schritt wird mit der Implementierung der grundlegenden Entitäten und Value Objects begonnen. Zudem werden die ersten Unit Tests parallel zur Domainimplementierung durchgeführt.
 
 
 
+### Beispiel: Domain Model in Python
 
+```bash
 
+from datetime import datetime
+from typing import List
 
 
+class Bürger:
+ def __init__(self, bürger_id: str, name: str, email: str, authentifizierungsstatus: bool, stimmberechtigung: bool):
+        self.bürger_id = bürger_id
+        self.name = name
+        self.email = email
+        self.authentifizierungsstatus = authentifizierungsstatus
+        self.stimmberechtigung = stimmberechtigung
 
+    def ist_stimmberechtigt(self) -> bool:
+        return self.stimmberechtigung
 
 
+class Stimme:
+    def __init__(self, bürger_id: str, abstimmungs_id: str, wahloption: str):
+        self.bürger_id = bürger_id
+        self.abstimmungs_id = abstimmungs_id
+        self.wahloption = wahloption
 
 
+class Abstimmung:
+    def __init__(self, abstimmungs_id: str, titel: str, beschreibung: str, organisations_id: str, frist: datetime, abstimmungsstatus: bool):
+        self.abstimmungs_id = abstimmungs_id
+        self.titel = titel
+        self.beschreibung = beschreibung
+        self.organisations_id = organisations_id
+        self.frist = frist
+        self.abstimmungsstatus = abstimmungsstatus
+        self.verfügbare_optionen: List[str] = []
 
+    def add_option(self, option: str):
+        self.verfügbare_optionen.append(option)
 
+    def ist_aktiv(self) -> bool:
+        return self.abstimmungsstatus and datetime.now() <= self.frist
 
 
+class Organisation:
+    def __init__(self, organisations_id: str, name: str, kontakt: str, authentifizierungsstatus: bool):
+        self.organisations_id = organisations_id
+        self.name = name
+        self.kontakt = kontakt
+        self.authentifizierungsstatus = authentifizierungsstatus
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# Beispiel für die Nutzung des Domain Models
+if __name__ == "__main__":
+    # Erstellen von Bürgern
+    bürger1 = Bürger(bürger_id="B1", name="Max Mustermann", email="max@example.com", authentifizierungsstatus=True, stimmberechtigung=True)
+    bürger2 = Bürger(bürger_id="B2", name="Erika Mustermann", email="erika@example.com", authentifizierungsstatus=True, stimmberechtigung=False)
+
+    # Erstellen einer Organisation
+    organisation = Organisation(organisations_id="O1", name="Wahlorganisation", kontakt="kontakt@organisation.com", authentifizierungsstatus=True)
+
+    # Erstellen einer Abstimmung
+    abstimmung = Abstimmung(
+        abstimmungs_id="A1",
+        titel="Wahl 2024",
+        beschreibung="Wählen Sie Ihren bevorzugten Kandidaten.",
+        organisations_id=organisation.organisations_id,
+        frist=datetime(2024, 12, 31),
+        abstimmungsstatus=True,
+    )
+
+    # Optionen zur Abstimmung hinzufügen
+    abstimmung.add_option("Kandidat A")
+    abstimmung.add_option("Kandidat B")
+
+    # Stimmen abgeben
+    if bürger1.ist_stimmberechtigt():
+        stimme1 = Stimme(bürger_id=bürger1.bürger_id, abstimmungs_id=abstimmung.abstimmungs_id, wahloption="Kandidat A")
+        print(f"{bürger1.name} hat für {stimme1.wahloption} gestimmt.")
+    else:
+        print(f"{bürger1.name} ist nicht stimmberechtigt.")
+
+    if bürger2.ist_stimmberechtigt():
+        stimme2 = Stimme(bürger_id=bürger2.bürger_id, abstimmungs_id=abstimmung.abstimmungs_id, wahloption="Kandidat B")
+        print(f"{bürger2.name} hat für {stimme2.wahloption} gestimmt.")
+    else:
+        print(f"{bürger2.name} ist nicht stimmberechtigt.")
+
+```
+
+
+---
+
+## Dokumentation der Zusammenarbeit (Übung 3)
+
+- Event Storming *- bearbeitet von allen Gruppenmitgliedern*
+- Domänenmodell *- bearbeitet von Josefine Theden-Schow*
+- Bounded Contexts und Entitäten und Aggregate *- bearbeitet von Niklas Wehl*
+- Domain Services und Repositories *- bearbeitet von Vera Kammerer*
+- Strategie zur Implementierung des DDD-Modells in Code *- bearbeitet von Jan Eberlein*
+
+---
+
+---
 
 
 
