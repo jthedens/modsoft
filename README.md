@@ -194,9 +194,100 @@ GitKraken:	Ein visueller Git-Client, der die Arbeit mit Git-Repositories erleich
 
 ## Übung 3 (UML & DDD)
 
+---
+
+### Domänenmodell
+
+<img align="center" width="500px" hspace="15" vspace="15" src="U3 Abb 2.png" alt="Abbildung 2" />
+
+**Bürger**: Eine Person, die sich im System registriert und an Abstimmungen teilnimmt.
+- Bürger-ID: string
+- Name: string
+- E-Mail: string
+- Authentifizierungsstatus: boolean
+- Stimmberechtigung.: boolean
+
+**Organisation**
+- Organisations-ID: string
+- Name: string
+- Kontakt: string
+- Authentifizierungsstatus: boolean
+
+**Abstimmung**: Eine Abstimmung zu einem bestimmten städtischen Thema oder Projekt.
+- Abstimmungs-ID: string
+- Titel: string
+- Beschreibung: string
+- Organisations-ID: string
+- Frist: date
+- Abstimmungsstatus: boolean
+- verfügbare Optionen.: string
+
+**Stimme**: Die von einem Bürger abgegebene Wahlentscheidung.
+- Bürger-ID: string
+- Abstimmungs-ID: string
+- Wahloption: string
+
+---
+
+### Bounded Contexts
+
+#### Inhaltsmanagment
+- Erstellung der Abstimmung und bestimmen der Rahmenbedingungen (Zu welcher Sache wird abgestimmt und der Gruppe von Usern darf abstimmen ...)
+
+#### Registrierungsverwaltung
+- Koordiniert die Registrierung der Bürger:innen und überprüft in diesem Zusammenhang die Wahlberechtigung. (Erfassen von personenbezogenen Daten, Zuweisung einer Rolle, …).
+
+#### Abstimmungsverwaltung
+- Stellt die Abstimmung/Themen zur Verfügung über die die Bürger:innen abstimmen können
+- Erfasst die abgegebenen Stimmen
+- Überwacht die Korrektheit der Abstimmung (Abstimmungssicherheit/-sicherheit)
+
+#### Ergebnisauswertung
+- Erstellt nach Abgabe der Stimme eine Ergebnisübersicht
+- Schließt die Abstimmung nach Abgabe aller Stimmen
+
+<img align="center" width="500px" hspace="15" vspace="15" src="U3 Abb 3.png" alt="Abbildung 3" />
 
 
+---
 
+### Entitäten und Aggregate
+
+#### Inhaltsmanagment
+Entität: Organisation \
+Aggregate: Organisation
+
+- Erstellen der Inhalte der Abstimmungen (Texte und Informationen)
+- Rahmenbedingen der jeweiligen Abstimmung (Anzahl der Stimmen, Bürger-Gruppe, Rollenberechtigungen, ...)
+
+#### Registrierungsverwaltung
+Entität: Bürger \
+Aggregate: Bürger
+
+- Erfassen der Daten: Name, E-Mail, Geburtsdatum, Adresse, ...
+- Registrierung bestätigen oder ablehnen
+- Erstellen einer eindeutigen ID/Kennung
+- Zuweisen einer Rolle (Bürger/Organisator/Gast, ...)
+
+#### Abstimmungsverwaltung
+Entität: Abstimmung \
+Aggregate: Abstimmung
+
+- Bietet eine Übersicht mit allen Abstimmungen
+- Beinhaltet Informationstexte und eine Option zum Abstimmen
+- Bestätigen der Stimme mit abschließen des Prozesses
+- Erfassen der Stimme
+- Überwacht die Korrektheit der Abstimmung
+
+#### Ergebnisauswertung
+Entität: Ergebnis \
+Aggregate: Ergebnis
+
+- Beinhaltet alle Stimmen
+- Bereitet das Ergebnis aller Stimmen auf
+- Sperrt die Abstimmung
+
+---
 
 
 
