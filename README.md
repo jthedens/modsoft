@@ -242,10 +242,47 @@ Weitere Vorteile von GitHub Actions:
 
 ---
 
+### Einrichtung der CI/CD-Pipeline
+
+```bash
+name: Python CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Run tests (skip if no tests yet)
+        run: |
+          echo "No tests to run at this stage."
+
+```
+---
+
+### Tests hinzufügen
 
 
 
-
+---
 
 
 
