@@ -196,6 +196,66 @@ GitKraken:	Ein visueller Git-Client, der die Arbeit mit Git-Repositories erleich
 
 ---
 
+
+## Übung 2 (CI/CD)
+
+---
+
+### Was ist CI/CD? Was sind die Vorteile?
+
+CI/CD steht für **Continuous Integration (CI)** und **Continuous Deployment (CD)**. 
+
+Continuous Integration (CI):
+Continuous Integration ist ein Konzept, bei dem der Code automatisch, regelmäßig und fortlaufend zusammengeführt wird. Mit diesem Verfahren können Fehler im Code frühzeitig erkannt und die Effizienz in der Entwicklung gesteigert werden. Automatisierte Tests, die bei jeder Codeänderung durchlaufen werden, helfen, Unstimmigkeiten frühzeitig zu erkennen. Diese Automatisierung kann den gesamten Prozess von der Änderung bis zur Auslieferung der Software umfassen. Der Umfang dieser Tests lässt sich individuell an die Anforderungen des Projekts anpassen
+
+Continuous Deployment (CD):
+Continuous Deployment (CD) ist eine Methode in der Softwareentwicklung, bei der Änderungen im Code automatisch und fortlaufend in die Produktionsumgebung übertragen werden, sobald alle Tests erfolgreich bestanden sind. Es erweitert das Konzept des Continuous Delivery und ermöglicht es, jede geprüfte Codeänderung ohne manuelle Freigabe direkt den Nutzern bereitzustellen.
+
+
+### Wie können wir CI/CD in unser Projekt integrieren?
+
+Erstes Ziel: Eine einfach gehaltene CI-Pipeline, die primär zur Fehlererkennung dient und den Code auf Integrität und Stabilität überprüft.
+Späteres Ziel: Erweiterung der Pipeline um automatisierte Deployment-Schritte, sobald die grundlegende CI-Konfiguration stabil läuft.
+Die Pipeline soll im Verlauf der Entwicklung schrittweise und gemeinsam mit dem Team angepasst und optimiert werden.
+
+Für ein Python-Projekt sind GitHub Actions und GitLab CI/CD gängige und gut unterstützte Optionen, die eine gute Integration in bestehende Git-Repositories bieten.
+
+Sobald die grundlegende CI-Pipeline zuverlässig läuft und Fehler effektiv erkannt werden, kann die Pipeline um CD-Funktionen erweitert werden. Dabei wird zunächst ein automatisiertes Deployment in eine Staging-Umgebung eingerichtet, um das Deployment zu testen und mögliche Fehler frühzeitig zu erkennen. 
+Sobald die Staging-Deployments stabil laufen, kann das automatische Deployment hinzugefügt werden, idealerweise mit einem manueller Freigabeschritt.
+
+Die Pipeline sollte kontinuierlich auf Basis von Team-Feedback und Projektanforderungen weiterentwickelt werden.
+
+Zu den möglichen Erweiterungen könnten gehören: Testabdeckung erweitern, Parallelisierung der Tests, Performance-Tests, …
+
+
+### Begründung für die Wahl von GitHub Actions:
+
+Um eine CI/CD-Pipeline in unser Projekt zu integrieren, haben wir uns für die Plattform GitHub Actions entschieden. Ein Hauptargument für diese Wahl ist die nahtlose Integration in bestehende Git-Repositories. Da Workflows direkt auf der Plattform eingerichtet werden können, auf der das Projekt gehostet wird, wird die Verwaltung der Workflows erheblich vereinfacht.
+
+Zusätzlich bietet GitHub Actions eine große Auswahl an vordefinierten Actions, die flexibel anpassbar sind. Die YAML-Dateien zur Workflow-Konfiguration lassen sich unkompliziert im Repository anpassen, was das Maß an Flexibilität im Entwicklungsprozess erhöht.
+
+Weitere Vorteile von GitHub Actions:
+
+- Umfangreiche Bibliothek an Workflows und Actions
+- Automatisierung durch ereignisbasierte Trigger (z. B. beim Push oder Pull-Request)
+- Kostenfreie Nutzung für öffentliche Repositories und einfache Aktivierung ohne zusätzliche Registrierung
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+---
+
 ## Übung 3 (UML & DDD)
 
 Ergebnisse aus unserem Miro-Board: https://miro.com/app/board/uXjVLO2HW6A=/?share_link_id=761067200081
