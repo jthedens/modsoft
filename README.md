@@ -285,8 +285,6 @@ jobs:
 ---
 
 
-# Übungsblatt 2
-
 ## **Beispiel für einen Deployment-Prozess**
 
 
