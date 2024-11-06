@@ -289,43 +289,43 @@ jobs:
 
 
 
-# **Code-Commit und Push:**
+### **Code-Commit und Push:**
   
    Eingabe des Codes in einem Versionskontrollsystem (z.B. Git) mit anschließendem Code Commit und Push
 
 
 
-# **Automatisierte Tests:**
+### **Automatisierte Tests:**
    
    Start einer automatischen CI/CD-Pipeline (GitHub Actions). Hierbei können Fehler frühzeitig gefunden werden.
 
 
 
-# **Build:**
+### **Build:**
    
    Bei erfolgreichem Test wird der Code in ein ausführbares Format umgewandelt (Build).
 
 
 
-# **Bereitstellung in Staging:**
+### **Bereitstellung in Staging:**
    
    Der Build wird auf eine Staging-Umgebung (eine Art Testumgebung) deployed. Hier können Entwickler und Tester die Anwendung testen, bevor sie live geht.
 
 
 
-# **Manuelles oder Automatisches Deployment auf Produktion:**
+### **Manuelles oder Automatisches Deployment auf Produktion:**
    
    Nach erfolgreichen Tests wird die neue Version in die Produktionsumgebung deployed, wo sie für Benutzer zugänglich ist.
 
 
 
-# **Monitoring und Rollback:**
+### **Monitoring und Rollback:**
   
    Nach dem Deployment wird die Anwendung überwacht, um Probleme frühzeitig zu erkennen. Falls Probleme auftreten, kann ein Rollback durchgeführt werden, um die vorherige       Version wiederherzustellen.
  
 
 
-# **Wo und wie könnte Ihre Anwendung in Zukunft automatisch deployed werden? Welche Plattformen wären relevant? Vor- und Nachteile?**
+### **Wo und wie könnte Ihre Anwendung in Zukunft automatisch deployed werden? Welche Plattformen wären relevant? Vor- und Nachteile?**
 
 
  
@@ -341,7 +341,7 @@ Erfordert Setup und Wartung der Pipeline, was bei größeren Projekten aufwendig
 
 
 
-# **2.Cloud-Plattformen (z.B. AWS, Azure, Google Cloud Platform)**
+### **2.Cloud-Plattformen (z.B. AWS, Azure, Google Cloud Platform)**
 
 **Vorteile:**
 
@@ -357,7 +357,7 @@ Datenschutz- und Compliance-Anforderungen je nach Region.
 
 
  
-# **3.Plattformen für Container-Orchestrierung (z.B. Kubernetes)**
+### **3.Plattformen für Container-Orchestrierung (z.B. Kubernetes)**
 
 **Vorteile:**
 
@@ -372,7 +372,7 @@ Höherer Ressourcenbedarf durch zusätzliche Container-Orchestrierung.
 
 
 
-# **4.PaaS-Anbieter  (z.B. Heroku, Render)**
+### **4.PaaS-Anbieter  (z.B. Heroku, Render)**
 
 **Vorteile:**
 
