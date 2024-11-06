@@ -26,4 +26,4 @@ jobs:
 
       - name: Run tests (skip if no tests yet)
         run: |
-          echo "No tests to run at this stage."
+          pytest
