@@ -329,7 +329,7 @@ jobs:
 
 
  
-# **1.GitLab als DevOps-Plattform**
+## **1.GitLab als DevOps-Plattform**
 **Vorteile:**
 CI/CD in einer Plattform integriert, was den gesamten Prozess beschleunigt und   vereinfacht.
 Automatisierung und Transparenz: Jeder Schritt im Deployment-Prozess ist nachvollziehbar.
