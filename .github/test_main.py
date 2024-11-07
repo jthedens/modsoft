@@ -1,5 +1,5 @@
 import unittest
-import main
+from main import Bürger, Stimme, Abstimmung
 from datetime import datetime, timedelta
 
 # Hier wird angenommen, dass die Klassen Bürger, Stimme und Abstimmung bereits importiert sind.
