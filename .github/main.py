@@ -1,10 +1,9 @@
 from datetime import datetime
 from typing import List
 
-
-class Bürger:
-    def __init__(self, bürger_id: str, name: str, email: str, password: str, rolle: str, authentifizierungsstatus: bool, stimmberechtigung: bool):
-        self.bürger_id = bürger_id
+class Citizens:
+    def __init__(self, citizens_id, name, email, password, rolle, authentifizierungsstatus, stimmberechtigung):
+        self.citizens_id = citizens_id
         self.name = name
         self.email = email
         self.password = password
@@ -16,12 +15,40 @@ class Bürger:
         return self.stimmberechtigung and self.authentifizierungsstatus
 
 
-class Stimme:
-    def __init__(self, bürger_id: str, abstimmungs_id: str, wahloption: str):
-        self.bürger_id = bürger_id
-        self.abstimmungs_id = abstimmungs_id
+class Stimme(Citizens):
+    def __init__(self, citizens_id,  name, email, password, rolle, authentifizierungsstatus, stimmberechtigung, wahloption):
+        super().__init__(citizens_id,  name, email, password, rolle, authentifizierungsstatus, stimmberechtigung)
+        #self.abstimmungs_id = abstimmungs_id
         self.wahloption = wahloption
 
+    def stimmeAbgabe(self, stimmberechtigung):
+        if stimmberechtigung == True:
+
+            self.wahloption = input("Abstimmen (Y/N): ")
+            if self.wahloption == "Y":
+                print(f"{self.name} hat für {self.wahloption} gestimmt.")
+                # Eintrag in Datenbank Stimme, Eintrag in Datenbank Bürger - ändern der Stimmberechtigung
+
+            elif self.wahloption == "N":
+                print(f"{self.name} hat für {self.wahloption} gestimmt.")
+                # Eintrag in Datenbank Stimme, Eintrag in Datenbank Bürger - ändern der Stimmberechtigung
+            else:
+                print("ERROR in der Stimmenabgabe")
+
+        else:
+            print(f"{self.name} ist nicht stimmberechtigt.")
+
+
+
+
+'''
+        if bürger2.ist_stimmberechtigt():
+            stimme2 = Stimme(bürger_id=bürger2.bürger_id, abstimmungs_id=abstimmung.abstimmungs_id,
+                             wahloption="Kandidat B")
+            print(f"{bürger2.name} hat für {stimme2.wahloption} gestimmt.")
+        else:
+            print(f"{bürger2.name} ist nicht stimmberechtigt.")
+'''
 
 class Abstimmung:
     def __init__(self, abstimmungs_id: str, titel: str, beschreibung: str, frist: datetime, abstimmungsstatus: bool):
@@ -38,6 +65,9 @@ class Abstimmung:
     def ist_aktiv(self) -> bool:
         return self.abstimmungsstatus and datetime.now() <= self.frist
 
+
+
+
 '''
 class Organisation:
     def __init__(self, organisations_id: str, name: str, kontakt: str, authentifizierungsstatus: bool):
@@ -50,8 +80,10 @@ class Organisation:
 # Beispiel für die Nutzung des Domain Models
 if __name__ == "__main__":
     # Erstellen von Bürgern
-    bürger1 = Bürger(bürger_id="B1", name="Max Mustermann", email="max@example.com", password="1234", rolle="buerger", authentifizierungsstatus=True, stimmberechtigung=True)
-    bürger2 = Bürger(bürger_id="B2", name="Erika Mustermann", email="erika@example.com", password="1234", rolle="buerger",authentifizierungsstatus=True, stimmberechtigung=False)
+    citizens1 = Citizens(citizens_id="B1", name="Max Mustermann", email="max@example.com", password="1234", rolle="buerger", authentifizierungsstatus=True, stimmberechtigung=True)
+    stimme1 = Stimme(citizens1.citizens_id, citizens1.name, citizens1.email, citizens1.password, citizens1.rolle, citizens1.authentifizierungsstatus, citizens1.stimmberechtigung, wahloption = "X")
+    stimme1.stimmeAbgabe(citizens1.stimmberechtigung)
+    #bürger2 = Bürger(bürger_id="B2", name="Erika Mustermann", email="erika@example.com", password="1234", rolle="buerger",authentifizierungsstatus=True, stimmberechtigung=False)
 
     # Erstellen einer Organisation
     #organisation = Organisation(organisations_id="O1", name="Wahlorganisation", kontakt="kontakt@organisation.com", authentifizierungsstatus=True)
@@ -70,14 +102,3 @@ if __name__ == "__main__":
     abstimmung.add_option("Kandidat B")
 
     # Stimmen abgeben
-    if bürger1.ist_stimmberechtigt():
-        stimme1 = Stimme(bürger_id=bürger1.bürger_id, abstimmungs_id=abstimmung.abstimmungs_id, wahloption="Kandidat A")
-        print(f"{bürger1.name} hat für {stimme1.wahloption} gestimmt.")
-    else:
-        print(f"{bürger1.name} ist nicht stimmberechtigt.")
-
-    if bürger2.ist_stimmberechtigt():
-        stimme2 = Stimme(bürger_id=bürger2.bürger_id, abstimmungs_id=abstimmung.abstimmungs_id, wahloption="Kandidat B")
-        print(f"{bürger2.name} hat für {stimme2.wahloption} gestimmt.")
-    else:
-        print(f"{bürger2.name} ist nicht stimmberechtigt.")
