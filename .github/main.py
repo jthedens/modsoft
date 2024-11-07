@@ -1,5 +1,7 @@
+from cgi import print_environ
 from datetime import datetime
 from typing import List
+import sqlite3
 
 class Citizens:
     def __init__(self, citizens_id, name, email, password, rolle, authentifizierungsstatus, stimmberechtigung):
@@ -13,6 +15,17 @@ class Citizens:
 
     def ist_stimmberechtigt(self) -> bool:
         return self.stimmberechtigung and self.authentifizierungsstatus
+
+
+'''
+class Organisation:
+    def __init__(self, organisations_id: str, name: str, kontakt: str, authentifizierungsstatus: bool):
+        self.organisations_id = organisations_id
+        self.name = name
+        self.kontakt = kontakt
+        self.authentifizierungsstatus = authentifizierungsstatus
+'''
+
 
 
 class Stimme(Citizens):
@@ -50,6 +63,7 @@ class Stimme(Citizens):
             print(f"{bürger2.name} ist nicht stimmberechtigt.")
 '''
 
+
 class Abstimmung:
     def __init__(self, abstimmungs_id: str, titel: str, beschreibung: str, frist: datetime, abstimmungsstatus: bool):
         self.abstimmungs_id = abstimmungs_id
@@ -66,21 +80,40 @@ class Abstimmung:
         return self.abstimmungsstatus and datetime.now() <= self.frist
 
 
+def callCitizens():
+    citizens_mail = input("E-Mail: ")
+    citizens_password = input("Password: ")
 
+    res = cursor.execute("SELECT CITIZENSID, FIRSTNAME, LASTNAME, EMAIL, PASSWORD, ROLL, AUTHENTICATIONSTATUS, CHOICEALLOWED FROM CITIZENS WHERE EMAIL = ? AND PASSWORD = ?",(citizens_mail, citizens_password))
+    CITIZENSID, FIRSTNAME, LASTNAME, EMAIL, PASSWORD, ROLL, AUTHENTICATIONSTATUS, CHOICEALLOWED = res.fetchone()
 
-'''
-class Organisation:
-    def __init__(self, organisations_id: str, name: str, kontakt: str, authentifizierungsstatus: bool):
-        self.organisations_id = organisations_id
-        self.name = name
-        self.kontakt = kontakt
-        self.authentifizierungsstatus = authentifizierungsstatus
-'''
+    '''
+    if citizens1.authentifizierungsstatus == "0":
+        authentifizierungsStatusChange = input("Authentifizieren? (Y/N): ")
+
+        if authentifizierungsStatusChange == "Y":
+            updateAuthentifizierungsStatus = "UPDATE CITIZENS SET AUTHENTICATIONSTATUS = ? WHERE CITIZENSID = ?"
+            resUpdate = cursor.execute(updateAuthentifizierungsStatus, ("1", citizens1.citizens_id))
+
+        else:
+            print("ERROR")
+    '''
+
+    return CITIZENSID, FIRSTNAME + " " + LASTNAME, EMAIL, PASSWORD, ROLL, AUTHENTICATIONSTATUS, CHOICEALLOWED
+
 
 # Beispiel für die Nutzung des Domain Models
 if __name__ == "__main__":
+
+    #Zugriff auf die Datenbank
+    conn = sqlite3.connect('citizens.db')
+    #Cursor erstellen
+    cursor = conn.cursor()
+
     # Erstellen von Bürgern
-    citizens1 = Citizens(citizens_id="B1", name="Max Mustermann", email="max@example.com", password="1234", rolle="buerger", authentifizierungsstatus=True, stimmberechtigung=True)
+    dataCitizens = callCitizens()
+    citizens1 = Citizens(dataCitizens[0], dataCitizens[1], dataCitizens[2], dataCitizens[3], dataCitizens[4], dataCitizens[5], dataCitizens[6])
+    # Stimmen abgeben
     stimme1 = Stimme(citizens1.citizens_id, citizens1.name, citizens1.email, citizens1.password, citizens1.rolle, citizens1.authentifizierungsstatus, citizens1.stimmberechtigung, wahloption = "X")
     stimme1.stimmeAbgabe(citizens1.stimmberechtigung)
     #bürger2 = Bürger(bürger_id="B2", name="Erika Mustermann", email="erika@example.com", password="1234", rolle="buerger",authentifizierungsstatus=True, stimmberechtigung=False)
@@ -101,4 +134,8 @@ if __name__ == "__main__":
     abstimmung.add_option("Kandidat A")
     abstimmung.add_option("Kandidat B")
 
-    # Stimmen abgeben
+
+    # Commit your changes in the database
+    conn.commit()
+    # Closing the connection
+    conn.close()
