@@ -1,4 +1,3 @@
-from cgi import print_environ
 from datetime import datetime
 from typing import List
 import sqlite3
@@ -35,7 +34,7 @@ class Stimme(Citizens):
         self.wahloption = wahloption
 
     def stimmeAbgabe(self, stimmberechtigung):
-        if stimmberechtigung == True:
+        if stimmberechtigung == "1":
 
             self.wahloption = input("Abstimmen (Y/N): ")
             if self.wahloption == "Y":

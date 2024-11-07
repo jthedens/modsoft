@@ -14,7 +14,7 @@ DATEOFBIRTH VARCHAR(255), EMAIL VARCHAR(255), PASSWORD VARCHAR(255), ROLL VARCHA
 cursor.execute(citizensTabel)
 
 # Queries to INSERT records.
-cursor.execute('''INSERT INTO CITIZENS VALUES ('100001', 'Max', 'Müller', '28.06.1965', 'max.m@mail.de', '1234', 'Bürger', '0', '0')''')
+cursor.execute('''INSERT INTO CITIZENS VALUES ('100001', 'Max', 'Müller', '28.06.1965', 'max.m@mail.de', '1234', 'Bürger', '0', '1')''')
 cursor.execute('''INSERT INTO CITIZENS VALUES ('100002', 'Petra', 'Meyer', '01.02.1991', 'petra.m@mail.de', '1234', 'Bürger','0', '0')''')
 cursor.execute('''INSERT INTO CITIZENS VALUES ('100003', 'Anna', 'Schmidt', '30.12.2007', 'anna.s@mail.de', '1234','Bürger', '0', '0')''')
 
