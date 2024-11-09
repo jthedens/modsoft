@@ -47,20 +47,11 @@ class Stimme(Citizens):
             else:
                 print("ERROR in der Stimmenabgabe")
 
+        elif stimmberechtigung != "1":
+            raise Exception("Keine Stimmabgabe erlaubt")
+
         else:
-            print(f"{self.name} ist nicht stimmberechtigt.")
-
-
-
-
-'''
-        if bürger2.ist_stimmberechtigt():
-            stimme2 = Stimme(bürger_id=bürger2.bürger_id, abstimmungs_id=abstimmung.abstimmungs_id,
-                             wahloption="Kandidat B")
-            print(f"{bürger2.name} hat für {stimme2.wahloption} gestimmt.")
-        else:
-            print(f"{bürger2.name} ist nicht stimmberechtigt.")
-'''
+            print("ERROR in der Stimmenabgabe.")
 
 
 class Abstimmung:
@@ -87,12 +78,14 @@ def callCitizens():
     CITIZENSID, FIRSTNAME, LASTNAME, EMAIL, PASSWORD, ROLL, AUTHENTICATIONSTATUS, CHOICEALLOWED = res.fetchone()
 
     '''
-    if citizens1.authentifizierungsstatus == "0":
+    if AUTHENTICATIONSTATUS == "0":
         authentifizierungsStatusChange = input("Authentifizieren? (Y/N): ")
 
         if authentifizierungsStatusChange == "Y":
             updateAuthentifizierungsStatus = "UPDATE CITIZENS SET AUTHENTICATIONSTATUS = ? WHERE CITIZENSID = ?"
-            resUpdate = cursor.execute(updateAuthentifizierungsStatus, ("1", citizens1.citizens_id))
+            resUpdate = cursor.execute(updateAuthentifizierungsStatus, ("1", CITIZENSID))
+            res = cursor.execute("SELECT CITIZENSID, FIRSTNAME, LASTNAME, EMAIL, PASSWORD, ROLL, AUTHENTICATIONSTATUS, CHOICEALLOWED FROM CITIZENS WHERE EMAIL = ? AND PASSWORD = ?",(citizens_mail, citizens_password))
+            CITIZENSID, FIRSTNAME, LASTNAME, EMAIL, PASSWORD, ROLL, AUTHENTICATIONSTATUS, CHOICEALLOWED = res.fetchone()
 
         else:
             print("ERROR")
@@ -112,13 +105,14 @@ if __name__ == "__main__":
     # Erstellen von Bürgern
     dataCitizens = callCitizens()
     citizens1 = Citizens(dataCitizens[0], dataCitizens[1], dataCitizens[2], dataCitizens[3], dataCitizens[4], dataCitizens[5], dataCitizens[6])
+
     # Stimmen abgeben
     stimme1 = Stimme(citizens1.citizens_id, citizens1.name, citizens1.email, citizens1.password, citizens1.rolle, citizens1.authentifizierungsstatus, citizens1.stimmberechtigung, wahloption = "X")
     stimme1.stimmeAbgabe(citizens1.stimmberechtigung)
-    #bürger2 = Bürger(bürger_id="B2", name="Erika Mustermann", email="erika@example.com", password="1234", rolle="buerger",authentifizierungsstatus=True, stimmberechtigung=False)
 
+    '''
     # Erstellen einer Organisation
-    #organisation = Organisation(organisations_id="O1", name="Wahlorganisation", kontakt="kontakt@organisation.com", authentifizierungsstatus=True)
+    organisation = Organisation(organisations_id="O1", name="Wahlorganisation", kontakt="kontakt@organisation.com", authentifizierungsstatus=True)
 
     # Erstellen einer Abstimmung
     abstimmung = Abstimmung(
@@ -132,7 +126,7 @@ if __name__ == "__main__":
     # Optionen zur Abstimmung hinzufügen
     abstimmung.add_option("Kandidat A")
     abstimmung.add_option("Kandidat B")
-
+    '''
 
     # Commit your changes in the database
     conn.commit()
