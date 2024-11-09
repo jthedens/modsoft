@@ -278,115 +278,172 @@ jobs:
 ```
 ---
 
-### Tests hinzufügen
+### Tests in der CI/CD-Pipeline
+
+```bash
+import unittest
+from main import Citizens, Stimme  # Passen Sie den Modulnamen an
+
+class TestCitizens(unittest.TestCase):
+    def setUp(self):
+        self.citizen = Citizens(
+            citizens_id="C1",
+            name="Max Mustermann",
+            email="max@example.com",
+            password="password123",
+            rolle="Bürger",
+            authentifizierungsstatus="0",
+            stimmberechtigung="1",
+        )
+
+    def test_ist_stimmberechtigt(self):
+        # Testet, ob der Bürger stimmberechtigt ist
+        self.assertTrue(self.citizen.ist_stimmberechtigt())
+
+class TestStimme(unittest.TestCase):
+    def setUp(self):
+        self.stimme = Stimme(
+            citizens_id="100000",
+            name="Max Mustermann",
+            email="max@example.com",
+            password="password123",
+            rolle="Bürger",
+            authentifizierungsstatus="0",
+            stimmberechtigung="1",
+            wahloption="X"
+        )
+
+    def test_stimme_abgabe_berechtigt(self):
+        # Testet die Stimmabgabe für einen stimmberechtigten Bürger
+        self.stimme.wahloption = "Y"  # Simulierte Eingabe ohne Benutzerinteraktion
+        self.assertEqual(self.stimme.wahloption, "Y")
+
+    def test_stimme_abgabe_nicht_berechtigt(self):
+        # Testet die Stimmabgabe für einen Bürger, der nicht stimmberechtigt ist
+        self.stimme.stimmberechtigung = "0"
+        with self.assertRaises(Exception):  # Falls `stimmeAbgabe` bei fehlender Berechtigung eine Exception wirft
+            self.stimme.stimmeAbgabe(self.stimme.stimmberechtigung)
+
+if __name__ == "__main__":
+    unittest.main()
 
 
+
+```
 
 ---
 
 
-## **Beispiel für einen Deployment-Prozess**
+### **Beispiel für einen Deployment-Prozess**
 
 
 
-### **Code-Commit und Push:**
+#### **Code-Commit und Push:**
   
-   Eingabe des Codes in einem Versionskontrollsystem (z.B. Git) mit anschließendem Code Commit und Push
+- Eingabe des Codes in einem Versionskontrollsystem (z.B. Git) mit anschließendem Code Commit und Push
 
 
 
-### **Automatisierte Tests:**
+#### **Automatisierte Tests:**
    
-   Start einer automatischen CI/CD-Pipeline (GitHub Actions). Hierbei können Fehler frühzeitig gefunden werden.
+- Start einer automatischen CI/CD-Pipeline (GitHub Actions). Hierbei können Fehler frühzeitig gefunden werden.
 
 
 
-### **Build:**
+#### **Build:**
    
-   Bei erfolgreichem Test wird der Code in ein ausführbares Format umgewandelt (Build).
+- Bei erfolgreichem Test wird der Code in ein ausführbares Format umgewandelt (Build).
 
 
-
-### **Bereitstellung in Staging:**
+#### **Bereitstellung in Staging:**
    
-   Der Build wird auf eine Staging-Umgebung (eine Art Testumgebung) deployed. Hier können Entwickler und Tester die Anwendung testen, bevor sie live geht.
+ - Der Build wird auf eine Staging-Umgebung (eine Art Testumgebung) deployed. Hier können Entwickler und Tester die Anwendung testen, bevor sie live geht.
 
 
 
-### **Manuelles oder Automatisches Deployment auf Produktion:**
+#### **Manuelles oder Automatisches Deployment auf Produktion:**
    
-   Nach erfolgreichen Tests wird die neue Version in die Produktionsumgebung deployed, wo sie für Benutzer zugänglich ist.
+- Nach erfolgreichen Tests wird die neue Version in die Produktionsumgebung deployed, wo sie für Benutzer zugänglich ist.
 
 
 
-### **Monitoring und Rollback:**
+#### **Monitoring und Rollback:**
   
-   Nach dem Deployment wird die Anwendung überwacht, um Probleme frühzeitig zu erkennen. Falls Probleme auftreten, kann ein Rollback durchgeführt werden, um die vorherige       Version wiederherzustellen.
- 
+- Nach dem Deployment wird die Anwendung überwacht, um Probleme frühzeitig zu erkennen. Falls Probleme auftreten, kann ein Rollback durchgeführt werden, um die vorherige Version wiederherzustellen.
 
+
+---
 
 ### **Wo und wie könnte Ihre Anwendung in Zukunft automatisch deployed werden? Welche Plattformen wären relevant? Vor- und Nachteile?**
 
 
  
-## **1.GitLab als DevOps-Plattform**
+#### **1. GitLab als DevOps-Plattform**
 **Vorteile:**
-CI/CD in einer Plattform integriert, was den gesamten Prozess beschleunigt und   vereinfacht.
-Automatisierung und Transparenz: Jeder Schritt im Deployment-Prozess ist nachvollziehbar.
-Flexible Integration mit Cloud-Services (z.B. Kubernetes für containerisierte Deployments oder direkte Deployments in die Cloud).
+- CI/CD in einer Plattform integriert, was den gesamten Prozess beschleunigt und   vereinfacht.
+- Automatisierung und Transparenz: Jeder Schritt im Deployment-Prozess ist nachvollziehbar.
+- Flexible Integration mit Cloud-Services (z.B. Kubernetes für containerisierte Deployments oder direkte Deployments in die Cloud).
 
 **Nachteile:**
 
-Erfordert Setup und Wartung der Pipeline, was bei größeren Projekten aufwendig sein kann.
+- Erfordert Setup und Wartung der Pipeline, was bei größeren Projekten aufwendig sein kann.
 
 
 
-### **2.Cloud-Plattformen (z.B. AWS, Azure, Google Cloud Platform)**
+#### **2. Cloud-Plattformen (z.B. AWS, Azure, Google Cloud Platform)**
 
 **Vorteile:**
 
-Hohe Skalierbarkeit und Flexibilität.
-Eine Vielzahl von integrierten Tools für CI/CD, Monitoring und Sicherheit.
-Bezahlen nur für die tatsächlich genutzten Ressourcen (Pay-as-you-go).
+- Hohe Skalierbarkeit und Flexibilität.
+- Eine Vielzahl von integrierten Tools für CI/CD, Monitoring und Sicherheit.
+- Bezahlen nur für die tatsächlich genutzten Ressourcen (Pay-as-you-go).
 
 **Nachteile:**
 
-Abhängigkeit vom Cloud-Anbieter.
-Potenziell hohe Kosten bei unkontrollierter Skalierung.
-Datenschutz- und Compliance-Anforderungen je nach Region.
+- Abhängigkeit vom Cloud-Anbieter.
+- Potenziell hohe Kosten bei unkontrollierter Skalierung.
+- Datenschutz- und Compliance-Anforderungen je nach Region.
 
 
  
-### **3.Plattformen für Container-Orchestrierung (z.B. Kubernetes)**
+#### **3. Plattformen für Container-Orchestrierung (z.B. Kubernetes)**
 
 **Vorteile:**
 
-Flexibles Deployment von Containern (z.B. mit Docker).
-Ermöglicht einfaches Skalieren und Verwenden von Microservices.
-Kann on-premise oder in der Cloud gehostet werden.
+- Flexibles Deployment von Containern (z.B. mit Docker).
+- Ermöglicht einfaches Skalieren und Verwenden von Microservices.
+- Kann on-premise oder in der Cloud gehostet werden.
 
 **Nachteile:**
 
-Komplexe Einrichtung und Wartung.
-Höherer Ressourcenbedarf durch zusätzliche Container-Orchestrierung.
+- Komplexe Einrichtung und Wartung.
+- Höherer Ressourcenbedarf durch zusätzliche Container-Orchestrierung.
 
 
 
-### **4.PaaS-Anbieter  (z.B. Heroku, Render)**
+#### **4. PaaS-Anbieter  (z.B. Heroku, Render)**
 
 **Vorteile:**
 
-Einfach zu bedienen, ideal für schnelle Deployments.
-Viel Infrastruktur-Management wird durch die Plattform übernommen.
+- Einfach zu bedienen, ideal für schnelle Deployments.
+- Viel Infrastruktur-Management wird durch die Plattform übernommen.
 
 **Nachteile:**
 
-Begrenzte Kontrolle über Infrastruktur und Konfiguration.
-Für größere Anwendungen oder spezifische Anforderungen oft nicht ausreichend flexibel.
+- Begrenzte Kontrolle über Infrastruktur und Konfiguration.
+- Für größere Anwendungen oder spezifische Anforderungen oft nicht ausreichend flexibel.
 
+---
 
+## Dokumentation der Zusammenarbeit (Übung 2)
 
+- Einführung in CI/CD *- bearbeitet von Niklas Wehl*
+- Einrichtung der CI/CD-Pipeline *- bearbeitet von Josefine Theden-Schow*
+- Tests hinzufügen *- bearbeitet von allen Mitgliedern*
+- Deployment-Konzepte *- bearbeitet von Vera Kammerer*
+- Branching und Pull Requests in Verbindung mit CI/CD *- bearbeitet von Jan Eberlein*
 
+---
 
 ---
 
@@ -757,6 +814,95 @@ if __name__ == "__main__":
 - Bounded Contexts und Entitäten und Aggregate *- bearbeitet von Niklas Wehl*
 - Domain Services und Repositories *- bearbeitet von Vera Kammerer*
 - Strategie zur Implementierung des DDD-Modells in Code *- bearbeitet von Jan Eberlein*
+
+---
+
+---
+
+## Übung 4 (Advanced Java und Test-Driven Design (TDD) anwenden)
+---
+---
+
+### **1. Implementierungsstrategie und Domain-Events**
+
+**Events:**
+Aktuell umfasst die Implementierung zwei zentrale Events, die als Basis für die grundlegenden Funktionen des Projekts dienen. Diese Events sind:
+
+- **Nutzerregistrierung und Authentifizierung** (in vereinfachter Form)
+- **Abstimmungsmechanismus**
+
+**Nutzerregistrierung und Authentifizierung (vereinfacht):**
+Dieses Event steht in einer ersten Version für die Zwischenpräsentation zur Verfügung. Die Ausgangsdaten stammen aus einer vorbereiteten Datenbank, die die persönlichen Daten der Bürger bereits enthält. Lediglich die abschließende Authentifizierung muss durchgeführt und validiert werden.
+
+Die Bürgerdaten werden über die Methode `callCitizens` und die Klasse `Citizens` (dt. Bürger) aus der Datenbank geladen. Der Authentifizierungsstatus der Bürger wird überprüft und gegebenenfalls aktualisiert. Zukünftig soll der Authentifizierungsstatus gemäß dem Domänenmodell noch enger eingebunden werden.
+
+**Abstimmungsmechanismus:**
+Dieses Event nutzt die Klasse `Stimme`, in der die Methode `stimmeAbgeben` die Stimmabgabe eines Bürgers verwaltet und die Abstimmungsergebnisse in der Datenbank speichert. Die Methode wurde von der ursprünglichen Implementierungsstrategie leicht abgewandelt, um die Datenerfassung zu optimieren. Zudem erbt die Klasse `Stimme` nun Eigenschaften der Klasse `Citizens`, sodass Bürgerdaten direkt verknüpft werden können. Zusätzlich zur Stimmabgabe ist die Methode `ist_stimmberechtigt` integriert, um sicherzustellen, dass nur stimmberechtigte Bürger abstimmen dürfen.
+
+---
+
+### **2. Definition der Testfälle (TDD-Schritt 1)**
+
+Im Rahmen der Test Driven Development (TDD) Strategie sollten zuerst Unit-Tests für die Hauptmethoden der Klassen `Citizens` und `Stimme` entwickelt werden. Diese Tests validieren zentrale Funktionen wie die Stimmberechtigung und die Auswahlmöglichkeiten bei der Abstimmung. Mit einem Test-Framework wie `unittest` oder `pytest` in Python können Tests definiert werden, die unter anderem sicherstellen:
+
+- Die Methode `ist_stimmberechtigt` gibt nur dann `True` (1) zurück, wenn ein Bürger sowohl stimmberechtigt als auch authentifiziert ist.
+- Die Methode `stimmeAbgeben` funktioniert nur für stimmberechtigte Bürger und gibt eine Fehlermeldung zurück, falls der Bürger nicht stimmberechtigt ist. Ebenso sollte überprüft werden, dass der Abstimmungsprozess korrekt verläuft.
+
+---
+
+### **3. Implementierung der Domänenlogik (TDD-Schritt 2)**
+
+Die Domänenlogik ist in der Datei `main.py` im Git-Repository implementiert, während die zugehörigen Unit-Tests in `test_main.py` hinterlegt sind.
+
+---
+
+### **4. Test-Erweiterung und Refaktorisierung (TDD-Schritt 3)**
+
+Randfälle sollten ebenfalls durch die Tests abgedeckt werden, etwa:
+
+- Szenarien, in denen die Methode `stimmeAbgeben` ohne Authentifizierung aufgerufen wird.
+- Tests, die ungültige Eingaben, wie falsche Wahloptionen, abfangen.
+
+Refaktorisierung: Der Code sollte regelmäßig refaktoriert werden, um die Qualität zu verbessern. So könnte die Methode `stimmeAbgeben` beispielsweise Fehlerabfragen priorisieren und eine explizitere Fehlerbehandlung anbieten, um Robustheit und Lesbarkeit zu steigern.
+
+---
+
+### **5. Modularität und Testbarkeit via CI/CD sicherstellen**
+
+In unserem Projekt haben wir auf eine modulare Architektur geachtet, indem wir die Bounded Contexts klar voneinander getrennt haben. Die zentralen Module – Bürger, Abstimmung und Stimmenabgabe – wurden jeweils in eigenen Dateien implementiert, um die Verantwortlichkeiten eindeutig zuzuordnen und die Lesbarkeit zu erhöhen. Das Modul für die Bürgerverwaltung deckt Funktionen wie Authentifizierung und Stimmberechtigungsprüfung ab, während das Abstimmungsmodul sich um die Verwaltung der Wahloptionen und Fristen kümmert. Die Stimmenabgabe verarbeitet die eingehenden Stimmen und validiert sie. Diese Struktur ermöglicht es, Änderungen an einem Modul vorzunehmen, ohne ungewollte Seiteneffekte in anderen Modulen zu erzeugen.
+
+Die Testbarkeit wurde durch den Einsatz von unittest gefördert, wobei jede Klasse in einer separaten Testklasse getestet wird. So gibt es Tests für Bürger, Stimmen und Abstimmungen, die unabhängig voneinander ausgeführt werden können. Diese Modularität erleichtert das isolierte Testen von Funktionen und gewährleistet, dass ein Fehler in einem Modul die anderen Tests nicht beeinträchtigt. Beispielsweise prüfen Tests für die ist_stimmberechtigt()-Methode, ob sie in unterschiedlichen Szenarien korrekt funktioniert. Mocking-Techniken ermöglichen zudem die Simulation externer Abhängigkeiten wie Datenbankzugriffe, was die Tests stabiler und schneller macht.
+
+Unsere CI-Pipeline wurde mit GitHub Actions eingerichtet, um eine kontinuierliche Integritätsprüfung zu gewährleisten. Der Workflow wird bei Pushes und Pull-Requests im main-Branch ausgelöst und läuft auf einer ubuntu-latest-Umgebung. Nach dem Checkout des Codes und der Einrichtung von Python werden Abhängigkeiten aus der requirements.txt installiert. Abschließend führen wir mit pytest die Unit-Tests durch, um sicherzustellen, dass alle Änderungen automatisch überprüft und potenzielle Fehler frühzeitig erkannt werden. Dies unterstützt die langfristige Wartbarkeit und Zuverlässigkeit des Projekts.
+
+---
+### **6. Reflektion zu TDD und DDD**
+
+
+
+
+---
+### **7. Einsatz eines Large Language Models (LLM)**
+Für die Optimierung unseres Codes haben wir das LLM ChatGPT verwendet.
+
+Allgemein haben wir darauf geachtet, nicht anhand „copy and paste“ vorzugehen, das heißt ganze Codes oder Befehle der KI zu entnehmen und anzuwenden, sondern die KI lediglich als Unterstützung zu betrachten. Bei der Erstellung des Codes beispielsweise haben wir stets nach Methoden und Syntax gefragt. Diese wendeten wir dann anhand von Beispielen eigenhändig an.
+
+Auch haben wir uns generelle Begriffe wie „Bounded Context“ oder „Domain Driven Design (DDD)“ von der KI erklären lassen, um die Aufgabenstellung gewissenhaft beantworten zu können. Zudem wurden uns allgemeine Fragen zur Programmierung, wie das Definieren und Aufrufen von Methoden in Python oder das Prinzip der Vererbung, anhand von praktischen Beispielen erklärt. Außerdem ließen wir uns von ChatGPT bestimmte Vorgehensweisen, wie die Nutzung von SQLite mit Python veranschaulichen, da uns hier die Erfahrung fehlte.
+
+Schon zu Beginn nutzten wir ChatGPT, um eine erste YML-Datei zu erstellen, die wir im weiteren Verlauf des Entwicklungsprozesses an den aktuellen Code angepasst haben. Größtenteils haben wir ChatGPT für die Erstellung der Tests als Hilfe herangezogen. So haben wir uns beispielsweise verschiedene Unittests für die Klassen Citizens und Stimme mithilfe der KI erstellen lassen. Dafür haben wir den gesamten Code in das Chatfeld eingegeben und die KI gefragt, ob sie uns hierfür drei passende Unittests bereitstellen kann. Zusätzlich fügten wir hinzu, dass wir mit Github Actions arbeiten. ChatGPT hat uns daraufhin drei Unittests vorgeschlagen und außerdem die schrittweise Vorgehensweise bezüglich der Testausführung mit Github Actions erklärt.
+
+Zusätzlich setzten wir ChatGPT zur Bedeutungserklärung von Fehlermeldungen ein, sowie zur Behebung dieser im Code.
+
+---
+
+## Dokumentation der Zusammenarbeit (Übung 3)
+
+- Implementierungsstrategie und Domain-Events / TTD (Schritte 1-3) *- bearbeitet von Niklas Wehl*
+- Modularität und Testbarkeit via CI/CD sicherstellen *- bearbeitet von Josefine Theden-Schow*
+- Reflektion zu TDD und DDD *- bearbeitet von Jan Eberlein*
+- Einsatz eines Large Language Models (LLM) *- bearbeitet von Vera Kammerer*
+
+Bemerkung: Die Inhalte von TTD wurden in der Gruppe besprochen.
 
 ---
 
