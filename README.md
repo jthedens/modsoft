@@ -891,7 +891,7 @@ Zusammenfassend schärfen TDD und DDD das Entwicklungsverständnis damit, dass v
 
 ---
 ### **7. Einsatz eines Large Language Models (LLM)**
-Für die Optimierung unseres Codes haben wir das LLM ChatGPT verwendet.
+Für die Optimierung unseres Codes haben wir das LLM ChatGPT (GPT 4.0) verwendet.
 
 Allgemein haben wir darauf geachtet, nicht anhand „copy and paste“ vorzugehen, das heißt ganze Codes oder Befehle der KI zu entnehmen und anzuwenden, sondern die KI lediglich als Unterstützung zu betrachten. Bei der Erstellung des Codes beispielsweise haben wir stets nach Methoden und Syntax gefragt. Diese wendeten wir dann anhand von Beispielen eigenhändig an.
 
@@ -899,7 +899,9 @@ Auch haben wir uns generelle Begriffe wie „Bounded Context“ oder „Domain D
 
 Schon zu Beginn nutzten wir ChatGPT, um eine erste YML-Datei zu erstellen, die wir im weiteren Verlauf des Entwicklungsprozesses an den aktuellen Code angepasst haben. Größtenteils haben wir ChatGPT für die Erstellung der Tests als Hilfe herangezogen. So haben wir uns beispielsweise verschiedene Unittests für die Klassen Citizens und Stimme mithilfe der KI erstellen lassen. Dafür haben wir den gesamten Code in das Chatfeld eingegeben und die KI gefragt, ob sie uns hierfür drei passende Unittests bereitstellen kann. Zusätzlich fügten wir hinzu, dass wir mit Github Actions arbeiten. ChatGPT hat uns daraufhin drei Unittests vorgeschlagen und außerdem die schrittweise Vorgehensweise bezüglich der Testausführung mit Github Actions erklärt.
 
-Zusätzlich setzten wir ChatGPT zur Bedeutungserklärung von Fehlermeldungen ein, sowie zur Behebung dieser im Code.
+Zusätzlich setzten wir ChatGPT zur Erklärung und Behebung von Fehlermeldungen ein. Wenn uns Fehlermeldungen von Github Actions unklar waren, erklärte die KI deren Bedeutung und zeigte mögliche Lösungen auf.
+
+Insgesamt hat uns ChatGPT im Entwicklungsprozess unseres e-Vote-Algorithmus wesentlich unterstützt, indem es uns bei Schwierigkeiten weiterhalf. Am Ende gaben wir den gesamten Code erneut an ChatGPT weiter und baten um Verbesserungsvorschläge, von denen wir einige erfolgreich umsetzten.
 
 ---
 
