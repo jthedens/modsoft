@@ -878,7 +878,15 @@ Unsere CI-Pipeline wurde mit GitHub Actions eingerichtet, um eine kontinuierlich
 ---
 ### **6. Reflektion zu TDD und DDD**
 
+Beide Methoden -sowohl Test-Driven Development als auch Domain-Driven Design legen Ihren Fokus auf Klarheit, Struktur und Testbarkeit des implementierten Codes, jedoch aber aus unterschiedlichen Perspektiven:
 
+TDD fordert von Beginn an ein, dass die Anforderungen in klar verständlichen und überprüfbaren Einheiten definiert werden. Hierzu werden zuerst die Tests vor dem eigentlichen Code geschrieben und implementiert, um eine genaue Vorstellung davon zu entwickeln, was jede Funktion erfüllen muss. Dies führt oft zu sauberem, gut strukturiertem Code, der Änderungen und Erweiterungen standhält, weil der Testprozess sicherstellt, dass jede Funktion ihren Anforderungen entspricht. Ein großer Vorteil von TDD ist, sofortiges Feedback zu erhalten und potenzielle Fehler frühzeitig aufzudecken.
+
+Als Herausforderung des TDD kann sich jedoch der Umfang und das anfängliche Zeitinvestment beim Schreiben der Tests gestalten, vor allem bei großen, komplexen Systemen.
+
+Domain-Driven Design hingegen richtet sich eher stark auf die Modellierung des eigentlichen Systems, und seiner Funktionalitäten. Indem das System um die eigentliche Geschäftslogik und die Terminologie der Domäne herum strukturiert wird, schafft man eine nachvollziehbare Architektur, die den Anforderungen langfristig besser gerecht wird. Der größte Vorteil von DDD ist, dass es die Verständlichkeit und Wartbarkeit des Codes erhöht und eine gemeinsame Sprache zwischen Entwicklern und Stakeholdern schafft. Die Herausforderung hier ist oft die Komplexität – DDD kann in komplexen Domänen und bei großen Projekten viel Aufwand erfordern und verlangt ein tiefes Verständnis sowohl der Domäne als auch der Designprinzipien.
+
+Zusammenfassend schärfen TDD und DDD das Entwicklungsverständnis damit, dass von Beginn an und durchgehend auf Struktur, Testbarkeit und domänenspezifische Klarheit bei der Implementierung geachtet wird. Die Kombination aus beiden Methoden bietet Stabilität und Flexibilität, ist aber mit erhöhtem Aufwand verbunden.
 
 
 ---
@@ -895,7 +903,7 @@ Zusätzlich setzten wir ChatGPT zur Bedeutungserklärung von Fehlermeldungen ein
 
 ---
 
-## Dokumentation der Zusammenarbeit (Übung 3)
+## Dokumentation der Zusammenarbeit (Übung 4)
 
 - Implementierungsstrategie und Domain-Events / TTD (Schritte 1-3) *- bearbeitet von Niklas Wehl*
 - Modularität und Testbarkeit via CI/CD sicherstellen *- bearbeitet von Josefine Theden-Schow*
