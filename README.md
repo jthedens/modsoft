@@ -883,7 +883,7 @@ Unsere CI-Pipeline wurde mit GitHub Actions eingerichtet, um eine kontinuierlich
 
 ---
 ### **7. Einsatz eines Large Language Models (LLM)**
-Für die Optimierung unseres Codes haben wir das LLM ChatGPT verwendet.
+Für die Optimierung unseres Codes haben wir das LLM ChatGPT (GPT 4.0) verwendet.
 
 Allgemein haben wir darauf geachtet, nicht anhand „copy and paste“ vorzugehen, das heißt ganze Codes oder Befehle der KI zu entnehmen und anzuwenden, sondern die KI lediglich als Unterstützung zu betrachten. Bei der Erstellung des Codes beispielsweise haben wir stets nach Methoden und Syntax gefragt. Diese wendeten wir dann anhand von Beispielen eigenhändig an.
 
