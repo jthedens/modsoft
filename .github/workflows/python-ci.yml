@@ -24,14 +24,10 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      - name: Setze PYTHONPATH auf aktuelles Verzeichnis
-        run: |
-          echo "PYTHONPATH=$(pwd)" >> $GITHUB_ENV
-
       - name: Liste der Dateien ausgeben
         run: |
           ls -R
 
       - name: Run test
         run: |
-            python -m unittest discover -s ./ -p "tests_*.py"
+            python -m unittest discover -s .github -p "tests_*.py"
