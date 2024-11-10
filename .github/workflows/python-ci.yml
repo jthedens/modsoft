@@ -30,4 +30,4 @@ jobs:
 
       - name: Run test
         run: |
-            python -m unittest discover -s ../ -p "tests_*.py"
+            python -m unittest discover -s ./ -p "tests_*.py"
