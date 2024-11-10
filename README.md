@@ -820,7 +820,7 @@ if __name__ == "__main__":
 ---
 
 ## Übung 4 (Advanced Java und Test-Driven Design (TDD) anwenden)
----
+
 ---
 
 ### **1. Implementierungsstrategie und Domain-Events**
