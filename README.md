@@ -917,3 +917,38 @@ Bemerkung: Die Inhalte von TTD wurden in der Gruppe besprochen.
 ---
 
 ---
+
+## Übung 5 (Software- und Architekturmetriken für Codequalität und Architekturoptimierung)
+
+---
+### 1. Überblick und Anwendung einfacher Metriken:
+
+Zur Erfassung der Daten haben wir das PyCharm-Plugin "MetricsReloaded" verwendet. Dieses Tool bietet eine einfache Möglichkeit, wichtige Code-Metriken wie die Anzahl der Codezeilen (LOC), Klassen, Methoden und die zyklomatische Komplexität zu analysieren. Es integriert sich nahtlos in PyCharm und stellt die Ergebnisse übersichtlich in Tabellen oder Diagrammen dar.
+
+Das Plugin ist einfach zu bedienen: Nach der Installation wird es direkt in die PyCharm-Oberfläche integriert und kann über das Menü oder eine Werkzeugleiste aufgerufen werden. Eine übersichtliche Darstellung der Ergebnisse in Form von Tabellen erleichtert die Interpretation der Daten.
+
+Durch den Einsatz von MetricsReloaded konnten wir nicht nur die aktuellen Code-Metriken unseres Projekts dokumentieren, sondern auch Schwachstellen im Code identifizieren und eine Grundlage für Optimierungsmaßnahmen schaffen.
+
+Bemerkung: Ergebnisse folgen ...
+
+---
+
+### 2. Test Coverage erweitern und Code Coverage verbessern:
+
+Die Integration von Code Coverage in PyCharm ist unkompliziert und direkt in die IDE eingebaut. Um Code Coverage für ein Python-Projekt zu nutzen, folgt man diesen Schritten:
+
+1. **Tests einrichten**: Zunächst müssen Tests, z. B. mit `unittest` oder `pytest`, im Projekt vorhanden sein.
+2. **Tests mit Coverage ausführen**: PyCharm bietet eine Option, Tests mit aktivierter Code Coverage zu starten. Dies geschieht über einen Rechtsklick auf die Testdateien oder das Testverzeichnis und die Auswahl von *"Run with Coverage"*.
+3. **Coverage-Bericht anzeigen**: Nach der Ausführung zeigt PyCharm einen Bericht an, der farblich markiert, welche Teile des Codes von den Tests abgedeckt wurden. Grün steht für getesteten Code, Rot für ungetesteten.
+4. **Erweiterte Einstellungen**: Über die Einstellungen (*File > Settings > Build, Execution, Deployment > Coverage*) kann die Berichterstellung angepasst werden, z. B. das Zusammenführen von Berichten aus mehreren Testläufen.
+
+Durch diese Integration ist es möglich, die Testabdeckung direkt innerhalb der IDE zu analysieren und den Entwicklungsprozess effizienter zu gestalten.
+
+Bemerkung: Ergebnisse folgen ...
+
+---
+
+## Dokumentation der Zusammenarbeit (Übung 5)
+
+- Überblick und Anwendung einfacher Metriken *- bearbeitet von Niklas Wehl*
+- Test Coverage erweitern und Code Coverage verbessern *- bearbeitet von Niklas Wehl*
