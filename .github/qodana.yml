@@ -1,0 +1,7 @@
+version: "1.0"
+linter: jetbrains/qodana-python
+project-dir: ./.github  # Zeigt auf den Ordner, in dem sich die Dateien befinden
+results-dir: qodana-results
+
+
+
