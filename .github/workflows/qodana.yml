@@ -1,7 +1,23 @@
-version: "1.0"
-linter: jetbrains/qodana-python
-project-dir: ./.github  # Zeigt auf den Ordner, in dem sich die Dateien befinden
-results-dir: qodana-results
+name: Qodana Analysis
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  qodana:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v3
+
+    - name: Run Qodana
+      uses: JetBrains/qodana-action@v2023.2
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
 
 
 
