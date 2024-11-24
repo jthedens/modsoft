@@ -1,0 +1,23 @@
+name: Qodana Analysis
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  qodana:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v3
+
+    - name: Run Qodana
+      uses: JetBrains/qodana-action@v2023.2
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+
+
