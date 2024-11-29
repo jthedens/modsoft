@@ -1,23 +1,44 @@
-name: Qodana Analysis
+version: "1.0"
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
+profiles:
+  - name: "CodeMetrics"
+    checks:
+      - id: "code.metrics"
+        enabled: true
 
-jobs:
-  qodana:
-    runs-on: ubuntu-latest
+run:
+  projectRoot: ./ # Root-Verzeichnis des Projekts
+  cacheDir: ./.qodana-cache # Cache-Verzeichnis
+  outputDir: ./qodana-report # Verzeichnis für Berichte
 
-    steps:
-    - name: Check out repository
-      uses: actions/checkout@v3
+report:
+  format: ["html", "json"] # Formate der Berichte
 
-    - name: Run Qodana
-      uses: JetBrains/qodana-action@v2023.2
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+metrics:
+  - enabled: true
+    include:
+      - "Code Complexity"
+      - "Code Duplication"
+      - "Code Coverage"
+    thresholds:
+      "Code Complexity": 10 # Maximal erlaubte Komplexität
+      "Code Duplication": 5 # Maximaler Prozentsatz für Duplikate
+      "Code Coverage": 80 # Mindestabdeckung in Prozent
 
+tools:
+  - name: "Python"
+    enabled: true
 
+filters:
+  exclude:
+    - "**/test/**"
+    - "**/build/**"
+    - "**/node_modules/**"
 
+failThreshold:
+  - metric: "Code Complexity"
+    max: 10
+  - metric: "Code Duplication"
+    max: 5
+  - metric: "Code Coverage"
+    min: 80

@@ -95,7 +95,7 @@ def callCitizens():
 
 
 # Beispiel für die Nutzung des Domain Models
-if __name__ == "__main__":
+#if __name__ == "__main__":
 
     #Zugriff auf die Datenbank
     conn = sqlite3.connect('citizens.db')
