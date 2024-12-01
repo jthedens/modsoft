@@ -1,6 +1,6 @@
-def createCitizens():
+def createCitizen():
     pass
 
-def deleteCitizens():
+def deleteCitizen():
     pass
 
