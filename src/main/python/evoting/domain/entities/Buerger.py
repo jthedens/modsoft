@@ -7,5 +7,3 @@ class Citizens:
         self.roll = roll
         self.authentifizierungsstatus = authentifizierungsstatus
         self.stimmberechtigung = stimmberechtigung
-
-

@@ -3,9 +3,10 @@ from src.main.python.evoting.infrastructure.services.AuthentifizierungsService i
 from src.main.python.evoting.infrastructure.services.LoginService import UserLogin
 from src.main.python.evoting.infrastructure.repositories.UserRepository import findCitizens
 
-userMail, userPassword = UserLogin()
-dataCitizens = findCitizens(userMail, userPassword)
-citizens = Citizens(dataCitizens[0], dataCitizens[1], dataCitizens[2], dataCitizens[3], dataCitizens[4],
-                     dataCitizens[5], dataCitizens[6])
+if __name__ == '__main__':
+    userMail, userPassword = UserLogin()
+    dataCitizens = findCitizens(userMail, userPassword)
+    citizens = Citizens(dataCitizens[0], dataCitizens[1], dataCitizens[2], dataCitizens[3], dataCitizens[4],
+                         dataCitizens[5], dataCitizens[6])
 
-AuthentifizierungUser(citizens.stimmberechtigung, citizens.authentifizierungsstatus)
+    AuthentifizierungUser(citizens.stimmberechtigung, citizens.authentifizierungsstatus)
