@@ -1,5 +1,3 @@
-
-
 def UserLogin():
     citizens_mail = input("E-Mail: ")
     citizens_password = input("Password: ")

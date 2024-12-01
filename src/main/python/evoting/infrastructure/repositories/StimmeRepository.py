@@ -1,8 +1,8 @@
 import sqlite3
 
-def findStimme(abstimmungs_id, citizens_id):
+def countStimme(abstimmungs_id, citizens_id):
     # Zugriff auf die Datenbank
-    conn = sqlite3.connect("../../../../../stimmen.db")
+    conn = sqlite3.connect("../../../../stimmen.db")
 
     # Cursor-Objekt erstellen
     cursor = conn.cursor()
