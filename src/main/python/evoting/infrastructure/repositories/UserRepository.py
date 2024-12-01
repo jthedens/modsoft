@@ -2,7 +2,7 @@ import sqlite3
 
 def findCitizens(citizens_mail, citizens_password):
     # Zugriff auf die Datenbank
-    conn = sqlite3.connect("../../../../../citizens.db")
+    conn = sqlite3.connect("../../../../citizens.db")
     # Cursor erstellen
     cursor = conn.cursor()
 
@@ -14,9 +14,4 @@ def findCitizens(citizens_mail, citizens_password):
     # Closing the connection
     conn.close()
 
-    print(CITIZENSID)
     return CITIZENSID, FIRSTNAME + " " + LASTNAME, EMAIL, PASSWORD, ROLL, AUTHENTICATIONSTATUS, CHOICEALLOWED
-
-
-
-#"../../../../../citizens.db"
