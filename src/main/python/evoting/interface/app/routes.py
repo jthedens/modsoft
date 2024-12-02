@@ -13,3 +13,15 @@ def login():
 @main.route('/register')
 def register():
     return render_template('register.html')
+
+@main.route('/abstimmung')
+def abstimmung():
+    return render_template('abstimmung.html')
+
+@main.route('/abstimmungen')
+def abstimmungen():
+    return render_template('abstimmungen.html')
+
+@main.route('/ergebnisse')
+def ergebnisse():
+    return render_template('ergebnisse.html')
