@@ -1,23 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>eVote Login</title>
-  <link rel="stylesheet" href="styles.css">
-  <script defer src="app.js"></script>
-</head>
+{% block title %}Home - eVote System{% endblock %}
 
-<body>
-  <header>
-    <h1>Willkommen im Bürgerabstimmungssystem</h1>
-    <p>Melden Sie sich an oder registrieren Sie sich, um teilzunehmen!</p>
-  </header>
-  <nav>
-    <a href="/login">Login</a>
-    <a href="/register">Registrieren</a>
-  </nav>
-</body>
-
-</html>
+{% block content %}
+  <div class="banner">
+    <div class="container">
+      <h1>Willkommen im Bürgerabstimmungssystem</h1>
+      <p>Melden Sie sich an oder registrieren Sie sich, um teilzunehmen!</p>
+      <br>
+      <a class="btn btn-flat" href="/login">Login</a>
+      <a class="btn btn-flat" href="/register">Registrieren</a>
+    </div>
+  </div>
+{% endblock %}
