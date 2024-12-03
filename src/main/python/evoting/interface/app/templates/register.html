@@ -3,16 +3,19 @@
 {% block title %}Register - eVote System{% endblock %}
 
 {% block content %}
-<body>
-  <h1>Registrieren</h1>
-  <form method="POST" action="/api/register">
-      <label for="name">Name:</label>
-      <input type="text" id="name" name="name" required>
-      <label for="email">E-Mail:</label>
-      <input type="email" id="email" name="email" required>
-      <label for="password">Passwort:</label>
-      <input type="password" id="password" name="password" required>
-      <button type="submit">Registrieren</button>
-  </form>
-</body>
+<div class="banner">
+  <div class="container">
+    <h1>Registrieren</h1>
+    <br>
+    <form method="POST" action="/api/register">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+        <label for="email">E-Mail:</label>
+        <input type="email" id="email" name="email" required>
+        <label for="password">Passwort:</label>
+        <input type="password" id="password" name="password" required>
+        <button type="submit">Registrieren</button>
+    </form>
+  </div>
+</div>
 {% endblock %}

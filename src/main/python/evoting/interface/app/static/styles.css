@@ -1,10 +1,7 @@
-body {
-  height: 100%;
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #e0e0e0;
-  color: #333;
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
 }
 
 .footer {
@@ -12,15 +9,16 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 100px;
+  height: 10vh;
   padding: 0px 50px;
   color: rgba(0,0,0,0.3);
 }
 
 .banner {
-    background-color: #eb7216; /* Beispiel für ein grünes Banner */
-    text-align: center;
-    padding: 150px 0;
+  height: 90vh;
+  background-color: #eb7216; /* Beispiel für ein grünes Banner */
+  text-align: center;
+  padding: 150px 0;
 }
 
 .banner h1 {
@@ -38,15 +36,16 @@ body {
   text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
 }
 
-.btn-flat {
+.banner .btn-flat {
   color: white;
   padding: 8px 24px;
+  margin: 0px 8px;
   border-radius: 4px;
-  background: #670BFF;
+  background: #1b610a;
   transition: background 0.3s ease;
 }
 
-.btn-flat:hover {
-  background: #4D04C4;
+.banner .btn-flat:hover {
+  background: #1b610aa5;
   color: white;
 }
