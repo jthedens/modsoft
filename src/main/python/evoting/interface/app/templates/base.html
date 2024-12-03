@@ -16,7 +16,17 @@
   </main>
 
   <footer class="footer">
-    <p>&copy; 2024 eVote System</p>
+    <p>&copy; Moderne Softwareentwicklung 2024 eVote System</p>
   </footer>
 </body>
 </html>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div>
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
