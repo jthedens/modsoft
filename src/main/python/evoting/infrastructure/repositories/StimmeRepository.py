@@ -16,3 +16,4 @@ def countStimme(abstimmungs_id, citizens_id):
     conn.close()
 
     return count
+

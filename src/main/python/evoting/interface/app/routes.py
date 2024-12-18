@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
-from ...infrastructure.repositories.UserRepository import find_citizens, add_citizen_to_database
+#from ...infrastructure.repositories.UserRepository import find_citizens, add_citizen_to_database
 
 main = Blueprint('main', __name__)
 
