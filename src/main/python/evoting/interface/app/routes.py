@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
-#from ...infrastructure.repositories.UserRepository import find_citizens, add_citizen_to_database
+from ...infrastructure.repositories.UserRepository import findeBuerger, add_citizen_to_database
 
 main = Blueprint('main', __name__)
 
@@ -16,7 +16,7 @@ def login():
 
         try:
             # Benutzer in der Datenbank suchen
-            citizen_data = find_citizens(email, password)
+            citizen_data = findeBuerger(email, password)
             if citizen_data:
                 # Benutzer erfolgreich eingeloggt
                 session['user_email'] = email  # Benutzer speichern

@@ -1,56 +1,65 @@
 import sqlite3
+import bcrypt  # Für Passwort-Hashing
+import os
 
-def find_citizens(citizens_mail, citizens_password):
-  try:
-    # Zugriff auf die Datenbank
-    conn = sqlite3.connect("../../../../citizens.db")
-    # Cursor erstellen
-    cursor = conn.cursor()
-
-    result = cursor.execute("SELECT CITIZENSID, FIRSTNAME, LASTNAME, EMAIL, PASSWORD, ROLE, AUTHENTICATIONSTATUS, CHOICEALLOWED FROM CITIZENS WHERE EMAIL = ? AND PASSWORD = ?",(citizens_mail, citizens_password))
-    CITIZENSID, FIRSTNAME, LASTNAME, EMAIL, PASSWORD, ROLL, AUTHENTICATIONSTATUS, CHOICEALLOWED = result.fetchone()
-
-    if result is None:
-      raise ValueError("Kein Benutzer gefunden. Ungültige Email oder Passwort.")
-
-    return (
-        result[0],  # CITIZENSID
-        f"{result[1]} {result[2]}",  # FIRSTNAME + LASTNAME
-        result[3],  # EMAIL
-        result[4],  # PASSWORD
-        result[5],  # ROLE
-        result[6],  # AUTHENTICATIONSTATUS
-        result[7],  # CHOICEALLOWED
-      )
-
-  except sqlite3.Error as e:
-    print(f"Datenbankfehler: {e}")
-    raise
-  finally:
-    conn.close()
-
-
-    # # Commit your changes in the database
-    # conn.commit()
-    # # Closing the connection
-    # conn.close()
-
-    # return CITIZENSID, FIRSTNAME + " " + LASTNAME, EMAIL, PASSWORD, ROLL, AUTHENTICATIONSTATUS, CHOICEALLOWED
-
-def add_citizen_to_database(name, email, password):
+def findeBuerger(email, passwort):
     try:
-        conn = sqlite3.connect("citizens.db")
-        cursor = conn.cursor()
+        # Zugriff auf die Datenbank mit 'with', um automatische Verbindungsschließung sicherzustellen
 
-        # Passwort-Hashing hinzufügen (empfohlen)
-        hashed_password = password  # Hier könntest du `werkzeug.security` verwenden
+        if not os.path.exists("eVoteMain.db"):
+            raise ValueError("Die Datenbankdatei existiert nicht!")
 
-        cursor.execute(
-            "INSERT INTO CITIZENS (FIRSTNAME, LASTNAME, EMAIL, PASSWORD, ROLL, AUTHENTICATIONSTATUS, CHOICEALLOWED) VALUES (?, ?, ?, ?, ?, ?, ?)",
-            (name.split()[0], name.split()[1], email, hashed_password, "user", 0, 1)
-        )
-        conn.commit()
+        with sqlite3.connect("eVoteMain.db") as conn:
+            cursor = conn.cursor()
+            # SQL-Abfrage ausführen
+            cursor.execute(
+                """SELECT 
+                    buergerid, 
+                    vorname,
+                    nachname, 
+                    geburtstag, 
+                    adresse, 
+                    plz, 
+                    email, 
+                    passwort, 
+                    rolle, 
+                    authentifizierungsstatus
+                FROM buerger 
+                WHERE email = ?""",  # Wir prüfen nur nach Email, weil Passwörter nie im Klartext in der DB gespeichert werden sollten.
+                (email,)
+            )
+
+            # Einträge aus der Datenbank abholen
+            result = cursor.fetchone()
+
+            if result is None:
+                raise ValueError("Kein Benutzer gefunden. Ungültige Email oder Passwort.")
+
+            # Entpacken der Ergebnisse
+            buergerid, vorname, nachname, geburtstag, adresse, plz, email, hashed_password, rolle, authentifizierungsstatus = result
+
+            print(hashed_password)
+
+            # Passwort mit dem gehashten Passwort vergleichen
+            if not bcrypt.checkpw(passwort.encode('utf-8'), hashed_password):
+                raise ValueError("Falsches Passwort.")
+
+            # Rückgabe der Benutzerinformationen
+            return {
+                "buergerid": buergerid,
+                "voller_name": f"{vorname} {nachname}",
+                "email": email,
+                "rolle": rolle,
+                "authentifizierungsstatus": authentifizierungsstatus,
+                "geburtstag": geburtstag,
+                "adresse": adresse,
+                "plz": plz
+            }
+
     except sqlite3.Error as e:
-        raise Exception(f"Fehler beim Hinzufügen zur Datenbank: {e}")
-    finally:
-        conn.close()
+        print(f"Datenbankfehler: {e}")
+        raise
+    except ValueError as e:
+        print(f"Fehler: {e}")
+        raise
+
