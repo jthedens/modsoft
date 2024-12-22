@@ -1,29 +1,25 @@
 import sqlite3
 
-def abgebenStimme(stimmberechtigung, citizensID, abstimmungsID):
+def stimmeErfassen(buergerid, abstimmungid, stimme):
+    try:
+        # Verbindung zur Datenbank herstellen mit 'with' für automatische Schließung
+        with sqlite3.connect("eVoteMain.db") as connection:
+            cursor = connection.cursor()
 
-    if stimmberechtigung:
-        stimme = input("Option 1 oder 2: ")
+            # SQL-Befehl zum Einfügen eines Eintrags
+            insert_query = '''INSERT INTO auswertung (buergerid, abstimmungid, stimme) VALUES (?, ?, ?)'''
 
-        # Verbindung zur Datenbank herstellen
-        connection = sqlite3.connect("../../../../stimmen.db")
-        cursor = connection.cursor()
+            # Werte, die eingefügt werden sollen
+            values = (buergerid, abstimmungid, stimme)
 
-        # SQL-Befehl zum Einfügen eines Eintrags
-        insert_query = '''INSERT INTO users (CITIZENSID, ABSTIMMUNGSID, STIMME) VALUES (?, ?, ?)'''
+            # SQL-Befehl ausführen
+            cursor.execute(insert_query, values)
 
-        # Werte, die eingefügt werden sollen
-        values = (abstimmungsID, citizensID, stimme)
+            # Änderungen speichern
+            connection.commit()
 
-        # SQL-Befehl ausführen
-        cursor.execute(insert_query, values)
+            print("Eintrag erfolgreich hinzugefügt.")
 
-        # Änderungen speichern
-        connection.commit()
-
-        # Verbindung schließen
-        connection.close()
-
-        print("Eintrag erfolgreich hinzugefügt.")
-
-
+    except sqlite3.Error as e:
+        # Fehlerbehandlung, falls ein Fehler bei der Datenbankoperation auftritt
+        print(f"Fehler beim Hinzufügen des Eintrags: {e}")
