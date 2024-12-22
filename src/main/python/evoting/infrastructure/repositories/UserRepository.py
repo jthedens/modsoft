@@ -1,3 +1,4 @@
+from src.main.python.evoting.domain.entities.Stimme import Buerger
 import sqlite3
 import bcrypt  # Für Passwort-Hashing
 import os
