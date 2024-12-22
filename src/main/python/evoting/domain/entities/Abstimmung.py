@@ -1,10 +1,8 @@
-from datetime import datetime
-
 class Abstimmung:
-    def __init__(self, abstimmungs_id: str, titel: str, beschreibung: str, frist: datetime, abstimmungsstatus: bool):
-        self.abstimmungs_id = abstimmungs_id
+    def __init__(self, abstimmungid, titel, beschreibung, frist, altersgrenze, status):
+        self.abstimmungid = abstimmungid
         self.titel = titel
         self.beschreibung = beschreibung
         self.frist = frist
-        self.abstimmungsstatus = abstimmungsstatus
-        self.verfuegbare_optionen: List[str] = []
+        self.altersgrenze = altersgrenze
+        self.status = status

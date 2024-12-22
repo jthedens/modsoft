@@ -1,6 +1,6 @@
 import sqlite3
 
-def stimmeSumme(abstimmungid):
+def stimmeSumme(abstimmungid, stimme):
     try:
         # Verbindung zur Datenbank mit 'with' für automatische Schließung
         with sqlite3.connect("eVoteMain.db") as conn:
@@ -8,7 +8,7 @@ def stimmeSumme(abstimmungid):
             cursor = conn.cursor()
 
             # SQL-Abfrage, um die Anzahl der Stimmen zu zählen
-            cursor.execute("SELECT COUNT(stimme) FROM auswertung WHERE ABSTIMMUNGSID = ?", (abstimmungid,))
+            cursor.execute("SELECT COUNT(stimme) FROM auswertung WHERE abstimmungid = ? AND stimme = ?", (abstimmungid, stimme))
 
             # Ergebnis abrufen
             count = cursor.fetchone()

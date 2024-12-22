@@ -1,9 +1,11 @@
-class Citizen:
-    def __init__(self, citizen_id, name, email, password, role, authentifizierungsstatus, stimmberechtigung):
-        self.citizen_id = citizen_id
+class Buerger:
+    def __init__(self, buergerid, name, email, geburtstag, adresse, plz, password, rolle, authentifizierungsstatus):
+        self.buergerid = buergerid
         self.name = name
+        self.geburtstag = geburtstag
+        self.adresse = adresse
+        self.plz = plz
         self.email = email
         self.password = password
-        self.role = role
+        self.rolle = rolle
         self.authentifizierungsstatus = authentifizierungsstatus
-        self.stimmberechtigung = stimmberechtigung
