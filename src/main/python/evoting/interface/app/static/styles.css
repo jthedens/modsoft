@@ -16,36 +16,72 @@ html, body {
 
 .banner {
   height: 90vh;
-  background-color: #eb7216; /* Beispiel für ein grünes Banner */
+  background-color: #DCE4C9; /* Beispiel für ein grünes Banner */
   text-align: center;
   padding: 150px 0;
 }
 
 .banner h1 {
-  margin: 0;
-  color: white;
-  text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+  color: #61210F;
+  /* text-shadow: 1px 1px 3px rgba(0,0,0,0.2); */
   font-size: 32px;
   font-weight: bold;
 }
 
 .banner p {
   font-size: 20px;
-  color: white;
+  color: #001723;
   opacity: .7;
-  text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+  /* text-shadow: 1px 1px 3px rgba(0,0,0,0.2); */
 }
 
 .banner .btn-flat {
-  color: white;
+  color: #001723;
   padding: 8px 24px;
   margin: 0px 8px;
   border-radius: 4px;
-  background: #1b610a;
+  background: #AF7A6D;
   transition: background 0.3s ease;
 }
 
 .banner .btn-flat:hover {
-  background: #1b610aa5;
+  background: #af7a6d7f;
   color: white;
+}
+
+.card-vote {
+  list-style: none;
+  overflow: hidden;
+  height: auto;
+  background: #f9f9f9; /* Leichtes Grau für den Hintergrund */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Weicherer Schatten */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 16px;
+  border-radius: 8px; /* Abgerundete Ecken */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-vote:hover {
+  transform: translateY(-5px); /* Heben der Karte beim Hover */
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15); /* Stärkere Schatten beim Hover */
+}
+
+.card-vote h2 {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.card-vote p {
+  font-size: 14px;
+  line-height: 1.4;
+  opacity: .7;
+  margin-bottom: 0;
+  margin-top: 8px;
+}
+
+.card-vote .card-vote-infos {
+  padding: 16px;
 }

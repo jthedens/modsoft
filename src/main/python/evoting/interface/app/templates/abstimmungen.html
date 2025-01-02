@@ -1,14 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verfügbare Abstimmungen</title>
-    <link rel="stylesheet" href="styles.css">
-    <script defer src="app.js"></script>
-</head>
-<body>
-    <h1>Verfügbare Abstimmungen</h1>
-    <ul id="abstimmungenList"></ul>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Abstimmungen - eVote System{% endblock %}
+
+{% block content %}
+<div class="banner">
+  <div class="container">
+      <h1>Aktuelle Abstimmungen</h1>
+      {% if abstimmungen %}
+          <ul class="card-vote">
+              {% for abstimmung in abstimmungen %}
+                  <li class="card-vote-infos">
+                      <h2>
+                        <a href="{{ url_for('main.abstimmung', id=abstimmung.id) }}">{{ abstimmung.titel }}</a>
+                      </h2>
+                      <p>{{ abstimmung.beschreibung }}</p>
+                      <p><strong>Zeitraum:</strong>
+                         {{ abstimmung.startdatum.strftime('%d.%m.%Y') }} bis {{ abstimmung.enddatum.strftime('%d.%m.%Y') }}
+                      </p>
+                      <p><strong>Status:</strong>
+                        <span class="{% if abstimmung.status == 'Offen' %}text-success{% else %}text-danger{% endif %}">
+                          {{ abstimmung.status }}
+                         </span>
+                      </p>
+                  </li>
+              {% endfor %}
+          </ul>
+      {% else %}
+          <p>Keine aktuellen Abstimmungen verfügbar.</p>
+      {% endif %}
+  </div>
+</div>
+
+{% endblock %}

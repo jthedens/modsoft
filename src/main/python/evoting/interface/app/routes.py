@@ -1,7 +1,30 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 #from ...infrastructure.repositories.UserRepository import find_citizens, add_citizen_to_database
+from ...domain.entities import Abstimmung
+from datetime import datetime
+
 
 main = Blueprint('main', __name__)
+
+# Dummy-Daten für Abstimmungen // nach Datenbank-Update wieder löschen
+abstimmungen = [
+    {
+        "abstimmungs_id": "1",
+        "titel": "Neue Parkanlage",
+        "beschreibung": "Soll eine neue Parkanlage im Stadtzentrum gebaut werden?",
+        "startdatum": datetime(2024, 1, 1),
+        "enddatum": datetime(2024, 1, 31),
+        "abstimmungsstatus": True,
+    },
+    {
+        "abstimmungs_id": "2",
+        "titel": "Schulreform",
+        "beschreibung": "Soll die neue Schulreform eingeführt werden?",
+        "startdatum": datetime(2024, 2, 1),
+        "enddatum": datetime(2024, 2, 28),
+        "abstimmungsstatus": False,
+    },
+]
 
 @main.route('/')
 def landing_page():
@@ -51,8 +74,8 @@ def abstimmung():
     return render_template('abstimmung.html')
 
 @main.route('/abstimmungen')
-def abstimmungen():
-    return render_template('abstimmungen.html')
+def abstimmungen_uebersicht():
+    return render_template('abstimmungen.html', abstimmungen=abstimmungen)
 
 @main.route('/ergebnisse')
 def ergebnisse():
