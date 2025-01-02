@@ -7,11 +7,12 @@
   <div class="container">
       <h1>Aktuelle Abstimmungen</h1>
       {% if abstimmungen %}
-          <ul class="card-vote">
+          <ul class="card-grid">
               {% for abstimmung in abstimmungen %}
-                  <li class="card-vote-infos">
+                  <li class="card-vote">
+                    <div class="card-vote-infos">
                       <h2>
-                        <a href="{{ url_for('main.abstimmung', id=abstimmung.id) }}">{{ abstimmung.titel }}</a>
+                        <a href="{{ url_for('main.abstimmung', id=abstimmung.abstimmungs_id) }}">{{ abstimmung.titel }}</a>
                       </h2>
                       <p>{{ abstimmung.beschreibung }}</p>
                       <p><strong>Zeitraum:</strong>
@@ -22,6 +23,8 @@
                           {{ abstimmung.status }}
                          </span>
                       </p>
+                    </div>
+                    <a class="btn btn-flat" href="/abstimmung">abstimmen</a>
                   </li>
               {% endfor %}
           </ul>

@@ -49,6 +49,15 @@ html, body {
   color: white;
 }
 
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Drei Spalten */
+    gap: 1.5rem; /* Abstand zwischen den Karten */
+    list-style: none;
+    padding: 0;
+    margin: 20px;
+}
+
 .card-vote {
   list-style: none;
   overflow: hidden;

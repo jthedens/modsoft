@@ -1,16 +1,32 @@
-{% comment %} <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abstimmung</title>
-    <link rel="stylesheet" href="styles.css">
-    <script defer src="app.js"></script>
-</head>
-<body>
-    <h1>Abstimmung</h1>
-    <p id="abstimmungDetails"></p>
-    <button onclick="submitVote('Option A')">Option A</button>
-    <button onclick="submitVote('Option B')">Option B</button>
-</body>
-</html> {% endcomment %}
+{% extends "base.html" %}
+
+{% block title %}{{ abstimmung.titel }} - Detailseite{% endblock %}
+
+{% block content %}
+<div class="banner">
+  <div class="container">
+    <h1>{{ abstimmung.titel }}</h1>
+    <p>{{ abstimmung.beschreibung }}</p>
+    <p><strong>Zeitraum:</strong> {{ abstimmung.startdatum.strftime('%d.%m.%Y') }} bis {{ abstimmung.enddatum.strftime('%d.%m.%Y') }}</p>
+    <p><strong>Status:</strong>
+      <span class="{% if abstimmung.abstimmungsstatus %}text-success{% else %}text-danger{% endif %}">
+        {% if abstimmung.abstimmungsstatus %}Offen{% else %}Geschlossen{% endif %}
+      </span>
+    </p>
+
+    {% if abstimmung.abstimmungsstatus %}
+    <h2>Ihre Stimme abgeben:</h2>
+    <form method="POST">
+      <label for="vote">Bitte wählen:</label>
+      <select name="vote" id="vote" required>
+        <option value="Ja">Ja</option>
+        <option value="Nein">Nein</option>
+      </select>
+      <button type="submit" class="btn btn-primary">Abstimmen</button>
+    </form>
+    {% else %}
+    <p>Die Abstimmung ist geschlossen. Vielen Dank für Ihr Interesse.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

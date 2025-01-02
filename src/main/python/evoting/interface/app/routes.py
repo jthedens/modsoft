@@ -69,9 +69,21 @@ def register():
 
     return render_template('register.html')
 
-@main.route('/abstimmung')
-def abstimmung():
-    return render_template('abstimmung.html')
+@main.route('/abstimmung/<int:id>', methods=['GET', 'POST'])
+def abstimmung_detail(id):
+    # Dummy-Daten (später durch Datenbankabfrage ersetzen)
+    abstimmung = next((a for a in abstimmungen if a["abstimmungs_id"] == str(id)), None)
+
+    if not abstimmung:
+        return "Abstimmung nicht gefunden", 404
+
+    if request.method == 'POST':
+        # Verarbeitung der Stimme (ersetze später durch Datenbankintegration)
+        stimme = request.form['vote']
+        print(f"Stimme '{stimme}' wurde für Abstimmung {id} abgegeben.")
+        return f"Danke für Ihre Stimme: {stimme}"
+
+    return render_template('abstimmung.html', abstimmung=abstimmung)
 
 @main.route('/abstimmungen')
 def abstimmungen_uebersicht():
