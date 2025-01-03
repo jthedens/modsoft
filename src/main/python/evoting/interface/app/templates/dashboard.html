@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - eVote System{% endblock %}
+
+{% block content %}
+  <div class="container dashboard">
+    <h1 class="mb-4">Willkommen auf eVote {{ user_name }}</h1>
+
+    <!-- Aktuelle Abstimmungen -->
+    <section style="margin: 50px 0;">
+      <h2 class="ms-4 text-start">Aktuelle Abstimmungen</h2>
+      {% if abstimmungen %}
+        <ul class="card-grid">
+          {% for abstimmung in abstimmungen %}
+            <li class="card-vote">
+              <h5>{{ abstimmung.titel }}</h5>
+              <p>{{ abstimmung.beschreibung }}</p>
+              <p><strong>Zeitraum:</strong> {{ abstimmung.startdatum.strftime('%d.%m.%Y') }} bis {{ abstimmung.enddatum.strftime('%d.%m.%Y') }}</p>
+              <p><strong>Status:</strong> {{ abstimmung.status }}</p>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>Keine aktuellen Abstimmungen verfügbar.</p>
+      {% endif %}
+    </section>
+
+  <!-- Meine teilgenommenen Abstimmungen -->
+    <section style="margin: 50px 0;">
+      <h2 class="ms-4 text-start">Meine teilgenommenen Abstimmungen</h2>
+      {% if teilgenommene_abstimmungen %}
+        <ul class="card-grid">
+          {% for abstimmung in teilgenommene_abstimmungen %}
+            <li class="card-vote">
+              <h5>{{ abstimmung.titel }}</h5>
+              <p><strong>Ihre Stimme:</strong> {{ abstimmung.stimme }}</p>
+              <p><strong>Status:</strong> {{ abstimmung.status }}</p>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>Sie haben an noch keiner Abstimmung teilgenommen.</p>
+      {% endif %}
+    </section>
+
+  <!-- Ergebnisse beendeter Abstimmungen -->
+    <section style="margin: 50px 0;">
+      <h2 class="ms-4 text-start">Ergebnisse beendeter Abstimmungen</h2>
+      {% if ergebnisse %}
+        <ul class="card-grid">
+          {% for ergebnis in ergebnisse %}
+            <li class="card-vote">
+              <h5>{{ ergebnis.titel }}</h5>
+              <p><strong>Ergebnis:</strong> {{ ergebnis.ergebnis }}</p>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>Keine Ergebnisse verfügbar.</p>
+      {% endif %}
+    </section>
+  </div>
+{% endblock %}

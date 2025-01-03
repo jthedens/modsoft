@@ -2,6 +2,8 @@ html, body {
     margin: 0;
     padding: 0;
     height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .footer {
@@ -9,21 +11,20 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 10vh;
+  height: 80px;
   padding: 0px 50px;
   color: rgba(0,0,0,0.3);
 }
 
 .banner {
-  height: 90vh;
   background-color: #DCE4C9; /* Beispiel für ein grünes Banner */
   text-align: center;
-  padding: 150px 0;
+  padding: 50px 0;
+  flex: 1;
 }
 
 .banner h1 {
   color: #61210F;
-  /* text-shadow: 1px 1px 3px rgba(0,0,0,0.2); */
   font-size: 32px;
   font-weight: bold;
 }
@@ -32,7 +33,6 @@ html, body {
   font-size: 20px;
   color: #001723;
   opacity: .7;
-  /* text-shadow: 1px 1px 3px rgba(0,0,0,0.2); */
 }
 
 .banner .btn-flat {
@@ -51,8 +51,8 @@ html, body {
 
 .card-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* Drei Spalten */
-    gap: 1.5rem; /* Abstand zwischen den Karten */
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
     list-style: none;
     padding: 0;
     margin: 20px;
@@ -94,3 +94,15 @@ html, body {
 .card-vote .card-vote-infos {
   padding: 16px;
 }
+
+.abstimmung-detailseite {
+  text-align: left;
+  display: flex;
+}
+
+.left, .right {
+  flex: 1;
+  height: 100%;
+  margin: 20px;
+}
+
