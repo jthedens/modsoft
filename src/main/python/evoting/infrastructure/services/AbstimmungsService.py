@@ -49,7 +49,7 @@ def abstimmungenListen(buerger_alter):
                 altersgrenze, 
                 status 
             FROM abstimmung
-            WHERE status = 'aktiv'
+            WHERE status = 1
         """)
 
         # Alle Ergebnisse abrufen

@@ -1,5 +1,8 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
-from ...infrastructure.repositories.UserRepository import findeBuerger
+
+from src.main.python.evoting.application.controllers.BürgerController import BuergerController
+from src.main.python.evoting.infrastructure.services.UserService import BuergerService
+from src.main.python.evoting.infrastructure.repositories.UserRepository import BuergerRepository
 
 main = Blueprint('main', __name__)
 
@@ -12,16 +15,21 @@ def landing_page():
 def login():
     if request.method == 'POST':
         email = request.form['email']
-        password = request.form['password']
+        passwort = request.form['password']
 
         try:
+            repository = BuergerRepository()
+            service = BuergerService(repository)
+            controller = BuergerController(service)
             # Benutzer in der Datenbank suchen
-            citizen_data = findeBuerger(email, password)
-            if citizen_data:
+            buerger_aufrufen = BuergerController(controller)
+            buerger_daten = buerger_aufrufen.finde_buerger(email,passwort)
+
+            if buerger_daten:
                 # Benutzer erfolgreich eingeloggt
-                session['user_email'] = email  # Benutzer speichern
-                flash("Login erfolgreich!", "success")
-                return redirect(url_for('abstimmungen'))  # Weiterleitung
+                #session['user_email'] = email  # Benutzer speichern
+                #flash("Login erfolgreich!", "success")
+                return redirect(url_for('main.abstimmungen'))  # Weiterleitung
         except ValueError as e:
             # Fehlgeschlagener Login
             flash(str(e), "danger")

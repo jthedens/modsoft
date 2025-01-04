@@ -1,93 +1,51 @@
+from src.main.python.evoting.infrastructure.services.PasswortService import hashPasswort
+from datetime import datetime #Für Altersberechnung
+from Buerger import Buerger
 import bcrypt  # Für Passwort-Hashing
-import os
-import sqlite3
 
-def burgerErstellen(buergerid, vorname, nachname, geburtstag, adresse, plz, email, passwort, rolle, authentifizierungsstatus):
-    try:
-        # Überprüfen, ob die Datenbankdatei existiert
-        if not os.path.exists("eVoteMain.db"):
-            raise ValueError("Die Datenbankdatei existiert nicht!")
+class BuergerService:
+    """
+    Enthält die Geschäftslogik für die Entität 'Buerger'.
+    Verwendet das Repository für Datenzugriff.
+    """
+    def __init__(self, repository):
+        self.repository = repository
 
-        # Verbindung zur Datenbank mit 'with', um automatische Schließung sicherzustellen
-        with sqlite3.connect("eVoteMain.db") as conn:
-            cursor = conn.cursor()
+    def buerger_finden(self, email, passwort):
+        """
+        Findet einen Bürger anhand der E-Mail und überprüft das Passwort.
+        :param email: Die E-Mail des Bürgers.
+        :param passwort: Das eingegebene Passwort.
+        :return: Ein Buerger-Objekt, wenn die Anmeldedaten korrekt sind.
+        """
+        buerger = self.repository.finde_buerger_nach_email(email)
+        if not buerger:
+            raise ValueError("Kein Benutzer gefunden.")
 
-            # Überprüfen, ob die E-Mail bereits in der Datenbank existiert
-            cursor.execute("SELECT COUNT(*) FROM buerger WHERE email = ?", (email,))
-            if cursor.fetchone()[0] > 0:
-                raise ValueError("Die E-Mail-Adresse existiert bereits!")
+        # Validierung des eingegebenen Passworts mit dem gespeicherten Hash
+        if not bcrypt.checkpw(passwort.encode('utf-8'), buerger.passwort.encode('utf-8')):
+            raise ValueError("Falsches Passwort.")
+        return buerger
 
-            # Passwort-Hashing
-            hashed_passwort = hashPasswort(passwort)
+    def buerger_erstellen(self, buergerid, vorname, nachname, geburtstag, adresse, plz, email, passwort, rolle, authentifizierungsstatus):
+        """
+        Erstellt einen neuen Bürger und speichert ihn in der Datenbank.
+        :param buergerid: Die eindeutige ID des Bürgers.
+        :param vorname: Der Vorname des Bürgers.
+        :param nachname: Der Nachname des Bürgers.
+        :param geburtstag: Das Geburtsdatum des Bürgers.
+        :param adresse: Die Adresse des Bürgers.
+        :param plz: Die Postleitzahl des Bürgers.
+        :param email: Die E-Mail des Bürgers.
+        :param passwort: Das Passwort des Bürgers.
+        :param rolle: Die Rolle des Bürgers.
+        :param authentifizierungsstatus: Authentifizierungsstatus des Bürgers.
+        """
+        if self.repository.finde_buerger_nach_email(email):
+            raise ValueError("Die E-Mail-Adresse existiert bereits!")
 
-            # Datensatz in die Tabelle 'buerger' einfügen
-            cursor.execute("""
-            INSERT INTO buerger (
-                buergerid, vorname, nachname, geburtstag, adresse, plz, email, passwort, rolle, authentifizierungsstatus
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """, (
-                buergerid,  # ID des Bürgers
-                vorname,  # Vorname
-                nachname,  # Nachname
-                geburtstag,  # Geburtsdatum
-                adresse,  # Adresse
-                plz,  # Postleitzahl
-                email,  # E-Mail-Adresse
-                hashed_passwort,  # Gehashtes Passwort
-                rolle,  # Rolle
-                authentifizierungsstatus  # Authentifizierungsstatus (1 = authentifiziert)
-            ))
+        # Passwort-Hashing
+        hashed_passwort = hashPasswort(passwort)
+        neuer_buerger = Buerger(buergerid, vorname, nachname, geburtstag, adresse, plz, email, hashed_passwort, rolle, authentifizierungsstatus)
+        self.repository.speichere_buerger(neuer_buerger)
 
-            # Änderungen in der Datenbank übernehmen
-            conn.commit()
-
-            print("Bürger erfolgreich erstellt!")
-    except sqlite3.Error as e:
-        raise Exception(f"Fehler beim Hinzufügen zur Datenbank: {e}")
-    except ValueError as ve:
-        raise Exception(f"Fehler: {ve}")
-    except Exception as ex:
-        raise Exception(f"Unerwarteter Fehler: {ex}")
-
-# Funktion zum Erstellen eines gehashten Passworts
-def hashPasswort(passwort):
-    try:
-        # Generiere ein Salt
-        salt = bcrypt.gensalt()
-        # Hash das Passwort mit dem Salt
-        hashed_passwort = bcrypt.hashpw(passwort.encode('utf-8'), salt)
-        return hashed_passwort
-    except Exception as e:
-        raise Exception(f"Fehler beim Hashen des Passworts: {e}")
-
-
-
-# Funktion zum Löschen eines Bürgers (noch nicht implementiert)
-def buergerEntfernen(buergerid):
-    try:
-        # Überprüfen, ob die Datenbankdatei existiert
-        if not os.path.exists("eVoteMain.db"):
-            raise ValueError("Die Datenbankdatei existiert nicht!")
-
-        # Verbindung zur Datenbank mit 'with', um automatische Schließung sicherzustellen
-        with sqlite3.connect("eVoteMain.db") as conn:
-            cursor = conn.cursor()
-
-            # Überprüfen, ob der Bürger mit der gegebenen ID existiert
-            cursor.execute("SELECT COUNT(*) FROM buerger WHERE buergerid = ?", (buergerid,))
-            if cursor.fetchone()[0] == 0:
-                raise ValueError("Kein Bürger mit dieser ID gefunden!")
-
-            # Bürger aus der Datenbank löschen
-            cursor.execute("DELETE FROM buerger WHERE buergerid = ?", (buergerid,))
-
-            # Änderungen in der Datenbank übernehmen
-            conn.commit()
-
-            print(f"Bürger mit der ID {buergerid} wurde erfolgreich gelöscht!")
-    except sqlite3.Error as e:
-        raise Exception(f"Fehler beim Löschen des Bürgers: {e}")
-    except ValueError as ve:
-        raise Exception(f"Fehler: {ve}")
-    except Exception as ex:
-        raise Exception(f"Unerwarteter Fehler: {ex}")
