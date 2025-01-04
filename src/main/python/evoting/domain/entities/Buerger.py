@@ -1,6 +1,10 @@
+from src.main.python.evoting.application.dekoratoren.dekoratoren import log_method_call, handle_exceptions
 from datetime import datetime
 
 class Buerger:
+
+    @log_method_call
+    @handle_exceptions
     def __init__(self, buergerid, vorname, nachname, geburtstag, adresse, plz, email, passwort, rolle, authentifizierungsstatus):
         self.buergerid = buergerid
         self.vorname = vorname
@@ -18,12 +22,18 @@ class Buerger:
         self.rolle = rolle
         self.authentifizierungsstatus = authentifizierungsstatus
 
+    @log_method_call
+    @handle_exceptions
     def voller_name(self):
         return f"{self.vorname} {self.nachname}"
 
+    @log_method_call
+    @handle_exceptions
     def ist_authentifiziert(self):
         return self.authentifizierungsstatus == "aktiv"
 
+    @log_method_call
+    @handle_exceptions
     def berechne_alter(self):
         geburtsdatum_dt = datetime.strptime(self.geburtstag, "%Y-%m-%d")
         heute = datetime.now()

@@ -33,3 +33,37 @@ class BuergerController:
             }
         except Exception as e:
             return {"error": str(e)}
+
+    @log_method_call
+    @handle_exceptions
+    def erstelle_buerger(self, buergerid, vorname, nachname, geburtstag, adresse, plz, email, passwort, rolle, authentifizierungsstatus):
+        """
+        Erstellt einen neuen Bürger und gibt eine Bestätigung oder Fehlermeldung zurück.
+        :param buergerid: Die eindeutige ID des Bürgers.
+        :param vorname: Der Vorname des Bürgers.
+        :param nachname: Der Nachname des Bürgers.
+        :param geburtstag: Das Geburtsdatum des Bürgers.
+        :param adresse: Die Adresse des Bürgers.
+        :param plz: Die Postleitzahl des Bürgers.
+        :param email: Die E-Mail-Adresse des Bürgers.
+        :param passwort: Das Passwort des Bürgers.
+        :param rolle: Die Rolle des Bürgers.
+        :param authentifizierungsstatus: Der Authentifizierungsstatus.
+        :return: Ein Dictionary mit einer Bestätigung oder einer Fehlermeldung.
+        """
+        try:
+            self.service.buerger_erstellen(
+                buergerid=buergerid,
+                vorname=vorname,
+                nachname=nachname,
+                geburtstag=geburtstag,
+                adresse=adresse,
+                plz=plz,
+                email=email,
+                passwort=passwort,
+                rolle=rolle,
+                authentifizierungsstatus=authentifizierungsstatus
+            )
+            return {"success": "Bürger wurde erfolgreich erstellt."}
+        except Exception as e:
+            return {"error": str(e)}

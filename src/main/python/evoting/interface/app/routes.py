@@ -39,15 +39,24 @@ def login():
 @main.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        name = request.form['name']
+        buergerid = request.form['buergerid']
+        vorname = request.form['vorname']
+        nachname = request.form['nachname']
+        geburtstag = request.form['geburtstag']
+        adresse = request.form['adresse']
+        plz = request.form['plz']
         email = request.form['email']
-        password = request.form['password']
+        passwort = request.form['password']
+        rolle = request.form['rolle']
+        authentifizierungsstatus = request.form['authentifizierungsstatus']
 
         try:
             # Benutzer zur Datenbank hinzufügen
-            add_citizen_to_database(name, email, password)
+            buerger_erstellen = BuergerController()
+            buerger_daten = buerger_erstellen.erstelle_buerger(buergerid, vorname, nachname, geburtstag, adresse, plz, email, passwort, rolle, authentifizierungsstatus)
             flash("Registrierung erfolgreich! Bitte melden Sie sich an.", "success")
-            return redirect(url_for('login'))
+            if buerger_daten:
+                return redirect(url_for('login'))
         except Exception as e:
             flash(f"Registrierung fehlgeschlagen: {e}", "danger")
 

@@ -1,75 +1,30 @@
-import sqlite3
+class AbstimmungService:
+    def __init__(self, repository):
+        self.repository = repository
 
-def stimmeErfassen(buergerid, abstimmungid, stimme):
-    try:
-        # Verbindung zur Datenbank herstellen mit 'with' für automatische Schließung
-        with sqlite3.connect("eVoteMain.db") as connection:
-            cursor = connection.cursor()
+    def erstelle_abstimmung(self, abstimmung: Abstimmung):
+        if self.repository.existiert(abstimmung.abstimmungid):
+            raise ValueError(f"Abstimmung mit ID {abstimmung.abstimmungid} existiert bereits.")
+        self.repository.speichern(abstimmung)
 
-            # SQL-Befehl zum Einfügen eines Eintrags
-            insert_query = '''INSERT INTO auswertung (buergerid, abstimmungid, stimme) VALUES (?, ?, ?)'''
+    def finde_abstimmung(self, abstimmungid):
+        abstimmung = self.repository.finde_nach_id(abstimmungid)
+        if not abstimmung:
+            raise ValueError(f"Abstimmung mit ID {abstimmungid} nicht gefunden.")
+        return abstimmung
 
-            # Werte, die eingefügt werden sollen
-            values = (buergerid, abstimmungid, stimme)
+    def aktualisiere_abstimmung(self, abstimmungid, **kwargs):
+        abstimmung = self.finde_abstimmung(abstimmungid)
+        abstimmung.aktualisieren(**kwargs)
+        self.repository.speichern(abstimmung)
 
-            # SQL-Befehl ausführen
-            cursor.execute(insert_query, values)
+    def entferne_abstimmung(self, abstimmungid):
+        abstimmung = self.finde_abstimmung(abstimmungid)
+        self.repository.entfernen(abstimmungid)
 
-            # Änderungen speichern
-            connection.commit()
-
-            print("Eintrag erfolgreich hinzugefügt.")
-
-    except sqlite3.Error as e:
-        # Fehlerbehandlung, falls ein Fehler bei der Datenbankoperation auftritt
-        print(f"Fehler beim Hinzufügen des Eintrags: {e}")
-
-
-def abstimmungenListen(buerger_alter):
-    """
-    Listet die Abstimmungen, bei denen der Bürger teilnehmen darf, und die aktiv sind.
-
-    :param buerger_alter: Alter des Bürgers
-    :return: Liste der zulässigen Abstimmungen
-    """
-    import sqlite3
-
-    try:
-        # Verbindung zur Datenbank herstellen
-        conn = sqlite3.connect("eVoteMain.db")
-        cursor = conn.cursor()
-
-        # SQL-Abfrage für aktive Abstimmungen
-        cursor.execute("""
-            SELECT 
-                abstimmungid, 
-                titel, 
-                beschreibung, 
-                frist, 
-                altersgrenze, 
-                status 
-            FROM abstimmung
-            WHERE status = 1
-        """)
-
-        # Alle Ergebnisse abrufen
-        abstimmungen = cursor.fetchall()
-
-        # Filter für Alter anwenden
-        erlaubte_abstimmungen = [
-            abstimmung for abstimmung in abstimmungen
-            if buerger_alter >= abstimmung[4]  # Altersgrenze prüfen
-        ]
-
-        return erlaubte_abstimmungen
-
-    except sqlite3.Error as e:
-        # Fehler in der Datenbankbehandlung
-        raise Exception(f"Datenbankfehler: {e}")
-
-    finally:
-        # Verbindung schließen
-        if conn:
-            conn.close()
-
-
+    def finde_alle_abstimmungen(self):
+        """
+        Holt alle Abstimmungen aus der Datenbank.
+        :return: Eine Liste von Abstimmungen
+        """
+        return self.repository.hole_abstimmungen()
