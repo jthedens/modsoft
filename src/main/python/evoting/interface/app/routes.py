@@ -1,5 +1,4 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
-
 from src.main.python.evoting.application.controllers.BürgerController import BuergerController
 from src.main.python.evoting.infrastructure.services.UserService import BuergerService
 from src.main.python.evoting.infrastructure.repositories.UserRepository import BuergerRepository
@@ -18,11 +17,11 @@ def login():
         passwort = request.form['password']
 
         try:
-            repository = BuergerRepository()
-            service = BuergerService(repository)
-            controller = BuergerController(service)
+            #repository = BuergerRepository()
+            #service = BuergerService(repository)
+            #controller = BuergerController()
             # Benutzer in der Datenbank suchen
-            buerger_aufrufen = BuergerController(controller)
+            buerger_aufrufen = BuergerController()
             buerger_daten = buerger_aufrufen.finde_buerger(email,passwort)
 
             if buerger_daten:

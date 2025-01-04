@@ -1,5 +1,6 @@
+from src.main.python.evoting.application.dekoratoren.dekoratoren import log_method_call, handle_exceptions
+from src.main.python.evoting.infrastructure.repositories.UserRepository import BuergerRepository
 from src.main.python.evoting.infrastructure.services.PasswortService import hashPasswort
-from datetime import datetime #Für Altersberechnung
 from Buerger import Buerger
 import bcrypt  # Für Passwort-Hashing
 
@@ -8,9 +9,14 @@ class BuergerService:
     Enthält die Geschäftslogik für die Entität 'Buerger'.
     Verwendet das Repository für Datenzugriff.
     """
+
+    @log_method_call
+    @handle_exceptions
     def __init__(self, repository):
         self.repository = repository
 
+    @log_method_call
+    @handle_exceptions
     def buerger_finden(self, email, passwort):
         """
         Findet einen Bürger anhand der E-Mail und überprüft das Passwort.
@@ -23,10 +29,12 @@ class BuergerService:
             raise ValueError("Kein Benutzer gefunden.")
 
         # Validierung des eingegebenen Passworts mit dem gespeicherten Hash
-        if not bcrypt.checkpw(passwort.encode('utf-8'), buerger.passwort.encode('utf-8')):
+        if not bcrypt.checkpw(passwort.encode('utf-8'), buerger.passwort):
             raise ValueError("Falsches Passwort.")
         return buerger
 
+    @log_method_call
+    @handle_exceptions
     def buerger_erstellen(self, buergerid, vorname, nachname, geburtstag, adresse, plz, email, passwort, rolle, authentifizierungsstatus):
         """
         Erstellt einen neuen Bürger und speichert ihn in der Datenbank.

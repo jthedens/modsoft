@@ -1,7 +1,6 @@
 from Buerger import Buerger
-from src.main.python.evoting.infrastructure.services.UserService import hashPasswort
+from src.main.python.evoting.application.dekoratoren.dekoratoren import log_method_call, handle_exceptions
 import sqlite3
-import bcrypt
 import os
 
 class BuergerRepository:
@@ -9,11 +8,16 @@ class BuergerRepository:
     Kapselt alle Datenbankoperationen für die Entität 'Buerger'.
     Trennt Datenbanklogik von der Geschäftslogik.
     """
+
+    @log_method_call
+    @handle_exceptions
     def __init__(self, db_path="eVoteMain.db"):
         if not os.path.exists(db_path):
             raise ValueError("Die Datenbankdatei existiert nicht!")
         self.db_path = db_path
 
+    @log_method_call
+    @handle_exceptions
     def finde_buerger_nach_email(self, email):
         """
         Sucht einen Bürger in der Datenbank anhand seiner E-Mail.
@@ -32,6 +36,8 @@ class BuergerRepository:
                 return Buerger(*result)
             return None
 
+    @log_method_call
+    @handle_exceptions
     def speichere_buerger(self, buerger):
         """
         Speichert einen neuen Bürger in der Datenbank.
