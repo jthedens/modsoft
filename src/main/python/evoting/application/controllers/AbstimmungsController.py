@@ -1,8 +1,8 @@
-from Abstimmung import Abstimmung
+from src.main.python.evoting.domain.entities.Abstimmung import Abstimmung
 from src.main.python.evoting.application.dekoratoren.dekoratoren import log_method_call, handle_exceptions
 from src.main.python.evoting.infrastructure.services.AbstimmungsService import AbstimmungService
 from src.main.python.evoting.infrastructure.repositories.AbstimmungRepository import AbstimmungRepository
-
+from src.main.python.evoting.infrastructure.services.UserService import BuergerService
 
 class AbstimmungController:
     """
@@ -14,6 +14,7 @@ class AbstimmungController:
     @handle_exceptions
     def __init__(self):
         self.service = AbstimmungService(AbstimmungRepository())
+        self.buerger_service = BuergerService()
 
     @log_method_call
     @handle_exceptions
@@ -87,6 +88,8 @@ class AbstimmungController:
         except Exception as e:
             return {"error": str(e), "status": "failure"}
 
+    @log_method_call
+    @handle_exceptions
     def finde_abstimmungen_fuer_buerger(self, email, passwort):
         """
         Gibt eine Liste von Abstimmungen zurück, die für einen bestimmten Bürger zugänglich sind,
@@ -105,6 +108,35 @@ class AbstimmungController:
                 abstimmung for abstimmung in abstimmungen if abstimmung.altersgrenze <= alter
             ]
 
-            return filter_abstimmungen
+            return [
+                {
+                    "abstimmungid": abstimmung.abstimmungid,
+                    "titel": abstimmung.titel,
+                    "beschreibung": abstimmung.beschreibung,
+                    "frist": abstimmung.frist.strftime("%Y-%m-%d"),
+                    "altersgrenze": abstimmung.altersgrenze,
+                    "status": abstimmung.status,
+                }
+                for abstimmung in filter_abstimmungen
+            ]
+
         except Exception as e:
             return {"error": str(e)}
+
+    @log_method_call
+    @handle_exceptions
+    def abstimmen(self, abstimmungid, buergerid):
+        """
+        Ermöglicht einem Bürger, an einer Abstimmung teilzunehmen.
+        :param abstimmungid: Die ID der Abstimmung.
+        :param buergerid: Die ID des Bürgers.
+        """
+        try:
+            abstimmung = self.service.finde_abstimmung(abstimmungid)
+            if abstimmung.status != "aktiv":
+                raise ValueError("Die Abstimmung ist nicht mehr aktiv.")
+            self.service.abstimmen(abstimmungid, buergerid)
+            return {"message": "Erfolgreich abgestimmt!", "status": "success"}
+        except Exception as e:
+            self.logger.error(f"Fehler beim Abstimmen: {e}")
+            return {"error": str(e), "status": "failure"}

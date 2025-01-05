@@ -1,5 +1,5 @@
 import sqlite3
-from abstimmung_domain import Abstimmung
+from src.main.python.evoting.domain.entities.Abstimmung import Abstimmung
 
 class AbstimmungRepository:
     def existiert(self, abstimmungid):
@@ -68,3 +68,21 @@ class AbstimmungRepository:
                     "status": row[5]
                 })
             return daten
+
+    def buerger_hat_abgestimmt(self, abstimmungid, buergerid):
+        with sqlite3.connect("eVoteMain.db") as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                "SELECT COUNT(*) FROM abstimmungen_stimmen WHERE abstimmungid = ? AND buergerid = ?",
+                (abstimmungid, buergerid)
+            )
+            return cursor.fetchone()[0] > 0
+
+    def speichere_stimme(self, abstimmungid, buergerid):
+        with sqlite3.connect("eVoteMain.db") as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                "INSERT INTO abstimmungen_stimmen (abstimmungid, buergerid) VALUES (?, ?)",
+                (abstimmungid, buergerid)
+            )
+            conn.commit()

@@ -41,3 +41,15 @@ class Buerger:
         if (heute.month, heute.day) < (geburtsdatum_dt.month, geburtsdatum_dt.day):
             alter -= 1
         return alter
+
+    @log_method_call
+    @handle_exceptions
+    @property
+    def alter(self):
+        from datetime import datetime
+        heute = datetime.now()
+        geburtsdatum = datetime.strptime(self.geburtsdatum, "%Y-%m-%d")
+        alter = heute.year - geburtsdatum.year
+        if (heute.month, heute.day) < (geburtsdatum.month, geburtsdatum.day):
+            alter -= 1
+        return alter
