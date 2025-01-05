@@ -1,14 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abstimmungsergebnisse</title>
-    <link rel="stylesheet" href="styles.css">
-    <script defer src="app.js"></script>
-</head>
-<body>
-    <h1>Abstimmungsergebnisse</h1>
-    <ul id="resultsList"></ul>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Ergebnisse - eVote System{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1 class="">Ergebnisse der Abstimmungen</h1>
+
+  {% if ergebnisse %}
+    <ul class="card-grid">
+      {% for ergebnis in ergebnisse %}
+        <li class="card-vote">
+          <h5>{{ ergebnis.titel }}</h5>
+          <p>{{ ergebnis.beschreibung }}</p>
+          <p><strong>Ergebnis:</strong> {{ ergebnis.ergebnis }}</p>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>Keine Ergebnisse verfügbar.</p>
+  {% endif %}
+</div>
+{% endblock %}
