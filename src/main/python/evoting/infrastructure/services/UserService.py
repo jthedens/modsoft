@@ -1,7 +1,7 @@
 from src.main.python.evoting.application.dekoratoren.dekoratoren import log_method_call, handle_exceptions
 from src.main.python.evoting.infrastructure.repositories.UserRepository import BuergerRepository
 from src.main.python.evoting.infrastructure.services.PasswortService import hashPasswort
-from Buerger import Buerger
+from ...domain.entities.Buerger import Buerger
 import bcrypt  # Für Passwort-Hashing
 
 class BuergerService:

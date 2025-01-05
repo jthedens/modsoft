@@ -35,6 +35,17 @@ teilgenommene_abstimmungen = [
 ergebnisse = [
     {"id": 2, "titel": "Schulreform", "ergebnis": "70% Ja, 30% Nein"}
 ]
+aktueller_buerger = {
+    "buergerid": 1,
+    "vorname": "Max",
+    "nachname": "Mustermann",
+    "geburtstag": "1990-01-01",
+    "adresse": "Musterstraße 1",
+    "plz": "12345",
+    "email": "max.mustermann@example.com",
+    "rolle": "Bürger",
+    "authentifizierungsstatus": True
+}
 
 @log_method_call
 @handle_exceptions
@@ -53,14 +64,18 @@ def login():
 
         try:
             # Benutzer in der Datenbank suchen (Platzhalter-Funktion)
-            buerger_aufrufen = BuergerController()
-            buerger_daten = buerger_aufrufen.finde_buerger(email,passwort)
-            if buerger_daten:
-                session['user_email'] = email
-                session['user_name'] = buerger_daten['voller_name']  # Name speichern
-                flash("Login erfolgreich!", "success")
-                return redirect(url_for('main.dashboard'))
-              
+          buerger_aufrufen = BuergerController()
+          buerger_daten = buerger_aufrufen.finde_buerger(email, passwort)
+
+          if "error" in buerger_daten:
+              flash(buerger_daten["error"], "danger")
+              return redirect(url_for('main.login'))
+
+          session['user_email'] = email
+          session['user_name'] = buerger_daten['voller_name']  # Name speichern
+          flash("Login erfolgreich!", "success")
+          return redirect(url_for('main.dashboard'))
+
         except ValueError as e:
             flash(str(e), "danger")
 
@@ -91,7 +106,7 @@ def register():
 
             if buerger_daten:
                 return redirect(url_for('login'))
-              
+
             return redirect(url_for('register.html'))
 
         except Exception as e:
@@ -133,9 +148,9 @@ def abstimmungen_uebersicht():
 def ergebnis_übersicht():
     return render_template('ergebnisse.html', ergebnisse=ergebnisse)
 
-@main.route("/profil")
+@main.route('/profil')
 def profil():
-  return render_template("profil.html")
+    return render_template('profil.html', buerger=aktueller_buerger) #ersetzen, wenn Datenbank Zugriff
 
 @main.route('/logout')
 def logout():
