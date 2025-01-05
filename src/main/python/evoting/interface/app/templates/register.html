@@ -3,16 +3,53 @@
 {% block title %}Register - eVote System{% endblock %}
 
 {% block content %}
-  <div class="container">
+  <div class="container card p-4 w-50">
     <h1>Registrieren</h1>
     <br>
-    <form method="POST" action="/api/register">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required>
-        <label for="email">E-Mail:</label>
-        <input type="email" id="email" name="email" required>
-        <label for="password">Passwort:</label>
-        <input type="password" id="password" name="password" required>
+    <form method="POST" action="/api/register" class="registration-form">
+        <!-- Vorname -->
+        <div class="form-row">
+          <label for="vorname">Vorname:</label>
+          <input type="text" id="vorname" name="vorname" required>
+        </div>
+
+        <!-- Nachname -->
+        <div class="form-row">
+          <label for="nachname">Nachname:</label>
+          <input type="text" id="nachname" name="nachname" required>
+        </div>
+
+        <!-- Geburtstag -->
+        <div class="form-row">
+          <label for="geburtstag">Geburtstag:</label>
+          <input type="date" id="geburtstag" name="geburtstag" required>
+        </div>
+
+        <!-- Adresse -->
+        <div class="form-row">
+          <label for="adresse">Adresse:</label>
+          <input type="text" id="adresse" name="adresse" required>
+        </div>
+
+        <!-- PLZ -->
+        <div class="form-row">
+          <label for="plz">PLZ:</label>
+          <input type="text" id="plz" name="plz" required pattern="\d{5}" title="Bitte geben Sie eine fünfstellige Postleitzahl ein.">
+        </div>
+
+        <!-- E-Mail -->
+        <div class="form-row">
+          <label for="email">E-Mail:</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+
+        <!-- Passwort -->
+        <div class="form-row">
+          <label for="password">Passwort:</label>
+          <input type="password" id="password" name="password" required>
+        </div>
+
+        <br>
         <button type="submit">Registrieren</button>
     </form>
   </div>

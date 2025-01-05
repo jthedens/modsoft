@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Profil - eVote System{% endblock %}
+
+{% block content %}
+<div class="container card p-4" style="text-align: left">
+  <h1>Profil</h1>
+
+    <div class="profile-info">
+      <div class="profile-row">
+        <span class="profile-label">Name:</span>
+        <span class="profile-value">{{ buerger.vorname }} {{ buerger.nachname }}</span>
+      </div>
+      <div class="profile-row">
+        <span class="profile-label">Geburtstag:</span>
+        <span class="profile-value">{{ buerger.geburtstag }}</span>
+      </div>
+      <div class="profile-row">
+        <span class="profile-label">Adresse:</span>
+        <span class="profile-value">{{ buerger.adresse }}</span>
+      </div>
+      <div class="profile-row">
+        <span class="profile-label">PLZ:</span>
+        <span class="profile-value">{{ buerger.plz }}</span>
+      </div>
+      <div class="profile-row">
+        <span class="profile-label">E-Mail:</span>
+        <span class="profile-value">{{ buerger.email }}</span>
+      </div>
+      <div class="profile-row">
+        <span class="profile-label">Authentifizierungsstatus:</span>
+        <span class="profile-value">
+          {% if buerger.authentifizierungsstatus %}
+            <span class="text-success">Authentifiziert</span>
+          {% else %}
+            <span class="text-danger">Nicht authentifiziert</span>
+          {% endif %}
+        </span>
+      </div>
+  </div>
+</div>
+{% endblock %}

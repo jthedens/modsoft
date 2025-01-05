@@ -5,7 +5,7 @@ class TestCitizens(unittest.TestCase):
     def setUp(self):
         self.citizen = Citizens(
             citizens_id="C1",
-            name="Max Mustermann",
+            voller_name="Max Mustermann",
             email="max@example.com",
             password="password123",
             rolle="Bürger",
@@ -21,7 +21,7 @@ class TestStimme(unittest.TestCase):
     def setUp(self):
         self.stimme = Stimme(
             citizens_id="100000",
-            name="Max Mustermann",
+            voller_name="Max Mustermann",
             email="max@example.com",
             password="password123",
             rolle="Bürger",

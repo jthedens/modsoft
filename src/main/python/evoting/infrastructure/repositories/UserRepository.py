@@ -1,4 +1,4 @@
-from Buerger import Buerger
+from ...domain.entities.Buerger import Buerger
 from src.main.python.evoting.application.dekoratoren.dekoratoren import log_method_call, handle_exceptions
 import sqlite3
 import os
