@@ -1,8 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
-
+from src.main.python.evoting.application.dekoratoren.dekoratoren import log_method_call, handle_exceptions
 from src.main.python.evoting.application.controllers.BürgerController import BuergerController
-from src.main.python.evoting.infrastructure.services.UserService import BuergerService
-from src.main.python.evoting.infrastructure.repositories.UserRepository import BuergerRepository
+from src.main.python.evoting.domain.entities.Buerger import Buerger
 from ...domain.entities import Abstimmung
 from datetime import datetime
 
@@ -37,11 +36,15 @@ ergebnisse = [
     {"id": 2, "titel": "Schulreform", "ergebnis": "70% Ja, 30% Nein"}
 ]
 
+@log_method_call
+@handle_exceptions
 @main.route('/')
 def landing_page():
     return render_template('landing.html')
 
 # Login-Route
+@log_method_call
+@handle_exceptions
 @main.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -54,7 +57,7 @@ def login():
             buerger_daten = buerger_aufrufen.finde_buerger(email,passwort)
             if buerger_daten:
                 session['user_email'] = email
-                session['user_name'] = citizen_data['name']  # Name speichern
+                session['user_name'] = buerger_daten['voller_name']  # Name speichern
                 flash("Login erfolgreich!", "success")
                 return redirect(url_for('main.dashboard'))
               
@@ -64,6 +67,8 @@ def login():
     return render_template('login.html')
 
 # Registrierung-Route
+@log_method_call
+@handle_exceptions
 @main.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -96,10 +101,9 @@ def register():
 
 @main.route('/dashboard')
 def dashboard():
-    user_name = session.get('user_name', 'Gast')
     return render_template(
         'dashboard.html',
-        user_name=user_name,
+        user_name=session['user_name'],
         abstimmungen=abstimmungen,
         teilgenommene_abstimmungen=teilgenommene_abstimmungen,
         ergebnisse=ergebnisse

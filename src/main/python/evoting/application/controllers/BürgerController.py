@@ -8,8 +8,7 @@ class BuergerController:
     Ruft die Geschäftslogik im Service auf und formatiert die Ergebnisse.
     """
 
-    @log_method_call
-    @handle_exceptions
+
     def __init__(self):
         self.service = BuergerService(BuergerRepository())
 
