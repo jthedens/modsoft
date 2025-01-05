@@ -49,11 +49,11 @@ INSERT INTO buerger (
     buergerid, vorname, nachname, geburtstag, adresse, plz, email, passwort, rolle, authentifizierungsstatus
 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 """, (
-    12345,                # ID des Bürgers
+    156418,               # ID des Bürgers
     'Max',                # Vorname
     'Mustermann',         # Nachname
-    '1990-01-01',         # Geburtsdatum
-    'Musterstraße 1',     # Adresse
+    '1996-07-26',         # Geburtsdatum
+    'Musterstraße 12',    # Adresse
     '12345',              # Postleitzahl
     'max@mail.de',        # E-Mail-Adresse
     hashed_passwort,      # Passwort

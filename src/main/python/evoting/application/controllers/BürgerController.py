@@ -1,13 +1,13 @@
 from src.main.python.evoting.application.dekoratoren.dekoratoren import log_method_call, handle_exceptions
 from src.main.python.evoting.infrastructure.services.UserService import BuergerService
 from src.main.python.evoting.infrastructure.repositories.UserRepository import BuergerRepository
+from Buerger import Buerger
 
 class BuergerController:
     """
     Schnittstelle für die Außenwelt, z. B. Webanwendungen oder APIs.
     Ruft die Geschäftslogik im Service auf und formatiert die Ergebnisse.
     """
-
 
     def __init__(self):
         self.service = BuergerService(BuergerRepository())

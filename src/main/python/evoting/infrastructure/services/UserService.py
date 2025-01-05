@@ -10,8 +10,6 @@ class BuergerService:
     Verwendet das Repository für Datenzugriff.
     """
 
-    @log_method_call
-    @handle_exceptions
     def __init__(self, repository):
         self.repository = repository
 

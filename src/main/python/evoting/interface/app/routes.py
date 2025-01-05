@@ -1,10 +1,8 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from src.main.python.evoting.application.dekoratoren.dekoratoren import log_method_call, handle_exceptions
 from src.main.python.evoting.application.controllers.BürgerController import BuergerController
-from src.main.python.evoting.domain.entities.Buerger import Buerger
-from ...domain.entities import Abstimmung
 from datetime import datetime
-
+from src.main.python.evoting.infrastructure.repositories.UserRepository import BuergerRepository
 
 main = Blueprint('main', __name__)
 
@@ -63,18 +61,19 @@ def login():
         passwort = request.form['password']
 
         try:
+
             # Benutzer in der Datenbank suchen (Platzhalter-Funktion)
-          buerger_aufrufen = BuergerController()
-          buerger_daten = buerger_aufrufen.finde_buerger(email, passwort)
+            buerger_aufrufen = BuergerController()
+            buerger_daten = buerger_aufrufen.finde_buerger(email, passwort)
 
-          if "error" in buerger_daten:
-              flash(buerger_daten["error"], "danger")
-              return redirect(url_for('main.login'))
+            if "error" in buerger_daten:
+                flash(buerger_daten["error"], "danger")
+                return redirect(url_for('main.login'))
 
-          session['user_email'] = email
-          session['user_name'] = buerger_daten['voller_name']  # Name speichern
-          flash("Login erfolgreich!", "success")
-          return redirect(url_for('main.dashboard'))
+            session['user_email'] = email
+            session['user_name'] = buerger_daten['voller_name']  # Name speichern
+            #flash("Login erfolgreich!", "success")
+            return redirect(url_for('main.dashboard'))
 
         except ValueError as e:
             flash(str(e), "danger")
@@ -150,7 +149,19 @@ def ergebnis_übersicht():
 
 @main.route('/profil')
 def profil():
-    return render_template('profil.html', buerger=aktueller_buerger) #ersetzen, wenn Datenbank Zugriff
+    if 'user_email' not in session:
+        flash("Bitte loggen Sie sich zuerst ein.", "danger")
+        return redirect(url_for('main.login'))
+
+    # Benutzer aus der Datenbank anhand der gespeicherten E-Mail abrufen
+    buerger_aufrufen = BuergerRepository()
+    buerger_daten = buerger_aufrufen.finde_buerger_nach_email(session['user_email'])
+
+    if not buerger_daten:
+        flash("Benutzerprofil konnte nicht gefunden werden.", "danger")
+        return redirect(url_for('main.dashboard'))
+
+    return render_template('profil.html', buerger=buerger_daten)
 
 @main.route('/logout')
 def logout():
