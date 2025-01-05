@@ -1,29 +1,67 @@
-import sqlite3
+from src.main.python.evoting.application.dekoratoren.dekoratoren import log_method_call, handle_exceptions
+from src.main.python.evoting.domain.entities.Abstimmung import Abstimmung
+import logging
 
-def abgebenStimme(stimmberechtigung, citizensID, abstimmungsID):
+class AbstimmungService:
+    @log_method_call
+    @handle_exceptions
+    def __init__(self, repository):
+        self.repository = repository
+        self.logger = logging.getLogger(__name__)
 
-    if stimmberechtigung:
-        stimme = input("Option 1 oder 2: ")
+    @log_method_call
+    @handle_exceptions
+    def erstelle_abstimmung(self, abstimmung: Abstimmung):
+        if self.repository.existiert(abstimmung.abstimmungid):
+            self.logger.warning(f"Abstimmung mit ID {abstimmung.abstimmungid} existiert bereits.")
+            raise ValueError(f"Abstimmung mit ID {abstimmung.abstimmungid} existiert bereits.")
+        self.repository.speichern(abstimmung)
+        self.logger.info(f"Abstimmung {abstimmung.abstimmungid} erstellt.")
 
-        # Verbindung zur Datenbank herstellen
-        connection = sqlite3.connect("../../../../stimmen.db")
-        cursor = connection.cursor()
+    @log_method_call
+    @handle_exceptions
+    def finde_abstimmung(self, abstimmungid):
+        abstimmung = self.repository.finde_nach_id(abstimmungid)
+        if not abstimmung:
+            raise ValueError(f"Abstimmung mit ID {abstimmungid} nicht gefunden.")
+        return abstimmung
 
-        # SQL-Befehl zum Einfügen eines Eintrags
-        insert_query = '''INSERT INTO users (CITIZENSID, ABSTIMMUNGSID, STIMME) VALUES (?, ?, ?)'''
+    @log_method_call
+    @handle_exceptions
+    def aktualisiere_abstimmung(self, abstimmungid, **kwargs):
+        abstimmung = self.finde_abstimmung(abstimmungid)
+        abstimmung.aktualisieren(**kwargs)
+        self.repository.speichern(abstimmung)
 
-        # Werte, die eingefügt werden sollen
-        values = (abstimmungsID, citizensID, stimme)
+    @log_method_call
+    @handle_exceptions
+    def entferne_abstimmung(self, abstimmungid):
+        abstimmung = self.finde_abstimmung(abstimmungid)
+        self.repository.entfernen(abstimmungid)
 
-        # SQL-Befehl ausführen
-        cursor.execute(insert_query, values)
+    @log_method_call
+    @handle_exceptions
+    def finde_alle_abstimmungen(self):
+        """
+        Holt alle Abstimmungen aus der Datenbank.
+        :return: Eine Liste von Abstimmungen
+        """
+        return self.repository.hole_abstimmungen()
 
-        # Änderungen speichern
-        connection.commit()
+    @log_method_call
+    @handle_exceptions
+    def pruefe_buerger_hat_abgestimmt(self, abstimmungid, buergerid):
+        """
+        Prüft, ob der Bürger bereits für eine Abstimmung abgestimmt hat.
+        """
+        return self.repository.buerger_hat_abgestimmt(abstimmungid, buergerid)
 
-        # Verbindung schließen
-        connection.close()
-
-        print("Eintrag erfolgreich hinzugefügt.")
-
-
+    @log_method_call
+    @handle_exceptions
+    def abstimmen(self, abstimmungid, buergerid):
+        """
+        Ermöglicht einem Bürger die Teilnahme an einer Abstimmung.
+        """
+        if self.pruefe_buerger_hat_abgestimmt(abstimmungid, buergerid):
+            raise ValueError("Der Bürger hat bereits abgestimmt.")
+        self.repository.speichere_stimme(abstimmungid, buergerid)

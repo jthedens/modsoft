@@ -1,56 +1,56 @@
+from Buerger import Buerger
+from src.main.python.evoting.application.dekoratoren.dekoratoren import log_method_call, handle_exceptions
 import sqlite3
+import os
 
-def find_citizens(citizens_mail, citizens_password):
-  try:
-    # Zugriff auf die Datenbank
-    conn = sqlite3.connect("../../../../citizens.db")
-    # Cursor erstellen
-    cursor = conn.cursor()
+class BuergerRepository:
+    """
+    Kapselt alle Datenbankoperationen für die Entität 'Buerger'.
+    Trennt Datenbanklogik von der Geschäftslogik.
+    """
 
-    result = cursor.execute("SELECT CITIZENSID, FIRSTNAME, LASTNAME, EMAIL, PASSWORD, ROLE, AUTHENTICATIONSTATUS, CHOICEALLOWED FROM CITIZENS WHERE EMAIL = ? AND PASSWORD = ?",(citizens_mail, citizens_password))
-    CITIZENSID, FIRSTNAME, LASTNAME, EMAIL, PASSWORD, ROLL, AUTHENTICATIONSTATUS, CHOICEALLOWED = result.fetchone()
+    @log_method_call
+    @handle_exceptions
+    def __init__(self, db_path="eVoteMain.db"):
+        if not os.path.exists(db_path):
+            raise ValueError("Die Datenbankdatei existiert nicht!")
+        self.db_path = db_path
 
-    if result is None:
-      raise ValueError("Kein Benutzer gefunden. Ungültige Email oder Passwort.")
+    @log_method_call
+    @handle_exceptions
+    def finde_buerger_nach_email(self, email):
+        """
+        Sucht einen Bürger in der Datenbank anhand seiner E-Mail.
+        :param email: Die E-Mail des zu suchenden Bürgers.
+        :return: Ein Buerger-Objekt oder None, wenn nicht gefunden.
+        """
+        query = """
+            SELECT buergerid, vorname, nachname, geburtstag, adresse, plz, email, passwort, rolle, authentifizierungsstatus
+            FROM buerger WHERE email = ?
+        """
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            result = cursor.execute(query, (email,)).fetchone()
+            if result:
+                # Erstellen eines Buerger-Objekts aus den Ergebnissen
+                return Buerger(*result)
+            return None
 
-    return (
-        result[0],  # CITIZENSID
-        f"{result[1]} {result[2]}",  # FIRSTNAME + LASTNAME
-        result[3],  # EMAIL
-        result[4],  # PASSWORD
-        result[5],  # ROLE
-        result[6],  # AUTHENTICATIONSTATUS
-        result[7],  # CHOICEALLOWED
-      )
-
-  except sqlite3.Error as e:
-    print(f"Datenbankfehler: {e}")
-    raise
-  finally:
-    conn.close()
-
-
-    # # Commit your changes in the database
-    # conn.commit()
-    # # Closing the connection
-    # conn.close()
-
-    # return CITIZENSID, FIRSTNAME + " " + LASTNAME, EMAIL, PASSWORD, ROLL, AUTHENTICATIONSTATUS, CHOICEALLOWED
-
-def add_citizen_to_database(name, email, password):
-    try:
-        conn = sqlite3.connect("citizens.db")
-        cursor = conn.cursor()
-
-        # Passwort-Hashing hinzufügen (empfohlen)
-        hashed_password = password  # Hier könntest du `werkzeug.security` verwenden
-
-        cursor.execute(
-            "INSERT INTO CITIZENS (FIRSTNAME, LASTNAME, EMAIL, PASSWORD, ROLL, AUTHENTICATIONSTATUS, CHOICEALLOWED) VALUES (?, ?, ?, ?, ?, ?, ?)",
-            (name.split()[0], name.split()[1], email, hashed_password, "user", 0, 1)
-        )
-        conn.commit()
-    except sqlite3.Error as e:
-        raise Exception(f"Fehler beim Hinzufügen zur Datenbank: {e}")
-    finally:
-        conn.close()
+    @log_method_call
+    @handle_exceptions
+    def speichere_buerger(self, buerger):
+        """
+        Speichert einen neuen Bürger in der Datenbank.
+        :param buerger: Ein Buerger-Objekt, das gespeichert werden soll.
+        """
+        query = """
+            INSERT INTO buerger (buergerid, vorname, nachname, geburtstag, adresse, plz, email, passwort, rolle, authentifizierungsstatus)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute(query, (
+                buerger.buergerid, buerger.vorname, buerger.nachname, buerger.geburtstag,
+                buerger.adresse, buerger.plz, buerger.email, buerger.passwort, buerger.rolle, buerger.authentifizierungsstatus
+            ))
+            conn.commit()

@@ -1,19 +1,25 @@
 import sqlite3
 
-def countStimme(abstimmungs_id, citizens_id):
-    # Zugriff auf die Datenbank
-    conn = sqlite3.connect("../../../../stimmen.db")
+def stimmeSumme(abstimmungid, stimme):
+    try:
+        # Verbindung zur Datenbank mit 'with' für automatische Schließung
+        with sqlite3.connect("eVoteMain.db") as conn:
+            # Cursor-Objekt erstellen
+            cursor = conn.cursor()
 
-    # Cursor-Objekt erstellen
-    cursor = conn.cursor()
+            # SQL-Abfrage, um die Anzahl der Stimmen zu zählen
+            cursor.execute("SELECT COUNT(stimme) FROM auswertung WHERE abstimmungid = ? AND stimme = ?", (abstimmungid, stimme))
 
-    # SQL-Abfrage, um die Anzahl der Werte in der Spalte 'name' zu zählen
-    cursor.execute("SELECT COUNT(STIMME) FROM stimmen WHERE ABSTIMMUNGSID = ? AND CITIZENSID = ?",(abstimmungs_id, citizens_id))
+            # Ergebnis abrufen
+            count = cursor.fetchone()
 
-    # Ergebnis abrufen
-    count = cursor.fetchone()[0]
+            # Überprüfen, ob ein Ergebnis vorhanden ist
+            if count is not None:
+                return count[0]  # Der erste Wert der Abfrage (Anzahl der Stimmen)
+            else:
+                return 0  # Falls keine Daten vorhanden sind, 0 zurückgeben
 
-    conn.close()
-
-    return count
-
+    except sqlite3.Error as e:
+        # Fehlerbehandlung
+        print(f"Fehler bei der Datenbankabfrage: {e}")
+        return None

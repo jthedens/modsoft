@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SqlDialectMappings">
+    <file url="file://$PROJECT_DIR$/src/initDB_eVoteMain.py" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/python/evoting/infrastructure/repositories/AbstimmungRepository.py" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/python/evoting/infrastructure/repositories/StimmeRepository.py" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/python/evoting/infrastructure/repositories/UserRepository.py" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/python/evoting/infrastructure/services/AbstimmungsService.py" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/python/evoting/infrastructure/services/UserService.py" dialect="GenericSQL" />
+  </component>
+</project>
