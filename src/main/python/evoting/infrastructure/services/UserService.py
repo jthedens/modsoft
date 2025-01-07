@@ -1,6 +1,7 @@
 from src.main.python.evoting.application.dekoratoren.dekoratoren import log_method_call, handle_exceptions
 from src.main.python.evoting.infrastructure.repositories.UserRepository import BuergerRepository
 from src.main.python.evoting.infrastructure.services.PasswortService import hashPasswort
+from datetime import datetime
 from ...domain.entities.Buerger import Buerger
 import bcrypt  # Für Passwort-Hashing
 
@@ -55,3 +56,24 @@ class BuergerService:
         neuer_buerger = Buerger(buergerid, vorname, nachname, geburtstag, adresse, plz, email, hashed_passwort, rolle, authentifizierungsstatus)
         self.repository.speichere_buerger(neuer_buerger)
 
+    @log_method_call
+    @handle_exceptions
+    def finde_buerger_nach_email(self, email):
+        # Aufruf der Repository-Methode, um den Bürger anhand der E-Mail zu finden
+        return self.repository.finde_buerger_nach_email(email)
+
+
+    @staticmethod
+    def berechne_alter(geburtsdatum_str):
+        # Das Geburtsdatum als String wird in ein datetime-Objekt umgewandelt
+        geburtsdatum = datetime.strptime(geburtsdatum_str, "%Y-%m-%d")
+        heute = datetime.today()
+
+        # Alter berechnen
+        alter = heute.year - geburtsdatum.year
+
+        # Falls der Geburtstag in diesem Jahr noch nicht gewesen ist
+        if (heute.month, heute.day) < (geburtsdatum.month, geburtsdatum.day):
+            alter -= 1
+
+        return alter

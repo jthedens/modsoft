@@ -1,4 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
+
+from src.main.python.evoting.application.controllers.AbstimmungsController import AbstimmungController
 from src.main.python.evoting.application.dekoratoren.dekoratoren import log_method_call, handle_exceptions
 from src.main.python.evoting.application.controllers.BürgerController import BuergerController
 from datetime import datetime
@@ -71,6 +73,7 @@ def login():
                 return redirect(url_for('main.login'))
 
             session['user_email'] = email
+            session['user_passwort'] = passwort
             session['user_name'] = buerger_daten['voller_name']  # Name speichern
             #flash("Login erfolgreich!", "success")
             return redirect(url_for('main.dashboard'))
@@ -123,25 +126,29 @@ def dashboard():
         ergebnisse=ergebnisse
     )
 
-@main.route('/abstimmung/<int:id>', methods=['GET', 'POST'])
+@main.route('/abstimmung/<uuid:id>', methods=['GET', 'POST'])
 def abstimmung(id):
-    # Dummy-Daten (später durch Datenbankabfrage ersetzen)
-    abstimmung = next((a for a in abstimmungen if a["abstimmungs_id"] == str(id)), None)
+    abstimmung_controller = AbstimmungController()
 
-    if not abstimmung:
-        return "Abstimmung nicht gefunden", 404
-
-    if request.method == 'POST':
-        # Verarbeitung der Stimme (ersetze später durch Datenbankintegration)
-        stimme = request.form['vote']
-        print(f"Stimme '{stimme}' wurde für Abstimmung {id} abgegeben.")
-        return f"Danke für Ihre Stimme: {stimme}"
+    # Überprüfe die Abstimmung anhand der UUID
+    abstimmung = abstimmung_controller.finde_abstimmung(str(id))  # UUID als String übergeben
 
     return render_template('abstimmung.html', abstimmung=abstimmung)
 
+
+
 @main.route('/abstimmungen')
 def abstimmungen_uebersicht():
-    return render_template('abstimmungen.html', abstimmungen=abstimmungen)
+    """
+    Route, um alle Abstimmungen anzuzeigen, die für den Bürger zugänglich sind.
+    """
+    abstimmung_controller = AbstimmungController()
+    email = session['user_email'] # Beispiel-Daten
+    daten = abstimmung_controller.finde_abstimmungen_fuer_buerger(email)
+
+    # Weitergabe an das Template
+    return render_template("abstimmungen.html", abstimmungen=daten)
+
 
 @main.route('/ergebnisse')
 def ergebnis_übersicht():

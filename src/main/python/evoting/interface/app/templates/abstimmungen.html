@@ -14,9 +14,7 @@
                       <a href="{{ url_for('main.abstimmung', id=abstimmung.abstimmungs_id) }}">{{ abstimmung.titel }}</a>
                     </h2>
                     <p>{{ abstimmung.beschreibung }}</p>
-                    <p><strong>Zeitraum:</strong>
-                        {{ abstimmung.startdatum.strftime('%d.%m.%Y') }} bis {{ abstimmung.enddatum.strftime('%d.%m.%Y') }}
-                    </p>
+                    <p><strong>Zeitraum:</strong> Bis zum {{ abstimmung.frist }}</p>
                     <p><strong>Status:</strong>
                       <span class="{% if abstimmung.status == 'Offen' %}text-success{% else %}text-danger{% endif %}">
                         {{ abstimmung.status }}

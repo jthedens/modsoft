@@ -3,18 +3,17 @@ from src.main.python.evoting.application.dekoratoren.dekoratoren import log_meth
 from src.main.python.evoting.infrastructure.services.AbstimmungsService import AbstimmungService
 from src.main.python.evoting.infrastructure.repositories.AbstimmungRepository import AbstimmungRepository
 from src.main.python.evoting.infrastructure.services.UserService import BuergerService
-
+from src.main.python.evoting.infrastructure.repositories.UserRepository import BuergerRepository
+from datetime import datetime
 class AbstimmungController:
     """
     Schnittstelle für Abstimmungsoperationen, z. B. für Webanwendungen oder APIs.
     Delegiert die Geschäftslogik an den Service und formatiert die Ergebnisse.
     """
 
-    @log_method_call
-    @handle_exceptions
     def __init__(self):
         self.service = AbstimmungService(AbstimmungRepository())
-        self.buerger_service = BuergerService()
+        self.buerger_service = BuergerService(BuergerRepository())
 
     @log_method_call
     @handle_exceptions
@@ -90,34 +89,34 @@ class AbstimmungController:
 
     @log_method_call
     @handle_exceptions
-    def finde_abstimmungen_fuer_buerger(self, email, passwort):
-        """
-        Gibt eine Liste von Abstimmungen zurück, die für einen bestimmten Bürger zugänglich sind,
-        basierend auf der Altersgrenze.
-        :param email: Die E-Mail des Bürgers
-        :param passwort: Das Passwort des Bürgers
-        :return: Eine Liste von Abstimmungen, die der Bürger sehen kann.
-        """
+    def finde_abstimmungen_fuer_buerger(self, email):
         try:
-            buerger = self.buerger_service.finde_buerger(email, passwort)
-            alter = buerger.alter  # Angenommen, du hast eine 'alter'-Eigenschaft in der 'Buerger' Klasse
+            # Holen des Benutzers aus der Session oder basierend auf der E-Mail
+            buerger = self.buerger_service.finde_buerger_nach_email(email)
+            print(buerger.geburtstag)
+            alter = self.buerger_service.berechne_alter(buerger.geburtstag)
             abstimmungen = self.service.finde_alle_abstimmungen()
-
-            # Filtere die Abstimmungen basierend auf der Altersgrenze
-            filter_abstimmungen = [
-                abstimmung for abstimmung in abstimmungen if abstimmung.altersgrenze <= alter
+            print(abstimmungen)
+            print(alter)
+            # Filtere die Abstimmungen basierend auf der Altersgrenze, Status und Frist
+            aktuelle_abstimmungen = [
+                abstimmung for abstimmung in abstimmungen
+                if abstimmung['altersgrenze'] <= alter  # Altersprüfung
+                   and abstimmung['status'] == 1  # Status muss "aktiv" sein
+                   and datetime.strptime(abstimmung['frist'], "%Y-%m-%d") >= datetime.today()
             ]
 
+            # Rückgabe der gefilterten Abstimmungen
             return [
                 {
-                    "abstimmungid": abstimmung.abstimmungid,
-                    "titel": abstimmung.titel,
-                    "beschreibung": abstimmung.beschreibung,
-                    "frist": abstimmung.frist.strftime("%Y-%m-%d"),
-                    "altersgrenze": abstimmung.altersgrenze,
-                    "status": abstimmung.status,
+                    "abstimmungid": abstimmung['abstimmungid'],
+                    "titel": abstimmung['titel'],
+                    "beschreibung": abstimmung['beschreibung'],
+                    "frist": abstimmung['frist'],
+                    "altersgrenze": abstimmung['altersgrenze'],
+                    "status": abstimmung['status'],
                 }
-                for abstimmung in filter_abstimmungen
+                for abstimmung in aktuelle_abstimmungen
             ]
 
         except Exception as e:
