@@ -3,6 +3,7 @@ from src.main.python.evoting.application.dekoratoren.dekoratoren import log_meth
 import sqlite3
 import os
 
+
 class BuergerRepository:
     """
     Kapselt alle Datenbankoperationen für die Entität 'Buerger'.
@@ -51,3 +52,4 @@ class BuergerRepository:
                 buerger.adresse, buerger.plz, buerger.email, buerger.passwort, buerger.rolle, buerger.authentifizierungsstatus
             ))
             conn.commit()
+

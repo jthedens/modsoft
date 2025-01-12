@@ -86,12 +86,12 @@ INSERT INTO abstimmung (
     abstimmungid, titel, beschreibung, frist, altersgrenze, status
 ) VALUES (?, ?, ?, ?, ?, ?)
 """, (
-    4678,
+    1,
     'Titel der Abstimmung',                        # Titel der Abstimmung
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Integer convallis, ...',  # Beschreibung
     '2026-02-01',                                  # Frist für die Abstimmung
     18,                                            # Altersgrenze
-    'aktiv'                                        # Status (1 = aktiv)
+    '1'                                        # Status (1 = aktiv)
 ))
 
 cursor.execute("""
@@ -99,12 +99,12 @@ INSERT INTO abstimmung (
     abstimmungid, titel, beschreibung, frist, altersgrenze, status
 ) VALUES (?, ?, ?, ?, ?, ?)
 """, (
-    9745,
+    2,
     'Neue Parkanlage',                             # Titel der Abstimmung
     'Soll eine neue Parkanlage im Stadtzentrum gebaut werden?',  # Beschreibung
     '2025-10-28',                                  # Frist für die Abstimmung
     18,                                            # Altersgrenze
-    'aktiv'                                        # Status (1 = aktiv)
+    '1'                                            # Status (1 = aktiv)
 ))
 
 ###########################

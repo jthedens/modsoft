@@ -75,6 +75,7 @@ def login():
             session['user_email'] = email
             session['user_passwort'] = passwort
             session['user_name'] = buerger_daten['voller_name']  # Name speichern
+            session['user_id'] = buerger_daten['buergerid']
             #flash("Login erfolgreich!", "success")
             return redirect(url_for('main.dashboard'))
 
@@ -89,7 +90,6 @@ def login():
 @main.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        buergerid = request.form['buergerid']
         vorname = request.form['vorname']
         nachname = request.form['nachname']
         geburtstag = request.form['geburtstag']
@@ -97,17 +97,16 @@ def register():
         plz = request.form['plz']
         email = request.form['email']
         passwort = request.form['password']
-        rolle = request.form['rolle']
-        authentifizierungsstatus = request.form['authentifizierungsstatus']
+
 
         try:
             # Benutzer zur Datenbank hinzufügen
             buerger_erstellen = BuergerController()
-            buerger_daten = buerger_erstellen.erstelle_buerger(buergerid, vorname, nachname, geburtstag, adresse, plz, email, passwort, rolle, authentifizierungsstatus)
+            buerger_daten = buerger_erstellen.erstelle_buerger(vorname, nachname, geburtstag, adresse, plz, email, passwort)
             flash("Registrierung erfolgreich! Bitte melden Sie sich an.", "success")
 
             if buerger_daten:
-                return redirect(url_for('login'))
+                return redirect(url_for('main.login'))
 
             return redirect(url_for('register.html'))
 
@@ -118,22 +117,28 @@ def register():
 
 @main.route('/dashboard')
 def dashboard():
+    abstimmung_controller = AbstimmungController()
+    email = session['user_email']  # Beispiel-Daten
+    daten = abstimmung_controller.finde_abstimmungen_fuer_buerger(email)
+
+
     return render_template(
         'dashboard.html',
         user_name=session['user_name'],
-        abstimmungen=abstimmungen,
+        abstimmungen=daten,
         teilgenommene_abstimmungen=teilgenommene_abstimmungen,
         ergebnisse=ergebnisse
     )
 
-@main.route('/abstimmung/<uuid:id>', methods=['GET', 'POST'])
-def abstimmung(id):
+@log_method_call
+@handle_exceptions
+@main.route('/abstimmung', methods=['GET', 'POST'])
+def abstimmung():
+    abstimmung_id = request.args.get('id')  # Versucht, den Parameter 'id' zu holen
     abstimmung_controller = AbstimmungController()
+    daten = abstimmung_controller.finde_abstimmung(abstimmung_id)
 
-    # Überprüfe die Abstimmung anhand der UUID
-    abstimmung = abstimmung_controller.finde_abstimmung(str(id))  # UUID als String übergeben
-
-    return render_template('abstimmung.html', abstimmung=abstimmung)
+    return render_template('abstimmung.html', abstimmung=daten)
 
 
 

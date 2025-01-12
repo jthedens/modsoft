@@ -11,7 +11,7 @@
                 <li class="card-vote">
                   <div class="card-vote-infos">
                     <h2>
-                      <a href="{{ url_for('main.abstimmung', id=abstimmung.abstimmungs_id) }}">{{ abstimmung.titel }}</a>
+                      <a href="{{ url_for('main.abstimmung', id=abstimmung.abstimmungid) }}">{{ abstimmung.titel }}</a>
                     </h2>
                     <p>{{ abstimmung.beschreibung }}</p>
                     <p><strong>Zeitraum:</strong> Bis zum {{ abstimmung.frist }}</p>
@@ -21,7 +21,7 @@
                         </span>
                     </p>
                   </div>
-                  <a class="btn btn-flat" href="/abstimmung">abstimmen</a>
+                  <a class="btn btn-flat" href="/abstimmung?id={{ abstimmung.abstimmungid }}">abstimmen</a>
                 </li>
             {% endfor %}
         </ul>

@@ -22,6 +22,7 @@ class AbstimmungService:
     @handle_exceptions
     def finde_abstimmung(self, abstimmungid):
         abstimmung = self.repository.finde_nach_id(abstimmungid)
+        print(abstimmung)
         if not abstimmung:
             raise ValueError(f"Abstimmung mit ID {abstimmungid} nicht gefunden.")
         return abstimmung

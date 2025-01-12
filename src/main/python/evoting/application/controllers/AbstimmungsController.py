@@ -47,13 +47,14 @@ class AbstimmungController:
         """
         try:
             abstimmung = self.service.finde_abstimmung(abstimmungid)
+            frist_datetime = datetime.strptime(abstimmung.frist, "%Y-%m-%d")
             return {
                 "abstimmungid": abstimmung.abstimmungid,
                 "titel": abstimmung.titel,
                 "beschreibung": abstimmung.beschreibung,
-                "frist": abstimmung.frist.strftime("%Y-%m-%d"),
+                "frist": frist_datetime.strftime("%Y-%m-%d"),
                 "altersgrenze": abstimmung.altersgrenze,
-                "status": abstimmung.status,
+                "status": True, ##################### "status": abstimmung.status
             }
         except Exception as e:
             return {"error": str(e), "status": "failure"}
