@@ -57,12 +57,12 @@ class AbstimmungService:
         """
         return self.repository.buerger_hat_abgestimmt(abstimmungid, buergerid)
 
-    @log_method_call
-    @handle_exceptions
-    def abstimmen(self, abstimmungid, buergerid):
+    #@log_method_call
+    #@handle_exceptions
+    def abstimmen(self, abstimmungid, buergerid, stimme):
         """
         Ermöglicht einem Bürger die Teilnahme an einer Abstimmung.
         """
-        if self.pruefe_buerger_hat_abgestimmt(abstimmungid, buergerid):
+        if self.repository.buerger_hat_abgestimmt(abstimmungid, buergerid):
             raise ValueError("Der Bürger hat bereits abgestimmt.")
-        self.repository.speichere_stimme(abstimmungid, buergerid)
+        self.repository.speichere_stimme(abstimmungid, buergerid, stimme)

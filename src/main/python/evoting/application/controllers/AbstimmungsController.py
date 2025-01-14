@@ -12,6 +12,7 @@ class AbstimmungController:
     """
 
     def __init__(self):
+        self.logger = None
         self.service = AbstimmungService(AbstimmungRepository())
         self.buerger_service = BuergerService(BuergerRepository())
 
@@ -46,6 +47,7 @@ class AbstimmungController:
         :return: Ein Dictionary mit Abstimmungsdetails oder einer Fehlermeldung.
         """
         try:
+
             abstimmung = self.service.finde_abstimmung(abstimmungid)
             frist_datetime = datetime.strptime(abstimmung.frist, "%Y-%m-%d")
             return {
@@ -94,11 +96,8 @@ class AbstimmungController:
         try:
             # Holen des Benutzers aus der Session oder basierend auf der E-Mail
             buerger = self.buerger_service.finde_buerger_nach_email(email)
-            print(buerger.geburtstag)
             alter = self.buerger_service.berechne_alter(buerger.geburtstag)
             abstimmungen = self.service.finde_alle_abstimmungen()
-            print(abstimmungen)
-            print(alter)
             # Filtere die Abstimmungen basierend auf der Altersgrenze, Status und Frist
             aktuelle_abstimmungen = [
                 abstimmung for abstimmung in abstimmungen
@@ -123,9 +122,8 @@ class AbstimmungController:
         except Exception as e:
             return {"error": str(e)}
 
-    @log_method_call
-    @handle_exceptions
-    def abstimmen(self, abstimmungid, buergerid):
+
+    def abstimmen(self, abstimmungid, buergerid, stimme):
         """
         Ermöglicht einem Bürger, an einer Abstimmung teilzunehmen.
         :param abstimmungid: Die ID der Abstimmung.
@@ -135,7 +133,7 @@ class AbstimmungController:
             abstimmung = self.service.finde_abstimmung(abstimmungid)
             if abstimmung.status != "aktiv":
                 raise ValueError("Die Abstimmung ist nicht mehr aktiv.")
-            self.service.abstimmen(abstimmungid, buergerid)
+            self.service.abstimmen(abstimmungid, buergerid, stimme)
             return {"message": "Erfolgreich abgestimmt!", "status": "success"}
         except Exception as e:
             self.logger.error(f"Fehler beim Abstimmen: {e}")

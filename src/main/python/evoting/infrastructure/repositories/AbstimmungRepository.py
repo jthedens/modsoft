@@ -118,11 +118,11 @@ class AbstimmungRepository:
             )
             return cursor.fetchone()[0] > 0
 
-    def speichere_stimme(self, abstimmungid, buergerid):
+    def speichere_stimme(self, abstimmungid, buergerid, stimme):
         with sqlite3.connect("eVoteMain.db") as conn:
             cursor = conn.cursor()
             cursor.execute(
-                "INSERT INTO abstimmungen_stimmen (abstimmungid, buergerid) VALUES (?, ?)",
-                (abstimmungid, buergerid)
+                "INSERT INTO abstimmungen_stimmen (abstimmungid, buergerid, stimme) VALUES (?, ?, ?)",
+                (abstimmungid, buergerid, stimme)
             )
             conn.commit()

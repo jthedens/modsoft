@@ -136,11 +136,31 @@ def dashboard():
 def abstimmung():
     abstimmung_id = request.args.get('id')  # Versucht, den Parameter 'id' zu holen
     abstimmung_controller = AbstimmungController()
+
+    if request.method == 'POST':
+        # Daten aus dem Formular holen
+        buergerid = session['user_id']
+        stimme = request.form.get('vote')
+
+        print(buergerid, stimme, abstimmung_id)
+
+        # Überprüfen, ob Abstimmung und Bürger-ID vorhanden sind
+        if not abstimmung_id or not buergerid:
+            flash("Abstimmung oder Bürger-ID fehlt!", "error")
+            return redirect(request.url)
+
+        try:
+            # Speichere die Stimme in die Datenbank
+            abstimmung_controller.abstimmen(abstimmung_id, buergerid, stimme)
+            flash("Deine Stimme wurde erfolgreich gespeichert!", "success")
+            print('wurde gespeichert')
+        except Exception as e:
+            flash(f"Fehler beim Speichern der Stimme: {e}", "error")
+            return redirect(request.url)
+
+    # Hole Abstimmungsdaten für GET-Methode
     daten = abstimmung_controller.finde_abstimmung(abstimmung_id)
-
     return render_template('abstimmung.html', abstimmung=daten)
-
-
 
 @main.route('/abstimmungen')
 def abstimmungen_uebersicht():
