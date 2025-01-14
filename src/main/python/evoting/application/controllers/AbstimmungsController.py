@@ -130,8 +130,10 @@ class AbstimmungController:
         :param buergerid: Die ID des Bürgers.
         """
         try:
+
             abstimmung = self.service.finde_abstimmung(abstimmungid)
-            if abstimmung.status != "aktiv":
+            if abstimmung.status != 1:
+                print('error')
                 raise ValueError("Die Abstimmung ist nicht mehr aktiv.")
             self.service.abstimmen(abstimmungid, buergerid, stimme)
             return {"message": "Erfolgreich abgestimmt!", "status": "success"}

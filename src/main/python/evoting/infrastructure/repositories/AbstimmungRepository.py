@@ -113,16 +113,17 @@ class AbstimmungRepository:
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
             cursor.execute(
-                "SELECT COUNT(*) FROM abstimmungen_stimmen WHERE abstimmungid = ? AND buergerid = ?",
+                "SELECT COUNT(*) FROM auswertung WHERE abstimmungid = ? AND buergerid = ?",
                 (abstimmungid, buergerid)
             )
             return cursor.fetchone()[0] > 0
 
     def speichere_stimme(self, abstimmungid, buergerid, stimme):
+        print('ist in repo')
         with sqlite3.connect("eVoteMain.db") as conn:
             cursor = conn.cursor()
             cursor.execute(
-                "INSERT INTO abstimmungen_stimmen (abstimmungid, buergerid, stimme) VALUES (?, ?, ?)",
+                "INSERT INTO auswertung(abstimmungid, buergerid, stimme) VALUES (?, ?, ?)",
                 (abstimmungid, buergerid, stimme)
             )
             conn.commit()

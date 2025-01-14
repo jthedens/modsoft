@@ -151,6 +151,7 @@ def abstimmung():
 
         try:
             # Speichere die Stimme in die Datenbank
+            print('vor dem abspeichern')
             abstimmung_controller.abstimmen(abstimmung_id, buergerid, stimme)
             flash("Deine Stimme wurde erfolgreich gespeichert!", "success")
             print('wurde gespeichert')

@@ -22,7 +22,6 @@ class AbstimmungService:
     @handle_exceptions
     def finde_abstimmung(self, abstimmungid):
         abstimmung = self.repository.finde_nach_id(abstimmungid)
-        print(abstimmung)
         if not abstimmung:
             raise ValueError(f"Abstimmung mit ID {abstimmungid} nicht gefunden.")
         return abstimmung
@@ -63,6 +62,9 @@ class AbstimmungService:
         """
         Ermöglicht einem Bürger die Teilnahme an einer Abstimmung.
         """
+        print('ist im service')
         if self.repository.buerger_hat_abgestimmt(abstimmungid, buergerid):
+            print('error')
             raise ValueError("Der Bürger hat bereits abgestimmt.")
+        print('kein error')
         self.repository.speichere_stimme(abstimmungid, buergerid, stimme)
