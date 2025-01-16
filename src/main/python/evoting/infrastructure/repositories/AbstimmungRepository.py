@@ -127,3 +127,22 @@ class AbstimmungRepository:
                 (abstimmungid, buergerid, stimme)
             )
             conn.commit()
+
+    def teilgenommen(self, buergerid):
+        daten = []
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            # Parameter als Tupel übergeben
+            cursor.execute(
+                "SELECT buergerid, abstimmungid, stimme FROM auswertung WHERE buergerid = ?",
+                (buergerid,)  # Tupel mit einem Element
+            )
+            # Ergebnisse abrufen und verarbeiten
+            result = cursor.fetchall()
+            for row in result:
+                daten.append({
+                    "buergerid": row[0],  # Bürger-ID
+                    "abstimmungid": row[1],  # Abstimmungs-ID
+                    "stimme": row[2]  # Stimme
+                })
+        return daten

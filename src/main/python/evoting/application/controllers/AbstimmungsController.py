@@ -1,3 +1,5 @@
+from twisted.application.strports import service
+
 from src.main.python.evoting.domain.entities.Abstimmung import Abstimmung
 from src.main.python.evoting.application.dekoratoren.dekoratoren import log_method_call, handle_exceptions
 from src.main.python.evoting.infrastructure.services.AbstimmungsService import AbstimmungService
@@ -140,3 +142,25 @@ class AbstimmungController:
         except Exception as e:
             self.logger.error(f"Fehler beim Abstimmen: {e}")
             return {"error": str(e), "status": "failure"}
+
+
+
+    def teilgenommen_abstimmung(self, buergerid):
+        # Alle Abstimmungen, an denen der Bürger teilgenommen hat
+        teilnahmen = self.service.teilgenommene_abstimmungen(buergerid)
+        ergebnisse = []
+
+        for teilnahme in teilnahmen:
+            # Abrufen der Abstimmung basierend auf der abstimmungid
+            abstimmung = self.service.finde_abstimmung(teilnahme['abstimmungid'])
+
+            # Zugriff auf die Attribute der Abstimmung mit Punkten
+            ergebnisse.append({
+                "abstimmungid": teilnahme['abstimmungid'],
+                "titel": abstimmung.titel,  # Attribut statt Schlüssel
+                "stimme": teilnahme['stimme'],
+                "status": abstimmung.status,  # Attribut statt Schlüssel
+            })
+
+        return ergebnisse
+

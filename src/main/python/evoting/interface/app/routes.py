@@ -119,14 +119,17 @@ def register():
 def dashboard():
     abstimmung_controller = AbstimmungController()
     email = session['user_email']  # Beispiel-Daten
+    buergerid = session['user_id']
     daten = abstimmung_controller.finde_abstimmungen_fuer_buerger(email)
+
+    teilgenommene_daten = abstimmung_controller.teilgenommen_abstimmung(buergerid)
 
 
     return render_template(
         'dashboard.html',
         user_name=session['user_name'],
         abstimmungen=daten,
-        teilgenommene_abstimmungen=teilgenommene_abstimmungen,
+        teilgenommene_abstimmungen=teilgenommene_daten,
         ergebnisse=ergebnisse
     )
 

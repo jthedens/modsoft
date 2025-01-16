@@ -68,3 +68,7 @@ class AbstimmungService:
             raise ValueError("Der Bürger hat bereits abgestimmt.")
         print('kein error')
         self.repository.speichere_stimme(abstimmungid, buergerid, stimme)
+
+    def teilgenommene_abstimmungen(self, buergerid):
+        return self.repository.teilgenommen(buergerid)
+
