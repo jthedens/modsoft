@@ -26,7 +26,7 @@ class ErgebnisController:
         """
         try:
             # Abrufen der offenen Abstimmungen, an denen der Bürger teilnehmen kann
-            abstimmungen = self.service.finde_offene_abstimmungen(buergerid)
+            abstimmungen = self.service.finde_abstimmungen_fuer_buerger(buergerid)
             verfuegbare_ergebnisse = []
 
             for abstimmung in abstimmungen:
@@ -45,36 +45,3 @@ class ErgebnisController:
             self.logger.error(f"Fehler beim Abrufen der verfügbaren Ergebnisse: {e}")
             return {"status": "failure", "error": str(e)}
 
-
-
-    @log_method_call
-    @handle_exceptions
-    def finde_ergebnis(self, abstimmungid, stimme):
-        """
-        Ruft das Ergebnis für eine bestimmte Abstimmung ab.
-        :param abstimmungid: Die ID der Abstimmung.
-        :param stimme: Die spezifische Stimme, deren Ergebnis abgerufen wird.
-        :return: Das Ergebnis als Dictionary oder Fehlernachricht.
-        """
-        try:
-            ergebnis = self.service.finde_ergebnis(abstimmungid, stimme)
-            return {"status": "success", "ergebnis": ergebnis}
-        except Exception as e:
-            self.logger.error(f"Fehler beim Abrufen des Ergebnisses: {e}")
-            return {"status": "failure", "error": str(e)}
-
-    @log_method_call
-    @handle_exceptions
-    def erstelle_ergebnis(self, abstimmungid, stimmen_verteilung):
-        """
-        Erstellt oder aktualisiert ein Ergebnis für eine Abstimmung.
-        :param abstimmungid: Die ID der Abstimmung.
-        :param stimmen_verteilung: Die Verteilung der Stimmen, die gespeichert werden soll.
-        :return: Statusnachricht über Erfolg oder Fehler.
-        """
-        try:
-            self.service.erstelle_ergebnis(abstimmungid, stimmen_verteilung)
-            return {"status": "success", "message": "Ergebnis erfolgreich erstellt oder aktualisiert."}
-        except Exception as e:
-            self.logger.error(f"Fehler beim Erstellen des Ergebnisses: {e}")
-            return {"status": "failure", "error": str(e)}
