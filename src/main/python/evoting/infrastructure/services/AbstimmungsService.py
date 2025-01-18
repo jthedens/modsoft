@@ -72,3 +72,22 @@ class AbstimmungService:
     def teilgenommene_abstimmungen(self, buergerid):
         return self.repository.teilgenommen(buergerid)
 
+    @log_method_call
+    @handle_exceptions
+    def finde_offene_abstimmungen(self, buergerid):
+        """
+        Findet alle offenen Abstimmungen, an denen der Bürger teilnehmen kann.
+        :param buergerid: Die ID des Bürgers
+        :return: Eine Liste von Abstimmungen
+        """
+        # Alle Abstimmungen abrufen
+        alle_abstimmungen = self.finde_alle_abstimmungen()
+        print("Methode wird aufgrufen")
+        # Filter: Nur offene Abstimmungen (status = 0), bei denen der Bürger nicht abgestimmt hat
+        offene_abstimmungen = [
+            abstimmung for abstimmung in alle_abstimmungen
+            if abstimmung.status == 0 and self.repository.buerger_hat_abgestimmt(abstimmung.abstimmungid, buergerid)
+        ]
+        print(offene_abstimmungen)
+
+        return offene_abstimmungen

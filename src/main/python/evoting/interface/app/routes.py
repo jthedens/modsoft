@@ -3,6 +3,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 from src.main.python.evoting.application.controllers.AbstimmungsController import AbstimmungController
 from src.main.python.evoting.application.dekoratoren.dekoratoren import log_method_call, handle_exceptions
 from src.main.python.evoting.application.controllers.BürgerController import BuergerController
+from src.main.python.evoting.application.controllers.ErgebnisController import ErgebnisController
 from datetime import datetime
 from src.main.python.evoting.infrastructure.repositories.UserRepository import BuergerRepository
 
@@ -118,11 +119,13 @@ def register():
 @main.route('/dashboard')
 def dashboard():
     abstimmung_controller = AbstimmungController()
+    ergebnis_controller = ErgebnisController()
     email = session['user_email']  # Beispiel-Daten
     buergerid = session['user_id']
     daten = abstimmung_controller.finde_abstimmungen_fuer_buerger(email)
 
     teilgenommene_daten = abstimmung_controller.teilgenommen_abstimmung(buergerid)
+    ergebnis_daten = ergebnis_controller.zeige_beendete_abstimmungen()
 
 
     return render_template(
@@ -130,7 +133,7 @@ def dashboard():
         user_name=session['user_name'],
         abstimmungen=daten,
         teilgenommene_abstimmungen=teilgenommene_daten,
-        ergebnisse=ergebnisse
+        ergebnisse=ergebnis_daten
     )
 
 @log_method_call
@@ -181,7 +184,9 @@ def abstimmungen_uebersicht():
 
 @main.route('/ergebnisse')
 def ergebnis_übersicht():
-    return render_template('ergebnisse.html', ergebnisse=ergebnisse)
+    ergebnis_controller = ErgebnisController()
+    ergebnis_daten = ergebnis_controller.zeige_beendete_abstimmungen()
+    return render_template('ergebnisse.html', ergebnisse=ergebnis_daten)
 
 @main.route('/profil')
 def profil():

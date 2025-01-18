@@ -100,30 +100,30 @@ class AbstimmungController:
             buerger = self.buerger_service.finde_buerger_nach_email(email)
             alter = self.buerger_service.berechne_alter(buerger.geburtstag)
             abstimmungen = self.service.finde_alle_abstimmungen()
+
             # Filtere die Abstimmungen basierend auf der Altersgrenze, Status und Frist
             aktuelle_abstimmungen = [
                 abstimmung for abstimmung in abstimmungen
-                if abstimmung['altersgrenze'] <= alter  # Altersprüfung
-                   and abstimmung['status'] == 1  # Status muss "aktiv" sein
-                   and datetime.strptime(abstimmung['frist'], "%Y-%m-%d") >= datetime.today()
+                if abstimmung.altersgrenze <= alter  # Altersprüfung
+                   and abstimmung.status == 1  # Status muss "aktiv" sein
+                   and datetime.strptime(abstimmung.frist, "%Y-%m-%d") >= datetime.today()
             ]
 
-            # Rückgabe der gefilterten Abstimmungen
+            # Rückgabe der gefilterten Abstimmungen als Dictionary-Liste
             return [
                 {
-                    "abstimmungid": abstimmung['abstimmungid'],
-                    "titel": abstimmung['titel'],
-                    "beschreibung": abstimmung['beschreibung'],
-                    "frist": abstimmung['frist'],
-                    "altersgrenze": abstimmung['altersgrenze'],
-                    "status": abstimmung['status'],
+                    "abstimmungid": abstimmung.abstimmungid,
+                    "titel": abstimmung.titel,
+                    "beschreibung": abstimmung.beschreibung,
+                    "frist": abstimmung.frist,
+                    "altersgrenze": abstimmung.altersgrenze,
+                    "status": abstimmung.status,
                 }
                 for abstimmung in aktuelle_abstimmungen
             ]
 
         except Exception as e:
             return {"error": str(e)}
-
 
     def abstimmen(self, abstimmungid, buergerid, stimme):
         """

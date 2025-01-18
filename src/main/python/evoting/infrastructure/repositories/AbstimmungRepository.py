@@ -87,8 +87,8 @@ class AbstimmungRepository:
     @handle_exceptions
     def hole_abstimmungen(self):
         """
-        Holt alle Abstimmungen aus der Datenbank.
-        :return: Eine Liste von Abstimmungen
+        Holt alle Abstimmungen aus der Datenbank und gibt sie als Liste von Abstimmung-Objekten zurück.
+        :return: Eine Liste von Abstimmungsobjekten
         """
         daten = []
         with sqlite3.connect(self.db_path) as conn:
@@ -99,15 +99,17 @@ class AbstimmungRepository:
             """)
             result = cursor.fetchall()
             for row in result:
-                daten.append({
-                    "abstimmungid": row[0],  # Die zufällige ID
-                    "titel": row[1],
-                    "beschreibung": row[2],
-                    "frist": row[3],
-                    "altersgrenze": row[4],
-                    "status": row[5]
-                })
+                abstimmung = Abstimmung(
+                    abstimmungid=row[0],
+                    titel=row[1],
+                    beschreibung=row[2],
+                    frist=row[3],
+                    altersgrenze=row[4],
+                    status=row[5]
+                )
+                daten.append(abstimmung)
         return daten
+
 
     def buerger_hat_abgestimmt(self, abstimmungid, buergerid):
         with sqlite3.connect(self.db_path) as conn:
