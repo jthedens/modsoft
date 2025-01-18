@@ -181,7 +181,6 @@ def abstimmungen_uebersicht():
     # Weitergabe an das Template
     return render_template("abstimmungen.html", abstimmungen=daten)
 
-
 @main.route('/ergebnisse')
 def ergebnis_übersicht():
     ergebnis_controller = ErgebnisController()

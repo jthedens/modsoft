@@ -11,5 +11,3 @@ class ErgebnisController:
         Ruft die beendeten Abstimmungen mit den Ergebnissen ab und übergibt sie an das Template.
         """
         return self.service.finde_beendete_abstimmungen()
-
-

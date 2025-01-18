@@ -41,4 +41,3 @@ class ErgebnisRepository:
 
         # Erstelle das Ergebnis-Objekt
         return Ergebnis(abstimmungid, ja_anzahl, nein_anzahl)
-
