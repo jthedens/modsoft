@@ -8,16 +8,16 @@
   <div class="left">
     <h1>{{ abstimmung.titel }}</h1>
     <p>{{ abstimmung.beschreibung }}</p>
-    <p><strong>Zeitraum:</strong> {{ abstimmung.startdatum.strftime('%d.%m.%Y') }} bis {{ abstimmung.enddatum.strftime('%d.%m.%Y') }}</p>
+    <p><strong>Zeitraum:</strong> Bis zum {{ abstimmung.frist }}</p>
     <p><strong>Status:</strong>
       <span class="{% if abstimmung.abstimmungsstatus %}text-success{% else %}text-danger{% endif %}">
-        {% if abstimmung.abstimmungsstatus %}Offen{% else %}Geschlossen{% endif %}
+        {% if abstimmung.status %}Offen{% else %}Geschlossen{% endif %}
       </span>
     </p>
   </div>
 
   <div class="right">
-    {% if abstimmung.abstimmungsstatus %}
+    {% if abstimmung.status %}
     <h2 class="mb-3">Ihre Stimme abgeben:</h2>
     <form method="POST">
       <label for="vote">Bitte wählen: </label>

@@ -11,19 +11,17 @@
                 <li class="card-vote">
                   <div class="card-vote-infos">
                     <h2>
-                      <a href="{{ url_for('main.abstimmung', id=abstimmung.abstimmungs_id) }}">{{ abstimmung.titel }}</a>
+                      <a href="{{ url_for('main.abstimmung', id=abstimmung.abstimmungid) }}">{{ abstimmung.titel }}</a>
                     </h2>
                     <p>{{ abstimmung.beschreibung }}</p>
-                    <p><strong>Zeitraum:</strong>
-                        {{ abstimmung.startdatum.strftime('%d.%m.%Y') }} bis {{ abstimmung.enddatum.strftime('%d.%m.%Y') }}
-                    </p>
+                    <p><strong>Zeitraum:</strong> Bis zum {{ abstimmung.frist }}</p>
                     <p><strong>Status:</strong>
                       <span class="{% if abstimmung.status == 'Offen' %}text-success{% else %}text-danger{% endif %}">
-                        {{ abstimmung.status }}
+                        {% if abstimmung.status %}Offen{% else %}Geschlossen{% endif %}
                         </span>
                     </p>
                   </div>
-                  <a class="btn btn-flat" href="/abstimmung">abstimmen</a>
+                  <a class="btn btn-flat" href="/abstimmung?id={{ abstimmung.abstimmungid }}">abstimmen</a>
                 </li>
             {% endfor %}
         </ul>

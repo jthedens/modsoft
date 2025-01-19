@@ -35,7 +35,7 @@ class BuergerController:
 
     @log_method_call
     @handle_exceptions
-    def erstelle_buerger(self, buergerid, vorname, nachname, geburtstag, adresse, plz, email, passwort, rolle, authentifizierungsstatus):
+    def erstelle_buerger(self, vorname, nachname, geburtstag, adresse, plz, email, passwort):
         """
         Erstellt einen neuen Bürger und gibt eine Bestätigung oder Fehlermeldung zurück.
         :param buergerid: Die eindeutige ID des Bürgers.
@@ -50,18 +50,16 @@ class BuergerController:
         :param authentifizierungsstatus: Der Authentifizierungsstatus.
         :return: Ein Dictionary mit einer Bestätigung oder einer Fehlermeldung.
         """
+        print("erstelle Bürger")
         try:
             self.service.buerger_erstellen(
-                buergerid=buergerid,
                 vorname=vorname,
                 nachname=nachname,
                 geburtstag=geburtstag,
                 adresse=adresse,
                 plz=plz,
                 email=email,
-                passwort=passwort,
-                rolle=rolle,
-                authentifizierungsstatus=authentifizierungsstatus
+                passwort=passwort
             )
             return {"success": "Bürger wurde erfolgreich erstellt."}
         except Exception as e:

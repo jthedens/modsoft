@@ -1,6 +1,7 @@
 # Importieren des sqlite3-Moduls, um mit SQLite-Datenbanken zu arbeiten
 import sqlite3
 import bcrypt # Für Passwort-Hashing
+import uuid
 
 # Verbindung zur SQLite-Datenbank herstellen (wenn die Datei nicht existiert, wird sie erstellt)
 conn = sqlite3.connect('eVoteMain.db')
@@ -69,13 +70,14 @@ INSERT INTO buerger (
 # Diese Tabelle enthält Informationen zu Abstimmungen (z.B. Titel, Beschreibung und Frist)
 cursor.execute(
     """CREATE TABLE IF NOT EXISTS abstimmung (
-    abstimmungid INTEGER NOT NULL,                   -- Eindeutige ID für jede Abstimmung
-    titel TEXT NOT NULL,                             -- Titel der Abstimmung
-    beschreibung TEXT NOT NULL,                      -- Beschreibung der Abstimmung
-    frist DATE NOT NULL,                             -- Frist für die Abstimmung im Format YYYY-MM-DD
-    altersgrenze INTEGER NOT NULL,                   -- Altersgrenze für die Teilnahme an der Abstimmung
-    status INTEGER NOT NULL                          -- Status der Abstimmung (0 = inaktiv, 1 = aktiv)
+    abstimmungid TEXT PRIMARY KEY,  -- UUID statt INTEGER
+    titel TEXT NOT NULL,
+    beschreibung TEXT NOT NULL,
+    frist DATE NOT NULL,
+    altersgrenze INTEGER NOT NULL,
+    status INTEGER NOT NULL
 );
+
 """)
 
 # Beispiel-Daten in die Tabelle 'abstimmung' einfügen
@@ -84,12 +86,25 @@ INSERT INTO abstimmung (
     abstimmungid, titel, beschreibung, frist, altersgrenze, status
 ) VALUES (?, ?, ?, ?, ?, ?)
 """, (
-    123,                                           # ID der Abstimmung
+    1,
     'Titel der Abstimmung',                        # Titel der Abstimmung
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Integer convallis, ...',  # Beschreibung
     '2026-02-01',                                  # Frist für die Abstimmung
     18,                                            # Altersgrenze
-    1                                              # Status (1 = aktiv)
+    '1'                                        # Status (1 = aktiv)
+))
+
+cursor.execute("""
+INSERT INTO abstimmung (
+    abstimmungid, titel, beschreibung, frist, altersgrenze, status
+) VALUES (?, ?, ?, ?, ?, ?)
+""", (
+    2,
+    'Neue Parkanlage',                             # Titel der Abstimmung
+    'Soll eine neue Parkanlage im Stadtzentrum gebaut werden?',  # Beschreibung
+    '2025-10-28',                                  # Frist für die Abstimmung
+    18,                                            # Altersgrenze
+    '1'                                            # Status (1 = aktiv)
 ))
 
 ###########################
