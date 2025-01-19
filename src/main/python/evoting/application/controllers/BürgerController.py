@@ -12,8 +12,8 @@ class BuergerController:
     def __init__(self):
         self.service = BuergerService(BuergerRepository())
 
-    @log_method_call
-    @handle_exceptions
+    #@log_method_call
+    #@handle_exceptions
     def finde_buerger(self, email, passwort):
         """
         Sucht einen Bürger und gibt die Ergebnisse in einem lesbaren Format zurück.

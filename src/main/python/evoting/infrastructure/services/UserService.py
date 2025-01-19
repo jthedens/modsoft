@@ -15,8 +15,8 @@ class BuergerService:
     def __init__(self, repository):
         self.repository = repository
 
-    @log_method_call
-    @handle_exceptions
+    #@log_method_call
+    #@handle_exceptions
     def buerger_finden(self, email, passwort):
         """
         Findet einen Bürger anhand der E-Mail und überprüft das Passwort.

@@ -1,5 +1,4 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
-
 from src.main.python.evoting.application.controllers.AbstimmungsController import AbstimmungController
 from src.main.python.evoting.application.dekoratoren.dekoratoren import log_method_call, handle_exceptions
 from src.main.python.evoting.application.controllers.BürgerController import BuergerController
@@ -55,8 +54,8 @@ def landing_page():
     return render_template('landing.html')
 
 # Login-Route
-@log_method_call
-@handle_exceptions
+#@log_method_call
+#@handle_exceptions
 @main.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -86,8 +85,8 @@ def login():
     return render_template('login.html')
 
 # Registrierung-Route
-@log_method_call
-@handle_exceptions
+#@log_method_call
+#@handle_exceptions
 @main.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
