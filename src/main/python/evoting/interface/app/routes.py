@@ -2,50 +2,10 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 from src.main.python.evoting.application.dekoratoren.dekoratoren import log_method_call, handle_exceptions
 from src.main.python.evoting.application.controllers.BürgerController import BuergerController
 from src.main.python.evoting.domain.entities.Buerger import Buerger
-from ...domain.entities import Abstimmung
+from src.main.python.evoting.domain.entities import Abstimmung
 from datetime import datetime
 
-
 main = Blueprint('main', __name__)
-
-# Dummy-Daten für Abstimmungen // nach Datenbank-Update wieder löschen
-abstimmungen = [
-    {
-        "abstimmungs_id": "1",
-        "titel": "Neue Parkanlage",
-        "beschreibung": "Soll eine neue Parkanlage im Stadtzentrum gebaut werden?",
-        "startdatum": datetime(2024, 1, 1),
-        "enddatum": datetime(2024, 1, 31),
-        "abstimmungsstatus": True,
-    },
-    {
-        "abstimmungs_id": "2",
-        "titel": "Schulreform",
-        "beschreibung": "Soll die neue Schulreform eingeführt werden?",
-        "startdatum": datetime(2024, 2, 1),
-        "enddatum": datetime(2024, 2, 28),
-        "abstimmungsstatus": False,
-    },
-]
-teilgenommene_abstimmungen = [
-    {"id": 1, "titel": "Neue Parkanlage", "stimme": "Ja", "status": "Offen"},
-    {"id": 2, "titel": "Schulreform", "stimme": "Nein", "status": "Geschlossen"},
-]
-
-ergebnisse = [
-    {"id": 2, "titel": "Schulreform", "ergebnis": "70% Ja, 30% Nein"}
-]
-aktueller_buerger = {
-    "buergerid": 1,
-    "vorname": "Max",
-    "nachname": "Mustermann",
-    "geburtstag": "1990-01-01",
-    "adresse": "Musterstraße 1",
-    "plz": "12345",
-    "email": "max.mustermann@example.com",
-    "rolle": "Bürger",
-    "authentifizierungsstatus": True
-}
 
 @log_method_call
 @handle_exceptions
@@ -72,7 +32,7 @@ def login():
               return redirect(url_for('main.login'))
 
           session['user_email'] = email
-          session['user_name'] = buerger_daten['voller_name']  # Name speichern
+          session['user_name'] = buerger_daten.get('voller_name', 'Unbekannter Benutzer')
           flash("Login erfolgreich!", "success")
           return redirect(url_for('main.dashboard'))
 
@@ -116,13 +76,22 @@ def register():
 
 @main.route('/dashboard')
 def dashboard():
-    return render_template(
-        'dashboard.html',
-        user_name=session['user_name'],
-        abstimmungen=abstimmungen,
-        teilgenommene_abstimmungen=teilgenommene_abstimmungen,
-        ergebnisse=ergebnisse
-    )
+  if 'user_name' not in session:
+    print("Benutzername fehlt in der Session. Umleitung zur Login-Seite.")
+    return render_template('login.html')
+
+    print("Benutzername gefunden:", session['user_name'])
+    print("Abstimmungen:", abstimmungen)
+    print("Teilgenommene Abstimmungen:", teilgenommene_abstimmungen)
+    print("Ergebnisse:", ergebnisse)
+
+  return render_template(
+    'dashboard.html',
+    user_name=session['user_name'],
+    # abstimmungen=abstimmung,
+    # teilgenommene_abstimmungen=teilgenommene_abstimmungen,
+    # ergebnisse=ergebnisse
+  )
 
 @main.route('/abstimmung/<int:id>', methods=['GET', 'POST'])
 def abstimmung(id):
