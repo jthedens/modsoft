@@ -1,6 +1,8 @@
 from src.main.python.evoting.application.dekoratoren.dekoratoren import log_method_call, handle_exceptions
 from src.main.python.evoting.infrastructure.repositories.UserRepository import BuergerRepository
 from src.main.python.evoting.infrastructure.services.PasswortService import hashPasswort
+from datetime import datetime
+import uuid
 from ...domain.entities.Buerger import Buerger
 import bcrypt  # Für Passwort-Hashing
 
@@ -10,13 +12,11 @@ class BuergerService:
     Verwendet das Repository für Datenzugriff.
     """
 
-    @log_method_call
-    @handle_exceptions
     def __init__(self, repository):
         self.repository = repository
 
-    @log_method_call
-    @handle_exceptions
+    #@log_method_call
+    #@handle_exceptions
     def buerger_finden(self, email, passwort):
         """
         Findet einen Bürger anhand der E-Mail und überprüft das Passwort.
@@ -35,7 +35,7 @@ class BuergerService:
 
     @log_method_call
     @handle_exceptions
-    def buerger_erstellen(self, buergerid, vorname, nachname, geburtstag, adresse, plz, email, passwort, rolle, authentifizierungsstatus):
+    def buerger_erstellen(self, vorname, nachname, geburtstag, adresse, plz, email, passwort):
         """
         Erstellt einen neuen Bürger und speichert ihn in der Datenbank.
         :param buergerid: Die eindeutige ID des Bürgers.
@@ -54,6 +54,29 @@ class BuergerService:
 
         # Passwort-Hashing
         hashed_passwort = hashPasswort(passwort)
-        neuer_buerger = Buerger(buergerid, vorname, nachname, geburtstag, adresse, plz, email, hashed_passwort, rolle, authentifizierungsstatus)
+        neuer_buerger = Buerger(str(uuid.uuid4()), vorname, nachname, geburtstag, adresse, plz, email, hashed_passwort, "Benutzer", 1)
         self.repository.speichere_buerger(neuer_buerger)
 
+        return
+
+    @log_method_call
+    @handle_exceptions
+    def finde_buerger_nach_email(self, email):
+        # Aufruf der Repository-Methode, um den Bürger anhand der E-Mail zu finden
+        return self.repository.finde_buerger_nach_email(email)
+
+
+    @staticmethod
+    def berechne_alter(geburtsdatum_str):
+        # Das Geburtsdatum als String wird in ein datetime-Objekt umgewandelt
+        geburtsdatum = datetime.strptime(geburtsdatum_str, "%Y-%m-%d")
+        heute = datetime.today()
+
+        # Alter berechnen
+        alter = heute.year - geburtsdatum.year
+
+        # Falls der Geburtstag in diesem Jahr noch nicht gewesen ist
+        if (heute.month, heute.day) < (geburtsdatum.month, geburtsdatum.day):
+            alter -= 1
+
+        return alter

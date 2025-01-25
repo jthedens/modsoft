@@ -1,33 +1,72 @@
 import sqlite3
+import os
+from datetime import datetime
+
+from src.main.python.evoting.application.dekoratoren.dekoratoren import handle_exceptions, log_method_call
 from src.main.python.evoting.domain.entities.Abstimmung import Abstimmung
 
 class AbstimmungRepository:
+
+    def __init__(self, db_path="eVoteMain.db"):
+        if not os.path.exists(db_path):
+            raise ValueError("Die Datenbankdatei existiert nicht!")
+        self.db_path = db_path
+
     def existiert(self, abstimmungid):
-        with sqlite3.connect("eVoteMain.db") as conn:
+        with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
             cursor.execute("SELECT COUNT(*) FROM abstimmung WHERE abstimmungid = ?", (abstimmungid,))
             return cursor.fetchone()[0] > 0
 
-    def speichern(self, abstimmung: Abstimmung):
-        with sqlite3.connect("eVoteMain.db") as conn:
+    import uuid
+    from datetime import datetime
+
+    def speichern(self, abstimmung):
+        """
+        Speichert eine Abstimmung in der Datenbank. Falls die Abstimmung existiert, wird sie aktualisiert.
+        Falls keine ID vorhanden ist, wird eine neue UUID generiert.
+        :param abstimmung: Ein Abstimmungsobjekt
+        """
+        with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
+
+            # Überprüfen, ob die Abstimmung bereits existiert
+            if not abstimmung.abstimmungid:
+                # Generiere eine neue UUID, wenn die ID nicht vorhanden ist
+                abstimmung.abstimmungid = str(uuid.uuid4())
+
             if self.existiert(abstimmung.abstimmungid):
+                # Abstimmung existiert bereits, aktualisieren
                 cursor.execute("""
                     UPDATE abstimmung
                     SET titel = ?, beschreibung = ?, frist = ?, altersgrenze = ?, status = ?
                     WHERE abstimmungid = ?
-                """, (abstimmung.titel, abstimmung.beschreibung, abstimmung.frist.strftime("%Y-%m-%d"),
-                      abstimmung.altersgrenze, abstimmung.status, abstimmung.abstimmungid))
+                """, (
+                    abstimmung.titel,
+                    abstimmung.beschreibung,
+                    abstimmung.frist.strftime("%Y-%m-%d") if isinstance(abstimmung.frist, datetime) else abstimmung.frist,
+                    abstimmung.altersgrenze,
+                    abstimmung.status,
+                    abstimmung.abstimmungid
+                ))
             else:
+                # Neue Abstimmung einfügen
                 cursor.execute("""
                     INSERT INTO abstimmung (abstimmungid, titel, beschreibung, frist, altersgrenze, status)
                     VALUES (?, ?, ?, ?, ?, ?)
-                """, (abstimmung.abstimmungid, abstimmung.titel, abstimmung.beschreibung,
-                      abstimmung.frist.strftime("%Y-%m-%d"), abstimmung.altersgrenze, abstimmung.status))
+                """, (
+                    abstimmung.abstimmungid,
+                    abstimmung.titel,
+                    abstimmung.beschreibung,
+                    abstimmung.frist.strftime("%y-%m-%d") if isinstance(abstimmung.frist,datetime) else abstimmung.frist,
+                    abstimmung.altersgrenze,
+                    abstimmung.status
+                ))
+
             conn.commit()
 
     def finde_nach_id(self, abstimmungid):
-        with sqlite3.connect("eVoteMain.db") as conn:
+        with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
             cursor.execute("""
                 SELECT abstimmungid, titel, beschreibung, frist, altersgrenze, status
@@ -39,19 +78,20 @@ class AbstimmungRepository:
             return None
 
     def entfernen(self, abstimmungid):
-        with sqlite3.connect("eVoteMain.db") as conn:
+        with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
             cursor.execute("DELETE FROM abstimmung WHERE abstimmungid = ?", (abstimmungid,))
             conn.commit()
 
+    @log_method_call
+    @handle_exceptions
     def hole_abstimmungen(self):
         """
-        Holt alle Abstimmungen aus der Datenbank.
-        :return: Eine Liste von Abstimmungen
+        Holt alle Abstimmungen aus der Datenbank und gibt sie als Liste von Abstimmung-Objekten zurück.
+        :return: Eine Liste von Abstimmungsobjekten
         """
-        # Beispiel für das Abrufen aus einer SQLite-Datenbank:
         daten = []
-        with sqlite3.connect("eVoteMain.db") as conn:
+        with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
             cursor.execute("""
                 SELECT abstimmungid, titel, beschreibung, frist, altersgrenze, status
@@ -59,31 +99,52 @@ class AbstimmungRepository:
             """)
             result = cursor.fetchall()
             for row in result:
-                daten.append({
-                  "abstimmungid": row[0],
-                  "titel": row[1],
-                  "beschreibung": row[2],
-                  "frist": row[3],
-                  "altersgrenze": row[4],
-                  "status": row[5]
-                })
+                abstimmung = Abstimmung(
+                    abstimmungid=row[0],
+                    titel=row[1],
+                    beschreibung=row[2],
+                    frist=row[3],
+                    altersgrenze=row[4],
+                    status=row[5]
+                )
+                daten.append(abstimmung)
+        return daten
 
-            return daten
 
     def buerger_hat_abgestimmt(self, abstimmungid, buergerid):
-        with sqlite3.connect("eVoteMain.db") as conn:
+        with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
             cursor.execute(
-                "SELECT COUNT(*) FROM abstimmungen_stimmen WHERE abstimmungid = ? AND buergerid = ?",
+                "SELECT COUNT(*) FROM auswertung WHERE abstimmungid = ? AND buergerid = ?",
                 (abstimmungid, buergerid)
             )
             return cursor.fetchone()[0] > 0
 
-    def speichere_stimme(self, abstimmungid, buergerid):
+    def speichere_stimme(self, abstimmungid, buergerid, stimme):
+        print('ist in repo')
         with sqlite3.connect("eVoteMain.db") as conn:
             cursor = conn.cursor()
             cursor.execute(
-                "INSERT INTO abstimmungen_stimmen (abstimmungid, buergerid) VALUES (?, ?)",
-                (abstimmungid, buergerid)
+                "INSERT INTO auswertung(abstimmungid, buergerid, stimme) VALUES (?, ?, ?)",
+                (abstimmungid, buergerid, stimme)
             )
             conn.commit()
+
+    def teilgenommen(self, buergerid):
+        daten = []
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            # Parameter als Tupel übergeben
+            cursor.execute(
+                "SELECT buergerid, abstimmungid, stimme FROM auswertung WHERE buergerid = ?",
+                (buergerid,)  # Tupel mit einem Element
+            )
+            # Ergebnisse abrufen und verarbeiten
+            result = cursor.fetchall()
+            for row in result:
+                daten.append({
+                    "buergerid": row[0],  # Bürger-ID
+                    "abstimmungid": row[1],  # Abstimmungs-ID
+                    "stimme": row[2]  # Stimme
+                })
+        return daten

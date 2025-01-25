@@ -1,6 +1,7 @@
 from src.main.python.evoting.application.dekoratoren.dekoratoren import log_method_call, handle_exceptions
 from src.main.python.evoting.infrastructure.services.UserService import BuergerService
 from src.main.python.evoting.infrastructure.repositories.UserRepository import BuergerRepository
+from src.main.python.evoting.domain.entities.Buerger import Buerger
 
 class BuergerController:
     """
@@ -8,12 +9,11 @@ class BuergerController:
     Ruft die Geschäftslogik im Service auf und formatiert die Ergebnisse.
     """
 
-
     def __init__(self):
         self.service = BuergerService(BuergerRepository())
 
-    @log_method_call
-    @handle_exceptions
+    #@log_method_call
+    #@handle_exceptions
     def finde_buerger(self, email, passwort):
         """
         Sucht einen Bürger und gibt die Ergebnisse in einem lesbaren Format zurück.
@@ -35,7 +35,7 @@ class BuergerController:
 
     @log_method_call
     @handle_exceptions
-    def erstelle_buerger(self, buergerid, vorname, nachname, geburtstag, adresse, plz, email, passwort, rolle, authentifizierungsstatus):
+    def erstelle_buerger(self, vorname, nachname, geburtstag, adresse, plz, email, passwort):
         """
         Erstellt einen neuen Bürger und gibt eine Bestätigung oder Fehlermeldung zurück.
         :param buergerid: Die eindeutige ID des Bürgers.
@@ -50,18 +50,16 @@ class BuergerController:
         :param authentifizierungsstatus: Der Authentifizierungsstatus.
         :return: Ein Dictionary mit einer Bestätigung oder einer Fehlermeldung.
         """
+        print("erstelle Bürger")
         try:
             self.service.buerger_erstellen(
-                buergerid=buergerid,
                 vorname=vorname,
                 nachname=nachname,
                 geburtstag=geburtstag,
                 adresse=adresse,
                 plz=plz,
                 email=email,
-                passwort=passwort,
-                rolle=rolle,
-                authentifizierungsstatus=authentifizierungsstatus
+                passwort=passwort
             )
             return {"success": "Bürger wurde erfolgreich erstellt."}
         except Exception as e:

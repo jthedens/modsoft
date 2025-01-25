@@ -15,8 +15,8 @@
             <li class="card-vote">
               <h5>{{ abstimmung.titel }}</h5>
               <p>{{ abstimmung.beschreibung }}</p>
-              <p><strong>Zeitraum:</strong> {{ abstimmung['frist'] }}</p>
-              <p><strong>Status:</strong> {{ abstimmung.status }}</p>
+              <p><strong>Zeitraum:</strong> Bis zum {{ abstimmung.frist }}</p>
+              <p><strong>Status:</strong> {% if abstimmung.status %}Offen{% else %}Geschlossen{% endif %}</p>
             </li>
           {% endfor %}
         </ul>
@@ -34,7 +34,7 @@
             <li class="card-vote">
               <h5>{{ abstimmung.titel }}</h5>
               <p><strong>Ihre Stimme:</strong> {{ abstimmung.stimme }}</p>
-              <p><strong>Status:</strong> {{ abstimmung.status }}</p>
+              <p><strong>Status:</strong> {% if abstimmung.status %}Offen{% else %}Geschlossen{% endif %}</p>
             </li>
           {% endfor %}
         </ul>
@@ -42,6 +42,7 @@
         <p>Sie haben an noch keiner Abstimmung teilgenommen.</p>
       {% endif %}
     </section>
+
 
   <!-- Ergebnisse beendeter Abstimmungen -->
     <section style="margin: 50px 0;">

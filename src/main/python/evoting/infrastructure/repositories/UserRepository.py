@@ -3,21 +3,19 @@ from src.main.python.evoting.application.dekoratoren.dekoratoren import log_meth
 import sqlite3
 import os
 
+
 class BuergerRepository:
     """
     Kapselt alle Datenbankoperationen für die Entität 'Buerger'.
     Trennt Datenbanklogik von der Geschäftslogik.
     """
 
-    @log_method_call
-    @handle_exceptions
     def __init__(self, db_path="eVoteMain.db"):
         if not os.path.exists(db_path):
             raise ValueError("Die Datenbankdatei existiert nicht!")
         self.db_path = db_path
 
-    @log_method_call
-    @handle_exceptions
+
     def finde_buerger_nach_email(self, email):
         """
         Sucht einen Bürger in der Datenbank anhand seiner E-Mail.
@@ -54,3 +52,4 @@ class BuergerRepository:
                 buerger.adresse, buerger.plz, buerger.email, buerger.passwort, buerger.rolle, buerger.authentifizierungsstatus
             ))
             conn.commit()
+

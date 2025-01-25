@@ -1,10 +1,12 @@
+from twisted.application.strports import service
+
 from src.main.python.evoting.domain.entities.Abstimmung import Abstimmung
 from src.main.python.evoting.application.dekoratoren.dekoratoren import log_method_call, handle_exceptions
 from src.main.python.evoting.infrastructure.services.AbstimmungsService import AbstimmungService
 from src.main.python.evoting.infrastructure.repositories.AbstimmungRepository import AbstimmungRepository
 from src.main.python.evoting.infrastructure.services.UserService import BuergerService
 from src.main.python.evoting.infrastructure.repositories.UserRepository import BuergerRepository
-
+from datetime import datetime
 
 class AbstimmungController:
     """
@@ -12,12 +14,10 @@ class AbstimmungController:
     Delegiert die Geschäftslogik an den Service und formatiert die Ergebnisse.
     """
 
-    @log_method_call
-    @handle_exceptions
     def __init__(self):
-      self.service = AbstimmungService(AbstimmungRepository())
-      self.buerger_service = BuergerService(BuergerRepository())
-
+        self.logger = None
+        self.service = AbstimmungService(AbstimmungRepository())
+        self.buerger_service = BuergerService(BuergerRepository())
 
     @log_method_call
     @handle_exceptions
@@ -50,14 +50,16 @@ class AbstimmungController:
         :return: Ein Dictionary mit Abstimmungsdetails oder einer Fehlermeldung.
         """
         try:
+
             abstimmung = self.service.finde_abstimmung(abstimmungid)
+            frist_datetime = datetime.strptime(abstimmung.frist, "%Y-%m-%d")
             return {
                 "abstimmungid": abstimmung.abstimmungid,
                 "titel": abstimmung.titel,
                 "beschreibung": abstimmung.beschreibung,
-                "frist": abstimmung.frist.strftime("%Y-%m-%d"),
+                "frist": frist_datetime.strftime("%Y-%m-%d"),
                 "altersgrenze": abstimmung.altersgrenze,
-                "status": abstimmung.status,
+                "status": True, ##################### "status": abstimmung.status
             }
         except Exception as e:
             return {"error": str(e), "status": "failure"}
@@ -93,53 +95,72 @@ class AbstimmungController:
 
     @log_method_call
     @handle_exceptions
-    def finde_abstimmungen_fuer_buerger(self, email, passwort):
-        """
-        Gibt eine Liste von Abstimmungen zurück, die für einen bestimmten Bürger zugänglich sind,
-        basierend auf der Altersgrenze.
-        :param email: Die E-Mail des Bürgers
-        :param passwort: Das Passwort des Bürgers
-        :return: Eine Liste von Abstimmungen, die der Bürger sehen kann.
-        """
+    def finde_abstimmungen_fuer_buerger(self, email):
         try:
-            buerger = self.buerger_service.finde_buerger(email, passwort)
-            alter = buerger.alter  # Angenommen, du hast eine 'alter'-Eigenschaft in der 'Buerger' Klasse
+            # Holen des Benutzers aus der Session oder basierend auf der E-Mail
+            buerger = self.buerger_service.finde_buerger_nach_email(email)
+            alter = self.buerger_service.berechne_alter(buerger.geburtstag)
             abstimmungen = self.service.finde_alle_abstimmungen()
 
-            # Filtere die Abstimmungen basierend auf der Altersgrenze
-            filter_abstimmungen = [
-                abstimmung for abstimmung in abstimmungen if abstimmung.altersgrenze <= alter
+            # Filtere die Abstimmungen basierend auf der Altersgrenze, Status und Frist
+            aktuelle_abstimmungen = [
+                abstimmung for abstimmung in abstimmungen
+                if abstimmung.altersgrenze <= alter  # Altersprüfung
+                   and abstimmung.status == 1  # Status muss "aktiv" sein
+                   and datetime.strptime(abstimmung.frist, "%Y-%m-%d") >= datetime.today()
             ]
 
+            # Rückgabe der gefilterten Abstimmungen als Dictionary-Liste
             return [
                 {
                     "abstimmungid": abstimmung.abstimmungid,
                     "titel": abstimmung.titel,
                     "beschreibung": abstimmung.beschreibung,
-                    "frist": abstimmung.frist.strftime("%Y-%m-%d"),
+                    "frist": abstimmung.frist,
                     "altersgrenze": abstimmung.altersgrenze,
                     "status": abstimmung.status,
                 }
-                for abstimmung in filter_abstimmungen
+                for abstimmung in aktuelle_abstimmungen
             ]
 
         except Exception as e:
             return {"error": str(e)}
 
-    @log_method_call
-    @handle_exceptions
-    def abstimmen(self, abstimmungid, buergerid):
+    def abstimmen(self, abstimmungid, buergerid, stimme):
         """
         Ermöglicht einem Bürger, an einer Abstimmung teilzunehmen.
         :param abstimmungid: Die ID der Abstimmung.
         :param buergerid: Die ID des Bürgers.
         """
         try:
+
             abstimmung = self.service.finde_abstimmung(abstimmungid)
-            if abstimmung.status != "aktiv":
+            if abstimmung.status != 1:
+                print('error')
                 raise ValueError("Die Abstimmung ist nicht mehr aktiv.")
-            self.service.abstimmen(abstimmungid, buergerid)
+            self.service.abstimmen(abstimmungid, buergerid, stimme)
             return {"message": "Erfolgreich abgestimmt!", "status": "success"}
         except Exception as e:
             self.logger.error(f"Fehler beim Abstimmen: {e}")
             return {"error": str(e), "status": "failure"}
+
+
+    def teilgenommen_abstimmung(self, buergerid):
+        # Alle Abstimmungen, an denen der Bürger teilgenommen hat
+        teilnahmen = self.service.teilgenommene_abstimmungen(buergerid)
+        ergebnisse = []
+
+        for teilnahme in teilnahmen:
+            # Abrufen der Abstimmung basierend auf der abstimmungid
+            abstimmung = self.service.finde_abstimmung(teilnahme['abstimmungid'])
+
+            # Zugriff auf die Attribute der Abstimmung mit Punkten
+            ergebnisse.append({
+                "abstimmungid": teilnahme['abstimmungid'],
+                "titel": abstimmung.titel,  # Attribut statt Schlüssel
+                "stimme": teilnahme['stimme'],
+                "status": abstimmung.status,  # Attribut statt Schlüssel
+            })
+
+        return ergebnisse
+
