@@ -1,12 +1,23 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from src.main.python.evoting.application.dekoratoren.dekoratoren import log_method_call, handle_exceptions
 from src.main.python.evoting.application.controllers.BürgerController import BuergerController
+from src.main.python.evoting.application.controllers.AbstimmungsController import AbstimmungController
 from src.main.python.evoting.domain.entities.Buerger import Buerger
 from src.main.python.evoting.domain.entities import Abstimmung
 from datetime import datetime
 
 main = Blueprint('main', __name__)
 
+#Abstimmungen laden
+from functools import lru_cache
+@lru_cache(maxsize=1)  # Cache speichert die Ergebnisse
+
+def get_abstimmungen():
+    controller = AbstimmungController()
+    abstimmungen = controller.service.finde_alle_abstimmungen()
+    return abstimmungen
+
+# Landingpage-Route
 @log_method_call
 @handle_exceptions
 @main.route('/')
@@ -23,7 +34,6 @@ def login():
         passwort = request.form['password']
 
         try:
-            # Benutzer in der Datenbank suchen (Platzhalter-Funktion)
           buerger_aufrufen = BuergerController()
           buerger_daten = buerger_aufrufen.finde_buerger(email, passwort)
 
@@ -77,26 +87,21 @@ def register():
 @main.route('/dashboard')
 def dashboard():
   if 'user_name' not in session:
-    print("Benutzername fehlt in der Session. Umleitung zur Login-Seite.")
-    return render_template('login.html')
-
-    print("Benutzername gefunden:", session['user_name'])
-    print("Abstimmungen:", abstimmungen)
-    print("Teilgenommene Abstimmungen:", teilgenommene_abstimmungen)
-    print("Ergebnisse:", ergebnisse)
+    flash("Bitte loggen Sie sich ein.", "warning")
+    return redirect(url_for('main.login'))
 
   return render_template(
     'dashboard.html',
     user_name=session['user_name'],
-    # abstimmungen=abstimmung,
+    abstimmungen=get_abstimmungen(),
     # teilgenommene_abstimmungen=teilgenommene_abstimmungen,
     # ergebnisse=ergebnisse
   )
 
 @main.route('/abstimmung/<int:id>', methods=['GET', 'POST'])
 def abstimmung(id):
-    # Dummy-Daten (später durch Datenbankabfrage ersetzen)
-    abstimmung = next((a for a in abstimmungen if a["abstimmungs_id"] == str(id)), None)
+    abstimmungen = get_abstimmungen()
+    abstimmung = next((a for a in abstimmungen if a["abstimmungid"] == str(id)), None)
 
     if not abstimmung:
         return "Abstimmung nicht gefunden", 404
@@ -111,7 +116,7 @@ def abstimmung(id):
 
 @main.route('/abstimmungen')
 def abstimmungen_uebersicht():
-    return render_template('abstimmungen.html', abstimmungen=abstimmungen)
+    return render_template('abstimmungen.html', abstimmungen=get_abstimmungen())
 
 @main.route('/ergebnisse')
 def ergebnis_übersicht():

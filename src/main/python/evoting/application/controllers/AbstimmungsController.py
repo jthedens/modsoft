@@ -3,6 +3,8 @@ from src.main.python.evoting.application.dekoratoren.dekoratoren import log_meth
 from src.main.python.evoting.infrastructure.services.AbstimmungsService import AbstimmungService
 from src.main.python.evoting.infrastructure.repositories.AbstimmungRepository import AbstimmungRepository
 from src.main.python.evoting.infrastructure.services.UserService import BuergerService
+from src.main.python.evoting.infrastructure.repositories.UserRepository import BuergerRepository
+
 
 class AbstimmungController:
     """
@@ -13,8 +15,9 @@ class AbstimmungController:
     @log_method_call
     @handle_exceptions
     def __init__(self):
-        self.service = AbstimmungService(AbstimmungRepository())
-        self.buerger_service = BuergerService()
+      self.service = AbstimmungService(AbstimmungRepository())
+      self.buerger_service = BuergerService(BuergerRepository())
+
 
     @log_method_call
     @handle_exceptions

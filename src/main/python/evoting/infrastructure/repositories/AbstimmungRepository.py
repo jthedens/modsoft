@@ -54,19 +54,20 @@ class AbstimmungRepository:
         with sqlite3.connect("eVoteMain.db") as conn:
             cursor = conn.cursor()
             cursor.execute("""
-                SELECT abstimmungid, titel, beschreibung, frist, altersgrenze, status 
+                SELECT abstimmungid, titel, beschreibung, frist, altersgrenze, status
                 FROM abstimmung
             """)
             result = cursor.fetchall()
             for row in result:
                 daten.append({
-                    "abstimmungid": row[0],
-                    "titel": row[1],
-                    "beschreibung": row[2],
-                    "frist": row[3],
-                    "altersgrenze": row[4],
-                    "status": row[5]
+                  "abstimmungid": row[0],
+                  "titel": row[1],
+                  "beschreibung": row[2],
+                  "frist": row[3],
+                  "altersgrenze": row[4],
+                  "status": row[5]
                 })
+
             return daten
 
     def buerger_hat_abgestimmt(self, abstimmungid, buergerid):
