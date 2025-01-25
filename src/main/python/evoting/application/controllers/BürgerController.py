@@ -1,7 +1,7 @@
 from src.main.python.evoting.application.dekoratoren.dekoratoren import log_method_call, handle_exceptions
 from src.main.python.evoting.infrastructure.services.UserService import BuergerService
 from src.main.python.evoting.infrastructure.repositories.UserRepository import BuergerRepository
-from Buerger import Buerger
+from src.main.python.evoting.domain.entities.Buerger import Buerger
 
 class BuergerController:
     """

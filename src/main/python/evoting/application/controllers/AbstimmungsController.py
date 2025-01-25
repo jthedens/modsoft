@@ -7,6 +7,7 @@ from src.main.python.evoting.infrastructure.repositories.AbstimmungRepository im
 from src.main.python.evoting.infrastructure.services.UserService import BuergerService
 from src.main.python.evoting.infrastructure.repositories.UserRepository import BuergerRepository
 from datetime import datetime
+
 class AbstimmungController:
     """
     Schnittstelle für Abstimmungsoperationen, z. B. für Webanwendungen oder APIs.
@@ -142,7 +143,6 @@ class AbstimmungController:
         except Exception as e:
             self.logger.error(f"Fehler beim Abstimmen: {e}")
             return {"error": str(e), "status": "failure"}
-
 
 
     def teilgenommen_abstimmung(self, buergerid):

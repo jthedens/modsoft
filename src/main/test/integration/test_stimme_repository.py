@@ -43,10 +43,10 @@ class TestFindStimme(unittest.TestCase):
         Test the findStimme function.
         """
         # Funktion so anpassen, dass sie eine bestehende Verbindung akzeptiert
-        def findStimmeWithConnection(connection, abstimmungs_id, citizens_id):
+        def findStimmeWithConnection(connection, abstimmungid, citizens_id):
             cursor = connection.cursor()
             cursor.execute("SELECT COUNT(STIMME) FROM stimmen WHERE ABSTIMMUNGSID = ? AND CITIZENSID = ?",
-                           (abstimmungs_id, citizens_id))
+                           (abstimmungid, citizens_id))
             return cursor.fetchone()[0]
 
         # Testfälle

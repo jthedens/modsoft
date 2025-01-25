@@ -1,52 +1,16 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
-from src.main.python.evoting.application.controllers.AbstimmungsController import AbstimmungController
 from src.main.python.evoting.application.dekoratoren.dekoratoren import log_method_call, handle_exceptions
+from src.main.python.evoting.domain.entities import Abstimmung
+from src.main.python.evoting.application.controllers.AbstimmungsController import AbstimmungController
+from src.main.python.evoting.domain.entities.Buerger import Buerger
 from src.main.python.evoting.application.controllers.BürgerController import BuergerController
+from src.main.python.evoting.infrastructure.repositories.UserRepository import BuergerRepository
 from src.main.python.evoting.application.controllers.ErgebnisController import ErgebnisController
 from datetime import datetime
-from src.main.python.evoting.infrastructure.repositories.UserRepository import BuergerRepository
 
 main = Blueprint('main', __name__)
 
-# Dummy-Daten für Abstimmungen // nach Datenbank-Update wieder löschen
-abstimmungen = [
-    {
-        "abstimmungs_id": "1",
-        "titel": "Neue Parkanlage",
-        "beschreibung": "Soll eine neue Parkanlage im Stadtzentrum gebaut werden?",
-        "startdatum": datetime(2024, 1, 1),
-        "enddatum": datetime(2024, 1, 31),
-        "abstimmungsstatus": True,
-    },
-    {
-        "abstimmungs_id": "2",
-        "titel": "Schulreform",
-        "beschreibung": "Soll die neue Schulreform eingeführt werden?",
-        "startdatum": datetime(2024, 2, 1),
-        "enddatum": datetime(2024, 2, 28),
-        "abstimmungsstatus": False,
-    },
-]
-teilgenommene_abstimmungen = [
-    {"id": 1, "titel": "Neue Parkanlage", "stimme": "Ja", "status": "Offen"},
-    {"id": 2, "titel": "Schulreform", "stimme": "Nein", "status": "Geschlossen"},
-]
-
-ergebnisse = [
-    {"id": 2, "titel": "Schulreform", "ergebnis": "70% Ja, 30% Nein"}
-]
-aktueller_buerger = {
-    "buergerid": 1,
-    "vorname": "Max",
-    "nachname": "Mustermann",
-    "geburtstag": "1990-01-01",
-    "adresse": "Musterstraße 1",
-    "plz": "12345",
-    "email": "max.mustermann@example.com",
-    "rolle": "Bürger",
-    "authentifizierungsstatus": True
-}
-
+# Landingpage-Route
 @log_method_call
 @handle_exceptions
 @main.route('/')
@@ -59,28 +23,27 @@ def landing_page():
 @main.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        email = request.form['email']
-        passwort = request.form['password']
+      email = request.form['email']
+      passwort = request.form['password']
 
-        try:
+      try:
+          # Benutzer in der Datenbank suchen (Platzhalter-Funktion)
+          buerger_aufrufen = BuergerController()
+          buerger_daten = buerger_aufrufen.finde_buerger(email, passwort)
 
-            # Benutzer in der Datenbank suchen (Platzhalter-Funktion)
-            buerger_aufrufen = BuergerController()
-            buerger_daten = buerger_aufrufen.finde_buerger(email, passwort)
+          if "error" in buerger_daten:
+              flash(buerger_daten["error"], "danger")
+              return redirect(url_for('main.register'))
 
-            if "error" in buerger_daten:
-                flash(buerger_daten["error"], "danger")
-                return redirect(url_for('main.login'))
+          session['user_email'] = email
+          session['user_passwort'] = passwort
+          session['user_name'] = buerger_daten['voller_name']  # Name speichern
+          session['user_id'] = buerger_daten['buergerid']
+          #flash("Login erfolgreich!", "success")
+          return redirect(url_for('main.dashboard'))
 
-            session['user_email'] = email
-            session['user_passwort'] = passwort
-            session['user_name'] = buerger_daten['voller_name']  # Name speichern
-            session['user_id'] = buerger_daten['buergerid']
-            #flash("Login erfolgreich!", "success")
-            return redirect(url_for('main.dashboard'))
-
-        except ValueError as e:
-            flash(str(e), "danger")
+      except ValueError as e:
+          flash(str(e), "danger")
 
     return render_template('login.html')
 
@@ -126,6 +89,9 @@ def dashboard():
     teilgenommene_daten = abstimmung_controller.teilgenommen_abstimmung(buergerid)
     ergebnis_daten = ergebnis_controller.zeige_beendete_abstimmungen()
 
+    if 'user_name' not in session:
+      flash("Bitte loggen Sie sich ein.", "warning")
+      return redirect(url_for('main.login'))
 
     return render_template(
         'dashboard.html',
