@@ -50,16 +50,22 @@ class AbstimmungController:
         :return: Ein Dictionary mit Abstimmungsdetails oder einer Fehlermeldung.
         """
         try:
-
+            # Abstimmung aus dem Service abrufen
             abstimmung = self.service.finde_abstimmung(abstimmungid)
+
+            # Frist in ein datetime-Objekt umwandeln
             frist_datetime = datetime.strptime(abstimmung.frist, "%Y-%m-%d")
+
+            # Status basierend auf der Frist berechnen
+            status = datetime.now() <= frist_datetime
+
             return {
                 "abstimmungid": abstimmung.abstimmungid,
                 "titel": abstimmung.titel,
                 "beschreibung": abstimmung.beschreibung,
                 "frist": frist_datetime.strftime("%Y-%m-%d"),
                 "altersgrenze": abstimmung.altersgrenze,
-                "status": True, ##################### "status": abstimmung.status
+                "status": status,  # Status dynamisch berechnet
             }
         except Exception as e:
             return {"error": str(e), "status": "failure"}
