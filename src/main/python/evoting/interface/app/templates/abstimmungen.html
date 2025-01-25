@@ -16,7 +16,7 @@
                     <p>{{ abstimmung.beschreibung }}</p>
                     <p><strong>Zeitraum:</strong> Bis zum {{ abstimmung.frist }}</p>
                     <p><strong>Status:</strong>
-                      <span class="{% if abstimmung.status == 'Offen' %}text-success{% else %}text-danger{% endif %}">
+                      <span class="{% if abstimmung.status %}text-success{% else %}text-danger{% endif %}">
                         {% if abstimmung.status %}Offen{% else %}Geschlossen{% endif %}
                         </span>
                     </p>

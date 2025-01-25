@@ -8,21 +8,31 @@
 
     <!-- Aktuelle Abstimmungen -->
     <section style="margin: 50px 0;">
-      <h2 class="ms-4 text-start">Aktuelle Abstimmungen</h2>
-      {% if abstimmungen %}
-        <ul class="card-grid">
-          {% for abstimmung in abstimmungen %}
-            <li class="card-vote">
-              <h5>{{ abstimmung.titel }}</h5>
-              <p>{{ abstimmung.beschreibung }}</p>
-              <p><strong>Zeitraum:</strong> Bis zum {{ abstimmung.frist }}</p>
-              <p><strong>Status:</strong> {% if abstimmung.status %}Offen{% else %}Geschlossen{% endif %}</p>
-            </li>
-          {% endfor %}
-        </ul>
-      {% else %}
-        <p>Keine aktuellen Abstimmungen verfügbar.</p>
-      {% endif %}
+      <div class="header-container">
+        <h2 class="ms-4 text-start">Aktuelle Abstimmungen</h2>
+        <a href="{{ url_for('main.abstimmungen_uebersicht') }}">Alle Abstimmungen anzeigen</a>
+      </div>
+        {% if abstimmungen %}
+          <ul class="card-grid">
+            {% for abstimmung in abstimmungen %}
+              <li class="card-vote">
+                <a href="{{ url_for('main.abstimmung', id=abstimmung.abstimmungid) }}" class="card-link">
+                  <h5>{{ abstimmung.titel }}</h5>
+                  <p>{{ abstimmung.beschreibung }}</p>
+                  <p><strong>Zeitraum:</strong> Bis zum {{ abstimmung.frist }}</p>
+                  <p><strong>Status:</strong>
+                      <span class="{% if abstimmung.status %}text-success{% else %}text-danger{% endif %}">
+                        {% if abstimmung.status %}Offen{% else %}Geschlossen{% endif %}
+                        </span>
+                  </p>
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+
+        {% else %}
+          <p>Keine aktuellen Abstimmungen verfügbar.</p>
+        {% endif %}
     </section>
 
   <!-- Meine teilgenommenen Abstimmungen -->
@@ -46,7 +56,10 @@
 
   <!-- Ergebnisse beendeter Abstimmungen -->
     <section style="margin: 50px 0;">
-      <h2 class="ms-4 text-start">Ergebnisse beendeter Abstimmungen</h2>
+      <div class="header-container">
+        <h2 class="ms-4 text-start">Ergebnisse beendeter Abstimmungen</h2>
+        <a href="{{ url_for('main.ergebnis_übersicht') }}">Alle Ergebnisse anzeigen</a>
+      </div>
       {% if ergebnisse %}
         <ul class="card-grid">
           {% for ergebnis in ergebnisse %}

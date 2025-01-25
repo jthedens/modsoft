@@ -10,6 +10,8 @@ from datetime import datetime
 
 main = Blueprint('main', __name__)
 
+
+
 # Landingpage-Route
 @log_method_call
 @handle_exceptions
@@ -18,8 +20,8 @@ def landing_page():
     return render_template('landing.html')
 
 # Login-Route
-#@log_method_call
-#@handle_exceptions
+@log_method_call
+@handle_exceptions
 @main.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -27,7 +29,7 @@ def login():
       passwort = request.form['password']
 
       try:
-          # Benutzer in der Datenbank suchen (Platzhalter-Funktion)
+          # Benutzer authentifizieren
           buerger_aufrufen = BuergerController()
           buerger_daten = buerger_aufrufen.finde_buerger(email, passwort)
 
@@ -37,9 +39,9 @@ def login():
 
           session['user_email'] = email
           session['user_passwort'] = passwort
-          session['user_name'] = buerger_daten['voller_name']  # Name speichern
+          session['user_name'] = buerger_daten['voller_name']
           session['user_id'] = buerger_daten['buergerid']
-          #flash("Login erfolgreich!", "success")
+          flash("Login erfolgreich!", "success")
           return redirect(url_for('main.dashboard'))
 
       except ValueError as e:
@@ -48,8 +50,8 @@ def login():
     return render_template('login.html')
 
 # Registrierung-Route
-#@log_method_call
-#@handle_exceptions
+@log_method_call
+@handle_exceptions
 @main.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -64,8 +66,8 @@ def register():
 
         try:
             # Benutzer zur Datenbank hinzufügen
-            buerger_erstellen = BuergerController()
-            buerger_daten = buerger_erstellen.erstelle_buerger(vorname, nachname, geburtstag, adresse, plz, email, passwort)
+            buerger_controller = BuergerController()
+            buerger_daten = buerger_controller.erstelle_buerger(vorname, nachname, geburtstag, adresse, plz, email, passwort)
             flash("Registrierung erfolgreich! Bitte melden Sie sich an.", "success")
 
             if buerger_daten:
@@ -82,11 +84,8 @@ def register():
 def dashboard():
     abstimmung_controller = AbstimmungController()
     ergebnis_controller = ErgebnisController()
-    email = session['user_email']  # Beispiel-Daten
-    buergerid = session['user_id']
-    daten = abstimmung_controller.finde_abstimmungen_fuer_buerger(email)
-
-    teilgenommene_daten = abstimmung_controller.teilgenommen_abstimmung(buergerid)
+    daten = abstimmung_controller.finde_abstimmungen_fuer_buerger(session['user_email'])
+    teilgenommene_daten = abstimmung_controller.teilgenommen_abstimmung(session['user_id'])
     ergebnis_daten = ergebnis_controller.zeige_beendete_abstimmungen()
 
     if 'user_name' not in session:
@@ -107,43 +106,47 @@ def dashboard():
 def abstimmung():
     abstimmung_id = request.args.get('id')  # Versucht, den Parameter 'id' zu holen
     abstimmung_controller = AbstimmungController()
+    abstimmung = abstimmung_controller.finde_abstimmung(abstimmung_id)
+
+    if not abstimmung:
+        flash("Abstimmung nicht gefunden.", "error")
+        return redirect(url_for('main.abstimmungen_uebersicht'))
 
     if request.method == 'POST':
-        # Daten aus dem Formular holen
-        buergerid = session['user_id']
+        buergerid = session.get('user_id')
         stimme = request.form.get('vote')
 
-        print(buergerid, stimme, abstimmung_id)
-
-        # Überprüfen, ob Abstimmung und Bürger-ID vorhanden sind
         if not abstimmung_id or not buergerid:
-            flash("Abstimmung oder Bürger-ID fehlt!", "error")
+            flash("Abstimmung oder Benutzerinformationen fehlen!", "error")
+            return redirect(request.url)
+
+        if stimme not in ["Ja", "Nein"]:
+            flash("Ungültige Auswahl. Bitte wählen Sie 'Ja' oder 'Nein'.", "error")
             return redirect(request.url)
 
         try:
-            # Speichere die Stimme in die Datenbank
-            print('vor dem abspeichern')
             abstimmung_controller.abstimmen(abstimmung_id, buergerid, stimme)
-            flash("Deine Stimme wurde erfolgreich gespeichert!", "success")
-            print('wurde gespeichert')
+            session['voted'] = True
+            print("Session voted (POST):", session.get('voted'))  # Debugging nach dem Setzen
+            flash("Vielen Dank für Ihre Teilnahme! Ihre Stimme wurde gezählt.", "success")
         except Exception as e:
             flash(f"Fehler beim Speichern der Stimme: {e}", "error")
             return redirect(request.url)
 
-    # Hole Abstimmungsdaten für GET-Methode
-    daten = abstimmung_controller.finde_abstimmung(abstimmung_id)
-    return render_template('abstimmung.html', abstimmung=daten)
 
+        # Zur Abstimmungsseite zurückkehren
+        return redirect(url_for('main.abstimmung', id=abstimmung_id))
+
+    # Debugging für GET
+    print("Session voted (GET):", session.get('voted'))
+    return render_template('abstimmung.html', abstimmung=abstimmung)
+
+
+#Übersicht über alle Abstimmungen, die für den Bürger zugänglich sind.
 @main.route('/abstimmungen')
 def abstimmungen_uebersicht():
-    """
-    Route, um alle Abstimmungen anzuzeigen, die für den Bürger zugänglich sind.
-    """
     abstimmung_controller = AbstimmungController()
-    email = session['user_email'] # Beispiel-Daten
-    daten = abstimmung_controller.finde_abstimmungen_fuer_buerger(email)
-
-    # Weitergabe an das Template
+    daten = abstimmung_controller.finde_abstimmungen_fuer_buerger(session['user_email'])
     return render_template("abstimmungen.html", abstimmungen=daten)
 
 @main.route('/ergebnisse')
@@ -168,8 +171,9 @@ def profil():
 
     return render_template('profil.html', buerger=buerger_daten)
 
+#Nutzenden ausloggen
 @main.route('/logout')
 def logout():
-    session.pop('user_email', None)
+    session.clear()
     flash("Sie wurden erfolgreich ausgeloggt.", "info")
-    return redirect(url_for('login'))
+    return redirect(url_for('main.login'))

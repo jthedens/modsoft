@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_session import Session
 import os
 
 
@@ -8,10 +9,17 @@ def create_app():
     # Secret Key setzen (verwende eine Umgebungsvariable oder einen festen Wert)
     app.secret_key = os.urandom(24)  # Zufällig generierter 24-Byte-Schlüssel
 
-    # Weitere Konfigurationen (Datenbank, Blueprints etc.)
+    # Flask-Session-Konfiguration
+    app.config['SESSION_TYPE'] = 'filesystem'  # Speichert Sessions im Dateisystem
+    app.config['SESSION_PERMANENT'] = False    # Optional: Sessions nur für die Browsersitzung
+    app.config['SESSION_FILE_DIR'] = os.path.join(os.getcwd(), 'flask_session')  # Speichere Sessions in einem lokalen Ordner
 
-    # Beispiel für das Hinzufügen von Blueprints oder anderen Konfigurationen
+    # Initialisiere die Flask-Session
+    Session(app)
+
+    # Weitere Konfigurationen (z. B. Datenbank, Blueprints etc.)
     from .routes import main
     app.register_blueprint(main)
 
     return app
+

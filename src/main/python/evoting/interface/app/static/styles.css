@@ -49,6 +49,13 @@ html, body {
   color: white;
 }
 
+.header-container {
+    display: flex;
+    justify-content: space-between; /* Platz zwischen H2 und Button */
+    align-items: center; /* Vertikale Ausrichtung */
+    margin-bottom: 20px; /* Abstand zum nächsten Inhalt */
+}
+
 .card-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -171,4 +178,8 @@ button {
 
 button:hover {
     background-color: #0056b3;
+}
+
+.card-link {
+    text-decoration: none; /* Keine Unterstreichung */
 }
