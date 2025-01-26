@@ -1,0 +1,10 @@
+.abstimmung-detailseite {
+  text-align: left;
+  display: flex;
+}
+
+.left, .right {
+  flex: 1;
+  height: 100%;
+  margin: 20px;
+}
