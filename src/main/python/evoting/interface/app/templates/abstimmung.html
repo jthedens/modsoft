@@ -4,14 +4,14 @@
 
 {% block content %}
 <!-- Link zurück zur Übersicht -->
-<div class="m-4 mt-0 text-start">
+<div class="link-small m-4 mt-0 text-start">
   <a href="{{ url_for('main.abstimmungen_uebersicht') }}">
     <i class="fa-solid fa-angle-left me-1"></i> Zurück zur Übersicht
   </a>
 </div>
 
 <div class="container abstimmung-detailseite">
-  <div class="row">
+  <div class="row mt-4">
     <!-- Linke Spalte: Abstimmungsdetails -->
     <div class="left">
       <h1>{{ abstimmung.titel }}</h1>

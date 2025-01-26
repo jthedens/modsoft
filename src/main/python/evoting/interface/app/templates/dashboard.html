@@ -10,7 +10,7 @@
     <section style="margin: 50px 0;">
       <div class="header-container">
         <h2 class="ms-4 text-start">Aktuelle Abstimmungen</h2>
-        <a href="{{ url_for('main.abstimmungen_uebersicht') }}">Alle Abstimmungen anzeigen</a>
+        <a class="link-small" href="{{ url_for('main.abstimmungen_uebersicht') }}">Alle Abstimmungen anzeigen</a>
       </div>
         {% if abstimmungen %}
           <ul class="card-grid">
@@ -58,7 +58,7 @@
     <section style="margin: 50px 0;">
       <div class="header-container">
         <h2 class="ms-4 text-start">Ergebnisse beendeter Abstimmungen</h2>
-        <a href="{{ url_for('main.ergebnis_übersicht') }}">Alle Ergebnisse anzeigen</a>
+        <a class="link-small" href="{{ url_for('main.ergebnis_übersicht') }}">Alle Ergebnisse anzeigen</a>
       </div>
       {% if ergebnisse %}
         <ul class="card-grid">
