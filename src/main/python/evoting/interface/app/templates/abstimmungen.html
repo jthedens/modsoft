@@ -10,9 +10,9 @@
             {% for abstimmung in abstimmungen %}
                 <li class="card-vote">
                   <div class="card-vote-infos">
-                    <h2>
+                    <h5>
                       <a href="{{ url_for('main.abstimmung', id=abstimmung.abstimmungid) }}">{{ abstimmung.titel }}</a>
-                    </h2>
+                    </h5>
                     <p>{{ abstimmung.beschreibung }}</p>
                     <p><strong>Zeitraum:</strong> Bis zum {{ abstimmung.frist }}</p>
                     <p><strong>Status:</strong>
