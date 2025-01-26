@@ -107,6 +107,8 @@ def abstimmung():
     abstimmung_id = request.args.get('id')  # Versucht, den Parameter 'id' zu holen
     abstimmung_controller = AbstimmungController()
     abstimmung = abstimmung_controller.finde_abstimmung(abstimmung_id)
+    buergerid = session.get('user_id')
+    voted = abstimmung_controller.service.pruefe_buerger_hat_abgestimmt(abstimmung_id, buergerid)
 
     if not abstimmung:
         flash("Abstimmung nicht gefunden.", "error")
@@ -125,21 +127,24 @@ def abstimmung():
             return redirect(request.url)
 
         try:
-            abstimmung_controller.abstimmen(abstimmung_id, buergerid, stimme)
-            session['voted'] = True
-            print("Session voted (POST):", session.get('voted'))  # Debugging nach dem Setzen
-            flash("Vielen Dank für Ihre Teilnahme! Ihre Stimme wurde gezählt.", "success")
+            if not voted:
+              abstimmung_controller.abstimmen(abstimmung_id, buergerid, stimme)
+            # session['voted'] = True
+              print("Session voted (POST):", session.get('voted'))  # Debugging nach dem Setzen
+              flash("Vielen Dank für Ihre Teilnahme! Ihre Stimme wurde gezählt.", "success")
         except Exception as e:
             flash(f"Fehler beim Speichern der Stimme: {e}", "error")
             return redirect(request.url)
 
-
         # Zur Abstimmungsseite zurückkehren
         return redirect(url_for('main.abstimmung', id=abstimmung_id))
 
-    # Debugging für GET
-    print("Session voted (GET):", session.get('voted'))
-    return render_template('abstimmung.html', abstimmung=abstimmung)
+    return render_template(
+        'abstimmung.html',
+        abstimmung=abstimmung,
+        voted=voted,
+        status_offen = abstimmung.get("status")  # Zugriff auf den Status im Dictionary
+    )
 
 
 #Übersicht über alle Abstimmungen, die für den Bürger zugänglich sind.
