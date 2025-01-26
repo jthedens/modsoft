@@ -16,3 +16,9 @@
   color: #001723;
   opacity: .7;
 }
+
+.link-small {
+  text-decoration: none;
+  opacity: .7;
+  font-size: 14px;
+}
