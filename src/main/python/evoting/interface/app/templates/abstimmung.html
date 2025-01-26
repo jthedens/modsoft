@@ -27,28 +27,28 @@
 
     <!-- Rechte Spalte: Abstimmung -->
     <div class="right">
-      {% if abstimmung.status %}
-        {% if session.get('voted') %}
-          <!-- Hinweis nach erfolgreicher Abstimmung -->
-          <h2 class="mb-3">Vielen Dank für Ihre Teilnahme!</h2>
-          <p>Ihre Stimme wurde erfolgreich gezählt.</p>
+      {% if status_offen %}
+            {% if not voted %}
+                <!-- Abstimmungsformular anzeigen -->
+                <h2 class="mb-3">Ihre Stimme abgeben:</h2>
+                <form method="POST">
+                    <label for="vote">Bitte wählen:</label>
+                    <select name="vote" id="vote" class="form-select" required>
+                        <option value="Ja">Ja</option>
+                        <option value="Nein">Nein</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary mt-3">Abstimmen</button>
+                </form>
+            {% else %}
+                <!-- Nachricht für bereits abgestimmt -->
+                <h2 class="mb-3">Vielen Dank für Ihre Teilnahme!</h2>
+                <p>Ihre Stimme wurde erfolgreich gezählt.</p>
+            {% endif %}
         {% else %}
-          <!-- Abstimmungsformular -->
-          <h2 class="mb-3">Ihre Stimme abgeben:</h2>
-          <form method="POST">
-            <label for="vote">Bitte wählen:</label>
-            <select name="vote" id="vote" class="form-select" required>
-              <option value="Ja">Ja</option>
-              <option value="Nein">Nein</option>
-            </select>
-            <button type="submit" class="btn btn-primary mt-3">Abstimmen</button>
-          </form>
+            <!-- Hinweis, wenn die Abstimmung geschlossen ist -->
+            <h2 class="mb-3">Abstimmung beendet</h2>
+            <p>Die Abstimmung ist geschlossen. Vielen Dank für Ihr Interesse.</p>
         {% endif %}
-      {% else %}
-        <!-- Hinweis, wenn die Abstimmung geschlossen ist -->
-        <h2 class="mb-3">Abstimmung beendet</h2>
-        <p>Die Abstimmung ist geschlossen. Vielen Dank für Ihr Interesse.</p>
-      {% endif %}
     </div>
   </div>
 
