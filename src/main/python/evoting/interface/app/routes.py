@@ -80,6 +80,7 @@ def register():
 
     return render_template('register.html')
 
+@log_method_call
 @main.route('/dashboard')
 def dashboard():
     abstimmung_controller = AbstimmungController()
@@ -148,18 +149,21 @@ def abstimmung():
 
 
 #Übersicht über alle Abstimmungen, die für den Bürger zugänglich sind.
+@log_method_call
 @main.route('/abstimmungen')
 def abstimmungen_uebersicht():
     abstimmung_controller = AbstimmungController()
     daten = abstimmung_controller.finde_abstimmungen_fuer_buerger(session['user_email'])
     return render_template("abstimmungen.html", abstimmungen=daten)
 
+@log_method_call
 @main.route('/ergebnisse')
 def ergebnis_übersicht():
     ergebnis_controller = ErgebnisController()
     ergebnis_daten = ergebnis_controller.zeige_beendete_abstimmungen()
     return render_template('ergebnisse.html', ergebnisse=ergebnis_daten)
 
+@log_method_call
 @main.route('/profil')
 def profil():
     if 'user_email' not in session:
@@ -177,6 +181,7 @@ def profil():
     return render_template('profil.html', buerger=buerger_daten)
 
 #Nutzenden ausloggen
+@log_method_call
 @main.route('/logout')
 def logout():
     session.clear()
