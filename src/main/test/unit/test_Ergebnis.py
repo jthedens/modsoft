@@ -1,5 +1,5 @@
 import unittest
-from src.main.python.evoting.domain.entities.Ergebnis import Ergebnis
+from src.main.python.evoting.domain.entities.Ergebnis import Ergebnis  # Passe den Importpfad an, falls nötig.
 
 class TestErgebnis(unittest.TestCase):
     def test_ergebnis_berechnung(self):
