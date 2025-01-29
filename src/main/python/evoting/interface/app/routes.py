@@ -10,8 +10,6 @@ from datetime import datetime
 
 main = Blueprint('main', __name__)
 
-
-
 # Landingpage-Route
 @log_method_call
 @handle_exceptions
@@ -129,8 +127,6 @@ def abstimmung():
         try:
             if not voted:
               abstimmung_controller.abstimmen(abstimmung_id, buergerid, stimme)
-            # session['voted'] = True
-              print("Session voted (POST):", session.get('voted'))  # Debugging nach dem Setzen
               flash("Vielen Dank für Ihre Teilnahme! Ihre Stimme wurde gezählt.", "success")
         except Exception as e:
             flash(f"Fehler beim Speichern der Stimme: {e}", "error")
@@ -151,7 +147,14 @@ def abstimmung():
 @main.route('/abstimmungen')
 def abstimmungen_uebersicht():
     abstimmung_controller = AbstimmungController()
+    buergerid = session.get('user_id')
+
     daten = abstimmung_controller.finde_abstimmungen_fuer_buerger(session['user_email'])
+
+    for abstimmung in daten:
+        abstimmung_id = request.args.get('id')
+        voted = abstimmung_controller.service.pruefe_buerger_hat_abgestimmt(abstimmung_id, buergerid)
+
     return render_template("abstimmungen.html", abstimmungen=daten)
 
 @main.route('/ergebnisse')
