@@ -21,7 +21,11 @@
                         </span>
                     </p>
                   </div>
-                  <a class="btn btn-flat" href="/abstimmung?id={{ abstimmung.abstimmungid }}">abstimmen</a>
+                  {% if not voted %}
+                      <a class="btn btn-flat" href="/abstimmung?id={{ abstimmung['abstimmungid'] }}">abstimmen</a>
+                  {% else %}
+                      <p><strong>Abgestimmt</strong></p>
+                  {% endif %}
                 </li>
             {% endfor %}
         </ul>
