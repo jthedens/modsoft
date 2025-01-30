@@ -1,11 +1,8 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from src.main.python.evoting.application.dekoratoren.dekoratoren import log_method_call, handle_exceptions
 from src.main.python.evoting.domain.entities import Abstimmung
-from src.main.python.evoting.application.controllers.AbstimmungsController import AbstimmungController
+from src.main.python.evoting.application.controller import abstimmung_controller, ergebnis_controller, buerger_controller, buerger_repository
 from src.main.python.evoting.domain.entities.Buerger import Buerger
-from src.main.python.evoting.application.controllers.BürgerController import BuergerController
-from src.main.python.evoting.infrastructure.repositories.UserRepository import BuergerRepository
-from src.main.python.evoting.application.controllers.ErgebnisController import ErgebnisController
 from datetime import datetime
 
 main = Blueprint('main', __name__)
@@ -30,8 +27,7 @@ def login():
 
       try:
           # Benutzer authentifizieren
-          buerger_aufrufen = BuergerController()
-          buerger_daten = buerger_aufrufen.finde_buerger(email, passwort)
+          buerger_daten = buerger_controller.finde_buerger(email, passwort)
 
           if "error" in buerger_daten:
               flash(buerger_daten["error"], "danger")
@@ -66,7 +62,6 @@ def register():
 
         try:
             # Benutzer zur Datenbank hinzufügen
-            buerger_controller = BuergerController()
             buerger_daten = buerger_controller.erstelle_buerger(vorname, nachname, geburtstag, adresse, plz, email, passwort)
             flash("Registrierung erfolgreich! Bitte melden Sie sich an.", "success")
 
@@ -83,8 +78,6 @@ def register():
 @log_method_call
 @main.route('/dashboard')
 def dashboard():
-    abstimmung_controller = AbstimmungController()
-    ergebnis_controller = ErgebnisController()
     daten = abstimmung_controller.finde_abstimmungen_fuer_buerger(session['user_email'])
     teilgenommene_daten = abstimmung_controller.teilgenommen_abstimmung(session['user_id'])
     ergebnis_daten = ergebnis_controller.zeige_beendete_abstimmungen()
@@ -106,7 +99,6 @@ def dashboard():
 @main.route('/abstimmung', methods=['GET', 'POST'])
 def abstimmung():
     abstimmung_id = request.args.get('id')  # Versucht, den Parameter 'id' zu holen
-    abstimmung_controller = AbstimmungController()
     abstimmung = abstimmung_controller.finde_abstimmung(abstimmung_id)
     buergerid = session.get('user_id')
     voted = abstimmung_controller.service.pruefe_buerger_hat_abgestimmt(abstimmung_id, buergerid)
@@ -152,14 +144,12 @@ def abstimmung():
 @log_method_call
 @main.route('/abstimmungen')
 def abstimmungen_uebersicht():
-    abstimmung_controller = AbstimmungController()
     daten = abstimmung_controller.finde_abstimmungen_fuer_buerger(session['user_email'])
     return render_template("abstimmungen.html", abstimmungen=daten)
 
 @log_method_call
 @main.route('/ergebnisse')
 def ergebnis_übersicht():
-    ergebnis_controller = ErgebnisController()
     ergebnis_daten = ergebnis_controller.zeige_beendete_abstimmungen()
     return render_template('ergebnisse.html', ergebnisse=ergebnis_daten)
 
@@ -171,8 +161,7 @@ def profil():
         return redirect(url_for('main.login'))
 
     # Benutzer aus der Datenbank anhand der gespeicherten E-Mail abrufen
-    buerger_aufrufen = BuergerRepository()
-    buerger_daten = buerger_aufrufen.finde_buerger_nach_email(session['user_email'])
+    buerger_daten = buerger_repository.finde_buerger_nach_email(session['user_email'])
 
     if not buerger_daten:
         flash("Benutzerprofil konnte nicht gefunden werden.", "danger")
