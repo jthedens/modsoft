@@ -28,6 +28,6 @@ jobs:
         run: |
           ls -R
 
-      - name: Run test
+      - name: Run tests
         run: |
-            python -m unittest discover -s .github -p "tests_*.py"
+          python -m unittest discover -s test -p "test_*.py"

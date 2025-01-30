@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch
-from src.main.python.evoting.domain.entities.Buerger import Citizens
+from src.main.python.evoting.domain.entities.Buerger import Buerger
 from src.main.python.evoting.infrastructure.services.AuthentifizierungsService import AuthentifizierungUser
 from src.main.python.evoting.infrastructure.repositories.UserRepository import findCitizens
 

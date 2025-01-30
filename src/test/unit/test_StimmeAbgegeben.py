@@ -4,7 +4,6 @@ from src.main.python.evoting.domain.entities.Stimme import Stimme
 from src.main.python.evoting.infrastructure.services.AbstimmungsService import stimmeErfassen
 from src.main.python.evoting.infrastructure.services.abstimmung_service import stimme_abgeben
 
-
 class TestStimmeAbgeben(unittest.TestCase):
     @patch("src.main.python.evoting.infrastructure.services.AbstimmungsService.stimmeErfassen")
     def test_stimme_abgeben_erfolgreich(self, mock_stimmeErfassen):
